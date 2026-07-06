@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   Music, Volume2, Lightbulb, Sliders, 
-  Sparkles, Calendar, Check, ArrowRight 
+  Sparkles, Calendar, Check, ArrowRight,
+  ChevronLeft, ChevronRight, PartyPopper,
+  Radio, Building2
 } from 'lucide-react';
 import FlipText from '@/components/FlipText';
 import CursorFollower from '@/components/CursorFollower';
@@ -15,105 +17,166 @@ import Footer from '@/components/Footer';
 const servicesData = [
   {
     id: 1,
-    title: 'DJ SERVICES',
-    subtitle: 'Premium DJ Performances',
-    description: 'High-energy DJ sets tailored to your event, featuring the latest hits and timeless classics.',
+    title: 'WEDDINGS',
+    subtitle: 'Premium DJ & Stage Audio',
+    description: 'Make your big day unforgettable with the perfect soundtrack. From romantic melodies during the vows to high-energy beats at the reception, we create the right mood for every moment of your wedding.',
     icon: Music,
     color: '#8B5CF6',
     features: [
-      'Professional DJ Equipment',
-      'Custom Music Playlists',
-      'Live Mixing & Remixing',
-      'MC Services Available',
-      'All Music Genres'
+      'Custom Bridal Entry Music',
+      'Intelligent Lighting Programs',
+      'High-Definition sound systems',
+      'SFX Sparklers & Dry-Ice Low Fog',
+      'Experienced DJ & MC hosts'
     ],
-    image: 'https://images.unsplash.com/photo-1516873240891-4bf014598ab4?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=600&q=80',
   },
   {
     id: 2,
-    title: 'SOUND SYSTEM',
-    subtitle: 'World-Class Audio',
-    description: 'Crystal-clear sound systems designed for venues of any size, from intimate gatherings to massive festivals.',
+    title: 'CONCERTS',
+    subtitle: 'Stadium Live Production',
+    description: 'From intimate live performances to massive stadium gigs, our expert DJs and technical team provide world-class sound and lights to amplify the impact of every performance. Kadam Production ensures crystal-clear audio, stunning visuals, and an atmosphere that elevates every artist and thrills every audience.',
     icon: Volume2,
     color: '#EC4899',
     features: [
-      'Line Array Speakers',
-      'Subwoofer Systems',
-      'Wireless Microphones',
-      'Sound Engineering',
-      'Backup Equipment'
+      'Line Array Riggings',
+      'High decibel bass layouts',
+      'Digital Audio Mixers',
+      'Heavy Duty Truss frames',
+      'On-site sound technicians'
     ],
-    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=600&q=80',
   },
   {
     id: 3,
-    title: 'LIGHTING DESIGN',
-    subtitle: 'Immersive Visual Experience',
-    description: 'State-of-the-art lighting setups that transform any venue into a visual spectacle.',
-    icon: Lightbulb,
+    title: 'FESTIVALS',
+    subtitle: 'Vibrant Arena Mixes',
+    description: 'Turn up the energy at any festival with Kadam Production! We bring powerful sound systems, vibrant lights, and electrifying mixes that keep the crowd moving. From cultural gatherings to large-scale music festivals, we create an atmosphere that celebrates community and culture.',
+    icon: Sparkles,
     color: '#06B6D4',
     features: [
-      'Intelligent Moving Heads',
-      'LED Par Lights',
-      'Laser Shows',
-      'Fog & Haze Machines',
-      'Custom Lighting Programs'
-    ],
-    image: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 4,
-    title: 'STAGE SETUP',
-    subtitle: 'Professional Stage Design',
-    description: 'Complete stage construction and design for concerts, weddings, and corporate events.',
-    icon: Sliders,
-    color: '#F97316',
-    features: [
-      'Modular Stage Platforms',
-      'Truss Systems',
-      'LED Video Walls',
-      'Backdrop Design',
-      'Safety Compliance'
-    ],
-    image: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 5,
-    title: 'SFX & PYROTECHNICS',
-    subtitle: 'Special Effects',
-    description: 'Add wow factor with professional special effects including CO2 jets, confetti, and pyrotechnics.',
-    icon: Sparkles,
-    color: '#8B5CF6',
-    features: [
-      'CO2 Jet Machines',
-      'Confetti Cannons',
-      'Cold Spark Machines',
-      'Fog Effects',
-      'Licensed Pyrotechnics'
+      'Vast outdoor system coverage',
+      'Dandiya & Garba specialist mixes',
+      'Strobe & Laser sky projection',
+      'High voltage generator backups',
+      'Crowd barrier controls support'
     ],
     image: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=600&q=80',
   },
   {
-    id: 6,
-    title: 'EVENT MANAGEMENT',
-    subtitle: 'End-to-End Planning',
-    description: 'Complete event planning and coordination services to ensure seamless execution.',
-    icon: Calendar,
-    color: '#EC4899',
+    id: 4,
+    title: 'CORPORATE EVENTS',
+    subtitle: 'Sleek Corporate Meets',
+    description: 'Rigging crystal clear presentation audios, moving head visual beams, and sleek stage production structures for summits and product launches.',
+    icon: Building2,
+    color: '#F97316',
     features: [
-      'Event Planning',
-      'Vendor Coordination',
-      'Timeline Management',
-      'On-site Supervision',
-      'Contingency Planning'
+      'UHF Wireless Lapel Mics',
+      'High-contrast backdrop LED screens',
+      'Silent Generators setup',
+      'Corporate Podium & Stage layout',
+      'Keynote presentation systems'
     ],
     image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80',
+  },
+  {
+    id: 5,
+    title: 'ROAD SHOWS',
+    subtitle: 'High-Impact Mobile Visuals',
+    description: 'Custom engineered truck-mounted LED displays, silent generator rigs, and concert truss line arrays bringing high impact mobile audio visuals.',
+    icon: Radio,
+    color: '#8B5CF6',
+    features: [
+      'Truck mounted truss gates',
+      'Shockproof audio brackets',
+      'Ultra bright daylight LED walls',
+      'Mobile power generators fleet',
+      'Dynamic rally visual design'
+    ],
+    image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80',
+  },
+  {
+    id: 6,
+    title: 'PRIVATE PARTIES',
+    subtitle: 'Club Themes & DJ Sets',
+    description: 'From intimate club themes to sprawling lawn parties, we orchestrate custom playlists, immersive light rigs, and energetic DJ performance sets.',
+    icon: PartyPopper,
+    color: '#EC4899',
+    features: [
+      'Dynamic Neon uplight designs',
+      'Bespoke dancefloor riggings',
+      'Theme customized DJ setups',
+      'Fog, Bubble & Smoke effects',
+      'Premium wireless mic support'
+    ],
+    image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=600&q=80',
+  },
+  {
+    id: 7,
+    title: 'SFX & PYROTECHNICS',
+    subtitle: 'Cold Sparks & Dry Ice',
+    description: 'Wow your audience with state-of-the-art stage enhancements including cold spark fountains, dry ice low fog layers, and CO2 cryo jets.',
+    icon: Sparkles,
+    color: '#06B6D4',
+    features: [
+      'Cold Spark Fountains',
+      'CO2 Cryo Jet machines',
+      'Dry Ice low clouds machine',
+      'Confetti blast launchers',
+      'Licensed crew operations'
+    ],
+    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80',
+  },
+  {
+    id: 8,
+    title: 'STAGE SETUP',
+    subtitle: 'Safety & Modular Trusses',
+    description: 'Modular stage platforms, customized truss frames, premium LED screens, and structural riggings prioritizing maximum visual appeal and safety.',
+    icon: Sliders,
+    color: '#F97316',
+    features: [
+      'Aluminum truss arches & gates',
+      'Height adjustable stages',
+      'Anti-slip stage carpet flooring',
+      'Weight certified safety rigging',
+      'LED panel scaffolding borders'
+    ],
+    image: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=600&q=80',
+  },
+  {
+    id: 9,
+    title: 'EVENT MANAGEMENT',
+    subtitle: 'Production & Coordination',
+    description: 'Full coordination from vendor allocations to running stage queues, contingency planning, and seamless on-site execution management.',
+    icon: Calendar,
+    color: '#8B5CF6',
+    features: [
+      'On-site production managers',
+      'Precise stage cue programs',
+      'Contingency power planning',
+      'Logistics & transit coordination',
+      'Rigging safety inspections'
+    ],
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80',
   }
 ];
 
 export default function ServicesPage() {
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: -380, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: 380, behavior: 'smooth' });
+    }
+  };
 
   // Render organic sound wave flowing animation on canvas for premium visual effect
   useEffect(() => {
@@ -136,7 +199,6 @@ export default function ServicesPage() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.lineWidth = 1.5;
       
-      // Draw 3 overlapping waves with different colors, phase shifts, and amplitudes
       const waves = [
         { color: 'rgba(139, 92, 246, 0.15)', amp: 55, freq: 0.003, speed: 0.04 },
         { color: 'rgba(236, 72, 153, 0.12)', amp: 45, freq: 0.005, speed: 0.03 },
@@ -175,7 +237,7 @@ export default function ServicesPage() {
       <CursorFollower />
       <SpotlightNavbar />
 
-      <div className="relative min-h-screen bg-black text-white pt-24 select-none">
+      <div className="relative min-h-screen bg-black text-white pt-24 select-none overflow-x-hidden">
         
         {/* HERO BANNER SECTION */}
         <section className="relative h-[360px] flex items-center justify-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-950/10 via-black to-black">
@@ -188,28 +250,48 @@ export default function ServicesPage() {
               text="OUR SERVICES" 
               className="text-4xl md:text-6xl font-black uppercase tracking-tight"
             />
-            <p className="text-xs sm:text-sm text-zinc-500 font-semibold tracking-[0.2em] uppercase">
+            <p className="text-xs sm:text-sm text-zinc-550 font-semibold tracking-[0.2em] uppercase">
               Everything you need for an unforgettable event
             </p>
           </div>
         </section>
 
-        {/* SERVICES INTERACTIVE CARDS GRID */}
-        <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* SERVICES CAROUSEL SECTION */}
+        <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto relative">
+          
+          {/* Floating navigation buttons above/on-top of cards */}
+          <div className="flex justify-end items-center gap-3 mb-8 px-4">
+            <button 
+              onClick={scrollLeft}
+              className="w-11 h-11 rounded-full bg-white/3 border border-white/10 hover:border-[#8B5CF6]/30 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-[#8B5CF6]/10 transition-all cursor-pointer"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={scrollRight}
+              className="w-11 h-11 rounded-full bg-white/3 border border-white/10 hover:border-[#EC4899]/30 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-[#EC4899]/10 transition-all cursor-pointer"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Swiping Carousel Container */}
+          <div 
+            ref={carouselRef}
+            className="flex gap-8 overflow-x-auto pb-12 pt-4 px-4 snap-x snap-mandatory scrollbar-none scroll-smooth"
+          >
             {servicesData.map((service, idx) => {
               const Icon = service.icon;
               return (
                 <motion.div
                   key={service.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true, margin: '-50px' }}
-                  transition={{ delay: idx * 0.1, duration: 0.6 }}
-                  whileHover={{ y: -10 }}
-                  className="group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 flex flex-col justify-between"
+                  transition={{ delay: idx * 0.05, duration: 0.5 }}
+                  className="w-[300px] sm:w-[360px] flex-shrink-0 snap-center group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 flex flex-col justify-between"
                   style={{
-                    boxShadow: `0 0 30px ${service.color}05, inset 0 0 30px ${service.color}03`
+                    boxShadow: `0 0 30px ${service.color}03, inset 0 0 30px ${service.color}02`
                   }}
                 >
                   {/* Thumbnail area */}
@@ -223,24 +305,24 @@ export default function ServicesPage() {
                     
                     {/* Floating Icon badge */}
                     <div 
-                      className="absolute top-6 left-6 w-14 h-14 rounded-2xl flex items-center justify-center border"
+                      className="absolute top-6 left-6 w-14 h-14 rounded-2xl flex items-center justify-center border animate-pulse-slow"
                       style={{
                         background: `${service.color}15`,
                         borderColor: `${service.color}35`,
                         backdropFilter: 'blur(10px)'
                       }}
                     >
-                      <Icon className="w-6 h-6 animate-pulse" style={{ color: service.color }} />
+                      <Icon className="w-6 h-6 text-white" style={{ color: service.color }} />
                     </div>
                   </div>
 
                   {/* Text Contents */}
                   <div className="p-8 flex-1 flex flex-col justify-between">
                     <div>
-                      <h3 className="text-xl font-bold text-white uppercase tracking-tight" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                      <h3 className="text-lg font-bold text-white uppercase tracking-tight" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                         {service.title}
                       </h3>
-                      <p className="text-xs font-bold uppercase tracking-wider mt-1" style={{ color: service.color }}>
+                      <p className="text-[10px] font-extrabold uppercase tracking-wider mt-0.5" style={{ color: service.color }}>
                         {service.subtitle}
                       </p>
                       
@@ -251,7 +333,7 @@ export default function ServicesPage() {
                       {/* Checklist */}
                       <ul className="mt-6 space-y-2.5">
                         {service.features.map((feature, fIdx) => (
-                          <li key={fIdx} className="flex items-center gap-3 text-xs text-zinc-300">
+                          <li key={fIdx} className="flex items-center gap-3 text-xs text-zinc-350">
                             <div 
                               className="w-4 h-4 rounded-md border flex items-center justify-center flex-shrink-0"
                               style={{ borderColor: `${service.color}30`, background: `${service.color}08` }}
@@ -264,7 +346,7 @@ export default function ServicesPage() {
                       </ul>
                     </div>
 
-                    {/* Learn More Button */}
+                    {/* Book Now Button */}
                     <div className="pt-8">
                       <button 
                         onClick={() => router.push('/contact')}

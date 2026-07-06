@@ -16,14 +16,45 @@ import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
 
-// Stable Mixkit public loop video URLs for the 2x3 grid
+// Local social media SVG icons for task 4
+const InstagramIcon = (props: any) => (
+  <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  </svg>
+);
+
+const YoutubeIcon = (props: any) => (
+  <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+  </svg>
+);
+
+const FacebookIcon = (props: any) => (
+  <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+  </svg>
+);
+
+const WhatsAppIcon = (props: any) => (
+  <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+  </svg>
+);
+
+// 9 Stable Mixkit public loop video URLs for the 3x3 grid
 const videoSources = [
   'https://assets.mixkit.co/videos/preview/mixkit-party-crowd-loop-462-large.mp4',
   'https://assets.mixkit.co/videos/preview/mixkit-dj-playing-music-at-a-club-42512-large.mp4',
   'https://assets.mixkit.co/videos/preview/mixkit-concert-crowd-with-lights-out-4548-large.mp4',
   'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-dj-on-his-mixing-console-42352-large.mp4',
   'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-dj-controlling-music-42515-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-audience-raising-hands-at-a-concert-40899-large.mp4'
+  'https://assets.mixkit.co/videos/preview/mixkit-audience-raising-hands-at-a-concert-40899-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-people-dancing-at-a-concert-4552-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-concert-stage-flashing-lights-41006-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-dancing-under-lights-42564-large.mp4'
 ];
 
 const marqueeServices = [
@@ -83,6 +114,7 @@ const cylinderStats = [
 export default function HomePage() {
   const router = useRouter();
   const [loadingComplete, setLoadingComplete] = useState(false);
+  const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
 
   return (
     <>
@@ -102,15 +134,16 @@ export default function HomePage() {
         
         {/* HERO SECTION */}
         <section className="relative h-screen flex flex-col justify-center items-center overflow-hidden">
-          {/* Layer 1: 2x3 Grid video loops */}
-          <div className="absolute inset-0 grid grid-cols-3 grid-rows-2 gap-[2px] opacity-40 select-none pointer-events-none">
+          
+          {/* Layer 1: Desktop/Tablet 3x3 Grid (9 videos, portrait aspect-ratio 9:16) */}
+          <div className="hidden md:grid absolute inset-0 grid-cols-3 grid-rows-3 gap-[2px] opacity-40 select-none pointer-events-none">
             {videoSources.map((src, idx) => (
               <motion.div 
                 key={idx}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: idx * 0.1, duration: 0.8 }}
-                className="relative w-full h-full overflow-hidden"
+                transition={{ delay: idx * 0.05, duration: 0.8 }}
+                className="relative w-full h-full overflow-hidden aspect-[9/16]"
               >
                 <video 
                   src={src} 
@@ -125,8 +158,60 @@ export default function HomePage() {
             ))}
           </div>
 
+          {/* Layer 1: Mobile Carousel (1 video at a time, aspect ratio 16:9, swipeable) */}
+          <div className="md:hidden absolute inset-0 w-full h-full flex flex-col justify-center items-center opacity-40 select-none pointer-events-none">
+            <div className="relative w-full aspect-video overflow-hidden">
+              <video 
+                key={currentVideoIdx}
+                src={videoSources[currentVideoIdx]}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover filter blur-[2px] brightness-[0.5]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 to-pink-900/10" />
+            </div>
+            
+            {/* Carousel navigation indicators */}
+            <div className="absolute bottom-6 flex gap-2 pointer-events-auto z-30">
+              {videoSources.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentVideoIdx(idx)}
+                  className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
+                    currentVideoIdx === idx ? 'bg-purple-500 w-4' : 'bg-white/30 hover:bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
           {/* Layer 2: Gradient Radial Overlay */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.85)_100%)] pointer-events-none" />
+
+          {/* Task 4: Social Icons stacked vertically on absolute right side of hero section */}
+          <div className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 flex-col gap-4 z-30">
+            {[
+              { name: 'Instagram', icon: InstagramIcon, href: 'https://instagram.com' },
+              { name: 'WhatsApp', icon: WhatsAppIcon, href: 'https://wa.me/919537330003' },
+              { name: 'YouTube', icon: YoutubeIcon, href: 'https://youtube.com' },
+              { name: 'Facebook', icon: FacebookIcon, href: 'https://facebook.com' }
+            ].map((social) => {
+              const Icon = social.icon;
+              return (
+                <a 
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-xl bg-white/3 border border-white/5 flex items-center justify-center text-white hover:text-white hover:bg-gradient-to-tr hover:from-purple-500 hover:to-pink-500 hover:scale-110 hover:shadow-[0_0_15px_rgba(139,92,246,0.6)] border-purple-500/0 hover:border-purple-500/20 transition-all duration-300 cursor-pointer"
+                >
+                  <Icon className="w-5 h-5" />
+                </a>
+              );
+            })}
+          </div>
 
           {/* Layer 3: Hero Content */}
           <div className="relative z-10 max-w-5xl mx-auto px-6 text-center space-y-6 pt-16">

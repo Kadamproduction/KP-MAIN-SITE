@@ -65,7 +65,7 @@ export default function PageLoader({ onComplete }: PageLoaderProps) {
             initial={{ y: 0 }}
             exit={{ y: '-100%' }}
             transition={{ duration: 0.8, ease: [0.77, 0, 0.175, 1] }}
-            className="absolute top-0 left-0 right-0 h-1/2 bg-black border-b border-zinc-900 pointer-events-auto"
+            className="absolute top-0 left-0 right-0 h-1/2 bg-black pointer-events-auto"
           />
 
           {/* CURTAIN SPLIT BOTTOM */}
@@ -73,7 +73,7 @@ export default function PageLoader({ onComplete }: PageLoaderProps) {
             initial={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ duration: 0.8, ease: [0.77, 0, 0.175, 1] }}
-            className="absolute bottom-0 left-0 right-0 h-1/2 bg-black border-t border-zinc-900 pointer-events-auto"
+            className="absolute bottom-0 left-0 right-0 h-1/2 bg-black pointer-events-auto"
           />
 
           {/* CONTENT SHELL OVERLAY */}
@@ -128,17 +128,6 @@ export default function PageLoader({ onComplete }: PageLoaderProps) {
                 </motion.span>
               </div>
 
-              {/* Progress number counting up (Behind/Below logo) */}
-              <div 
-                className="absolute text-slate-900/65 font-black font-sans uppercase pointer-events-none tracking-tighter text-9xl z-[-1] select-none"
-                style={{
-                  fontFamily: 'system-ui, sans-serif',
-                  WebkitTextStroke: '2px rgba(255,255,255,0.06)',
-                  color: 'transparent'
-                }}
-              >
-                {Math.floor(progress)}%
-              </div>
             </div>
 
             {/* Subtitle / Stages Info */}
