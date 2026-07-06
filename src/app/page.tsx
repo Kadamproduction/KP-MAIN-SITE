@@ -115,6 +115,7 @@ export default function HomePage() {
   const router = useRouter();
   const [loadingComplete, setLoadingComplete] = useState(false);
   const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
+  const [sectionVideoIdx, setSectionVideoIdx] = useState(0);
 
   return (
     <>
@@ -349,20 +350,67 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 1.4 STATS CAROUSEL SECTION */}
-        <section className="relative py-28 px-6 md:px-12 bg-black overflow-hidden flex flex-col items-center">
+        {/* 1.4 INTERACTIVE VIDEO GRID & CAROUSEL SECTION */}
+        <section className="relative py-28 px-6 md:px-12 bg-black overflow-hidden flex flex-col items-center border-t border-white/5">
           {/* Ambient Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-550/5 rounded-full blur-[120px] pointer-events-none" />
           
-          <div className="text-center max-w-xl space-y-3 mb-10">
+          <div className="text-center max-w-xl space-y-3 mb-16">
             <FlipText 
-              text="BY THE NUMBERS" 
+              text="OUR STAGES IN ACTION" 
               className="text-3xl md:text-5xl font-black uppercase tracking-tight"
             />
-            <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">Our milestones and achievements</p>
+            <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">A glance at our production footage</p>
           </div>
 
-          <CylinderCarousel items={cylinderStats} />
+          {/* Desktop/Tablet 3x3 Grid (9 portrait videos) */}
+          <div className="hidden md:grid grid-cols-3 gap-6 max-w-5xl mx-auto w-full relative z-20">
+            {videoSources.map((src, idx) => (
+              <div 
+                key={idx}
+                className="relative aspect-[9/16] rounded-3xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(139,92,246,0.2)] transition-all duration-500 bg-zinc-950/40"
+              >
+                <video 
+                  src={src} 
+                  autoPlay 
+                  muted 
+                  loop 
+                  playsInline 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent pointer-events-none" />
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile Swipeable Slider (1 video, 16:9 aspect-ratio) */}
+          <div className="md:hidden w-full flex flex-col items-center gap-6 relative z-20">
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/5 shadow-xl bg-zinc-950/40">
+              <video 
+                key={sectionVideoIdx}
+                src={videoSources[sectionVideoIdx]}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+            </div>
+            
+            {/* Dots */}
+            <div className="flex gap-2">
+              {videoSources.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSectionVideoIdx(idx)}
+                  className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
+                    sectionVideoIdx === idx ? 'bg-purple-500 w-4' : 'bg-white/30 hover:bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
         </section>
 
         {/* 1.5 VIDEO SHOWCASE SECTION */}
