@@ -50,9 +50,9 @@ const videoSources = [
   'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012632/Trim-6.mp4',
   'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012629/Trim-3-1.mp4',
   'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012627/Trim-1.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012632/Trim-6.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012629/Trim-3-1.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012627/Trim-1.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783418612/Untitled_design_2_pbfqf3.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783418673/download_2_sispkn.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783418682/Untitled_design_3_lw9eld.mp4',
   'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012632/Trim-6.mp4',
   'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012629/Trim-3-1.mp4',
   'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012627/Trim-1.mp4'
