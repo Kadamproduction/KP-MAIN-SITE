@@ -192,11 +192,11 @@ export default function AboutPage() {
                 transition={{ delay: idx * 0.1 }}
                 className="group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5"
               >
-                <div className="relative w-full aspect-[4/3] overflow-hidden">
+                <div className="relative w-full aspect-[3/4] overflow-hidden">
                   <img 
                     src={member.src} 
                     alt={member.name} 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
                   
