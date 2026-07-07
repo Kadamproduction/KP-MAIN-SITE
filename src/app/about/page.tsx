@@ -182,7 +182,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto justify-items-center">
             {teamMembers.map((member, idx) => (
               <motion.div
                 key={member.name}
@@ -190,7 +190,7 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5"
+                className="group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 w-full max-w-[280px] sm:max-w-[300px]"
               >
                 <div className="relative w-full aspect-[3/4] overflow-hidden">
                   <img 
