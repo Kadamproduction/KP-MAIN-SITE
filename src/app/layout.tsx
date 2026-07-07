@@ -59,7 +59,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${lora.variable} ${courierPrime.variable} ${gloock.variable} dark h-full antialiased`}>
-      <body className="min-h-full bg-black text-white flex flex-col font-sans select-none overflow-x-hidden">
+      <body className="min-h-full bg-black text-white flex flex-col font-gloock select-none overflow-x-hidden">
         {children}
         {/* Load Lottie player for premium vector animations */}
         <Script 

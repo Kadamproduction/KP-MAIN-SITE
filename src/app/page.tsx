@@ -159,9 +159,9 @@ export default function HomePage() {
               loop 
               playsInline 
               preload="auto"
-              className="w-full h-full object-cover brightness-[0.75]"
+              className="w-full h-full object-cover brightness-[0.55]"
             />
-            <div className="absolute inset-0 bg-black/15 bg-gradient-to-t from-black/60 via-transparent to-black/60" />
+            <div className="absolute inset-0 bg-black/35 bg-gradient-to-t from-black/60 via-transparent to-black/60" />
           </div>
 
           {/* Task 4: Social Icons stacked vertically on absolute LEFT side of hero section */}
@@ -363,7 +363,7 @@ export default function HomePage() {
                   muted 
                   loop 
                   playsInline 
-                  className="w-full aspect-[9/13] lg:aspect-[9/13] object-cover rounded-[1.8rem] md:rounded-[2.2rem]"
+                  className="w-full aspect-[9/16] lg:aspect-[9/16] object-cover rounded-[1.8rem] md:rounded-[2.2rem]"
                 />
                 
                 {/* Padded Content below the video */}
@@ -404,7 +404,7 @@ export default function HomePage() {
                 muted 
                 loop 
                 playsInline 
-                className="w-full aspect-[9/13] object-cover rounded-[1.8rem]"
+                className="w-full aspect-[9/16] object-cover rounded-[1.8rem]"
               />
               
               {/* Padded Content below the video */}
