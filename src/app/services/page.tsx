@@ -164,19 +164,6 @@ const servicesData = [
 export default function ServicesPage() {
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const carouselRef = useRef<HTMLDivElement>(null);
-
-  const scrollLeft = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: -380, behavior: 'smooth' });
-    }
-  };
-
-  const scrollRight = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: 380, behavior: 'smooth' });
-    }
-  };
 
   // Render organic sound wave flowing animation on canvas for premium visual effect
   useEffect(() => {
@@ -256,30 +243,11 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* SERVICES CAROUSEL SECTION */}
+        {/* SERVICES GRID SECTION */}
         <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto relative">
           
-          {/* Floating navigation buttons above/on-top of cards */}
-          <div className="flex justify-end items-center gap-3 mb-8 px-4">
-            <button 
-              onClick={scrollLeft}
-              className="w-11 h-11 rounded-full bg-white/3 border border-white/10 hover:border-[#8B5CF6]/30 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-[#8B5CF6]/10 transition-all cursor-pointer"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button 
-              onClick={scrollRight}
-              className="w-11 h-11 rounded-full bg-white/3 border border-white/10 hover:border-[#EC4899]/30 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-[#EC4899]/10 transition-all cursor-pointer"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Swiping Carousel Container */}
-          <div 
-            ref={carouselRef}
-            className="flex gap-8 overflow-x-auto pb-12 pt-4 px-4 snap-x snap-mandatory scrollbar-none scroll-smooth"
-          >
+          {/* Universal Responsive Grid (Stacks vertically on mobile, 3 columns on desktop) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
             {servicesData.map((service, idx) => {
               const Icon = service.icon;
               return (
@@ -289,13 +257,13 @@ export default function ServicesPage() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true, margin: '-50px' }}
                   transition={{ delay: idx * 0.05, duration: 0.5 }}
-                  className="w-[300px] sm:w-[360px] flex-shrink-0 snap-center group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 flex flex-col justify-between"
+                  className="w-full group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 flex flex-col justify-between"
                   style={{
                     boxShadow: `0 0 30px ${service.color}03, inset 0 0 30px ${service.color}02`
                   }}
                 >
-                  {/* Thumbnail area */}
-                  <div className="relative h-56 overflow-hidden">
+                  {/* Thumbnail area (aspect 4:3 with increased height) */}
+                  <div className="relative w-full aspect-[4/3] overflow-hidden">
                     <img 
                       src={service.image} 
                       alt={service.title}
