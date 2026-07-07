@@ -159,7 +159,7 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
               <img 
                 src={project.images.col1_img1} 
                 alt={`${project.name} preview 1`}
-                className="w-full h-full object-cover filter brightness-[0.8] hover:scale-103 transition-transform duration-500"
+                className="w-full h-full object-cover filter brightness-[0.8]"
               />
             </div>
             
@@ -167,7 +167,7 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
               <img 
                 src={project.images.col1_img2} 
                 alt={`${project.name} preview 2`}
-                className="w-full h-full object-cover filter brightness-[0.8] hover:scale-103 transition-transform duration-500"
+                className="w-full h-full object-cover filter brightness-[0.8]"
               />
             </div>
           </div>
@@ -177,7 +177,7 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
             <img 
               src={project.images.col2_img} 
               alt={`${project.name} main cover`}
-              className="md:absolute md:inset-0 w-full h-full object-cover filter brightness-[0.8] hover:scale-103 transition-transform duration-700"
+              className="md:absolute md:inset-0 w-full h-full object-cover filter brightness-[0.8]"
             />
           </div>
         </div>

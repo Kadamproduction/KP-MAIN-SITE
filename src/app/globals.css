@@ -19,6 +19,11 @@ body {
   scroll-behavior: smooth;
 }
 
+/* Universal Gloock Font weight override to enforce regular light styling */
+h1, h2, h3, h4, h5, h6, .hero-heading, [style*="gloock"] {
+  font-weight: 400 !important;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

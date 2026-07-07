@@ -357,7 +357,7 @@ export default function HomePage() {
             {cylinderStats.map((stat, idx) => (
               <div 
                 key={idx}
-                className="relative w-full rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col hover:border-purple-550/30 hover:scale-[1.02] hover:shadow-[0_0_35px_rgba(139,92,246,0.15)] transition-all duration-500 shadow-2xl"
+                className="relative w-full rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col hover:border-purple-550/30 hover:shadow-[0_0_35px_rgba(139,92,246,0.15)] transition-all duration-500 shadow-2xl"
               >
                 {/* Tall Video component */}
                 <video 
@@ -456,11 +456,18 @@ export default function HomePage() {
             <div className="lg:col-span-5 flex flex-col justify-between h-full py-6 space-y-8">
               <div className="space-y-4">
                 <h2 
-                  className="text-4xl md:text-6xl font-normal uppercase tracking-wider bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent hero-heading leading-tight"
+                  className="text-4xl md:text-6xl font-normal uppercase tracking-wider leading-tight"
                   style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
                 >
-                  CHOOSE <br className="hidden md:inline" /> OUR VIBRANTS
+                  <span className="text-white block mb-2">CHOOSE</span>
+                  <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent hero-heading block">
+                    OUR VIBRANTS
+                  </span>
                 </h2>
+                {/* White subtitle under heading */}
+                <p className="text-sm md:text-base text-zinc-300 tracking-wide font-normal max-w-sm pt-2 leading-relaxed">
+                  Discover our curated event categories tailored to deliver premium audio, stage setups, and visual experiences.
+                </p>
               </div>
 
               {/* Slider Navigation circular arrow buttons */}
@@ -487,13 +494,13 @@ export default function HomePage() {
                   <motion.div 
                     key={item.title}
                     layout
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                    className="w-[260px] sm:w-[300px] aspect-[3/4] flex-shrink-0 rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group transition-all duration-500 hover:border-purple-500/20"
+                    transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+                    className="w-[260px] sm:w-[300px] aspect-[3/4] flex-shrink-0 snap-start rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group transition-all duration-500 hover:border-purple-500/20"
                   >
                     <img 
                       src={item.image} 
                       alt={item.title} 
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.7]"
+                      className="w-full h-full object-cover filter brightness-[0.7]"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                     <span 
@@ -506,8 +513,8 @@ export default function HomePage() {
                 ))}
               </div>
 
-              {/* Description block at the bottom right */}
-              <div className="flex justify-end pr-4">
+              {/* Description block aligned under the starting edge of the carousel */}
+              <div className="flex justify-start pl-1">
                 <p className="text-xs md:text-sm text-zinc-400 font-semibold leading-relaxed max-w-md text-left">
                   Music isn&apos;t just played—it&apos;s experienced. We organize events that blend powerful sound, smooth transitions, and crowd-reading skills to create an electric atmosphere from start to finish.
                 </p>

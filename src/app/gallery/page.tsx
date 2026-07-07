@@ -133,7 +133,7 @@ export default function GalleryPage() {
                 <img 
                   src={image.src} 
                   alt={image.title}
-                  className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-103"
+                  className="w-full h-auto object-cover"
                 />
                 
                 {/* Visual Overlay on Hover */}

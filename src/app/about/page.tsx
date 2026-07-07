@@ -173,7 +173,7 @@ export default function AboutPage() {
                   <img 
                     src={member.src} 
                     alt={member.name} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
+                    className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
                   
