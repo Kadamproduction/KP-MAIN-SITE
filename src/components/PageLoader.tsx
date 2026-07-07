@@ -8,146 +8,66 @@ interface PageLoaderProps {
 }
 
 export default function PageLoader({ onComplete }: PageLoaderProps) {
-  const [progress, setProgress] = useState(0);
-  const [stage, setStage] = useState(1); // 1: 0-80%, 2: 80-90%, 3: 90-100%, 4: Complete/Exit
+  const [showLogo, setShowLogo] = useState(true);
+  const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
-    // Progress counter timer
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
-        }
-        
-        // Dynamic speed based on progress stages
-        let step = 1;
-        if (prev < 20) step = 2; // Fast start
-        else if (prev < 80) step = Math.random() > 0.7 ? 1 : 2; // Steady build
-        else if (prev < 90) step = 0.5; // Decelerating for dramatic effect
-        else step = 1.5; // Final sprint
-        
-        const next = prev + step;
-        return next > 100 ? 100 : next;
-      });
-    }, 30);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Update stages based on progress counter
-  useEffect(() => {
-    if (progress >= 100) {
-      setStage(4);
-      const timer = setTimeout(() => {
+    // 1. Hide the logo after exactly 2 seconds
+    const logoTimer = setTimeout(() => {
+      setShowLogo(false);
+      
+      // 2. Start curtain split exit animation immediately after logo fades
+      const exitTimer = setTimeout(() => {
+        setIsActive(false);
         onComplete();
-      }, 900); // Wait for curtain exit transition to finish
-      return () => clearTimeout(timer);
-    } else if (progress >= 90) {
-      setStage(3);
-    } else if (progress >= 80) {
-      setStage(2);
-    }
-  }, [progress, onComplete]);
+      }, 900); // Give the exit animation enough time to slide away (800ms)
+      
+      return () => {
+        clearTimeout(exitTimer);
+      };
+    }, 2000);
 
-  // SVG parameters for progress ring
-  const radius = 60;
-  const strokeWidth = 3;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
+    return () => {
+      clearTimeout(logoTimer);
+    };
+  }, [onComplete]);
 
   return (
     <AnimatePresence>
-      {stage < 4 && (
+      {isActive && (
         <div className="fixed inset-0 z-[9999] overflow-hidden pointer-events-none">
-          {/* CURTAIN SPLIT TOP */}
+          {/* CURTAIN SPLIT TOP (Slides Up on logo fade) */}
           <motion.div 
             initial={{ y: 0 }}
-            exit={{ y: '-100%' }}
+            animate={{ y: showLogo ? 0 : '-100%' }}
             transition={{ duration: 0.8, ease: [0.77, 0, 0.175, 1] }}
             className="absolute top-0 left-0 right-0 h-1/2 bg-black pointer-events-auto"
           />
 
-          {/* CURTAIN SPLIT BOTTOM */}
+          {/* CURTAIN SPLIT BOTTOM (Slides Down on logo fade) */}
           <motion.div 
             initial={{ y: 0 }}
-            exit={{ y: '100%' }}
+            animate={{ y: showLogo ? 0 : '100%' }}
             transition={{ duration: 0.8, ease: [0.77, 0, 0.175, 1] }}
             className="absolute bottom-0 left-0 right-0 h-1/2 bg-black pointer-events-auto"
           />
 
-          {/* CONTENT SHELL OVERLAY */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-auto z-10">
-            {/* Center Loading Ring & Glitch K Logo */}
-            <div className="relative w-48 h-48 flex items-center justify-center select-none">
-              {/* Progress Ring */}
-              <svg className="absolute w-40 h-40 rotate-[-90deg]">
-                {/* Background Ring */}
-                <circle 
-                  cx="80" 
-                  cy="80" 
-                  r={radius} 
-                  stroke="rgba(255,255,255,0.03)" 
-                  strokeWidth={strokeWidth} 
-                  fill="transparent" 
-                />
-                {/* Glowing Colored Ring */}
-                <motion.circle 
-                  cx="80" 
-                  cy="80" 
-                  r={radius} 
-                  stroke="url(#loaderGrad)" 
-                  strokeWidth={strokeWidth} 
-                  fill="transparent" 
-                  strokeDasharray={circumference}
-                  strokeDashoffset={strokeDashoffset}
-                  strokeLinecap="round"
-                  className="drop-shadow-[0_0_15px_rgba(139,92,246,0.5)]"
-                />
-                <defs>
-                  <linearGradient id="loaderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#8B5CF6" />
-                    <stop offset="50%" stopColor="#EC4899" />
-                    <stop offset="100%" stopColor="#F97316" />
-                  </linearGradient>
-                </defs>
-              </svg>
-
-              {/* Lottie player logo in the center of the ring */}
-              <div className="relative w-28 h-28 flex items-center justify-center">
+          {/* Centered Lottie Logo (Fades out when showLogo is false) */}
+          <div className="absolute inset-0 flex items-center justify-center z-50">
+            <AnimatePresence>
+              {showLogo && (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
+                  initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.4 }}
+                  className="w-48 h-48 flex items-center justify-center pointer-events-auto"
                   dangerouslySetInnerHTML={{
-                    __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1.2" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
+                    __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
                   }}
-                  className="w-full h-full"
                 />
-              </div>
-
-            </div>
-
-            {/* Subtitle / Stages Info */}
-            <div className="mt-8 h-12 flex flex-col items-center justify-center text-center">
-              {stage < 3 ? (
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-xs uppercase font-extrabold tracking-[0.25em] text-zinc-500"
-                >
-                  Creating Atmosphere
-                </motion.div>
-              ) : (
-                <motion.div 
-                  initial={{ scale: 0 }}
-                  animate={{ scale: [0, 1.2, 1] }}
-                  className="text-sm uppercase font-extrabold tracking-[0.3em] text-white gradient-text-accent"
-                >
-                  LET&apos;S BEGIN
-                </motion.div>
               )}
-            </div>
+            </AnimatePresence>
           </div>
         </div>
       )}
