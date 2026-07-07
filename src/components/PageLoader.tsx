@@ -113,19 +113,17 @@ export default function PageLoader({ onComplete }: PageLoaderProps) {
                 </defs>
               </svg>
 
-              {/*Glitching K Logo in the Center */}
-              <div className="relative text-7xl font-black text-white tracking-tighter select-none font-mono">
-                <motion.span
+              {/* Lottie player logo in the center of the ring */}
+              <div className="relative w-28 h-28 flex items-center justify-center">
+                <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="block relative"
-                >
-                  K
-                  {/* Glitch effects layers */}
-                  <span className="absolute top-0 left-0 text-red-500/50 -translate-x-[2px] translate-y-[1px] select-none pointer-events-none animate-pulse">K</span>
-                  <span className="absolute top-0 left-0 text-cyan-500/50 translate-x-[2px] -translate-y-[1px] select-none pointer-events-none animate-pulse">K</span>
-                </motion.span>
+                  transition={{ duration: 0.5 }}
+                  dangerouslySetInnerHTML={{
+                    __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1.2" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
+                  }}
+                  className="w-full h-full"
+                />
               </div>
 
             </div>
