@@ -159,7 +159,7 @@ export default function GalleryPage() {
               </button>
 
               {/* Main lightbox photo container */}
-              <div className="max-w-4xl max-h-[75vh] flex flex-col items-center">
+              <div className="max-w-4xl max-h-[85vh] flex flex-col items-center">
                 <motion.img 
                   key={filteredImages[lightboxIndex].id}
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -168,19 +168,8 @@ export default function GalleryPage() {
                   transition={{ duration: 0.3 }}
                   src={filteredImages[lightboxIndex].src} 
                   alt={filteredImages[lightboxIndex].title}
-                  className="max-w-full max-h-[65vh] object-contain rounded-2xl border border-white/10 shadow-2xl"
+                  className="max-w-full max-h-[80vh] object-contain rounded-2xl border border-white/10 shadow-2xl"
                 />
-                
-                {/* Info panel */}
-                <div className="text-center mt-6 space-y-1">
-                  <span className="text-[10px] font-bold text-purple-400 uppercase tracking-widest" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                    {filteredImages[lightboxIndex].category}
-                  </span>
-                  <h4 className="text-lg md:text-xl font-bold text-white uppercase">
-                    {filteredImages[lightboxIndex].title}
-                  </h4>
-                  <p className="text-xs text-zinc-550">{filteredImages[lightboxIndex].event}</p>
-                </div>
               </div>
 
               {/* Next trigger */}
