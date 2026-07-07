@@ -104,7 +104,7 @@ export default function AboutPage() {
                 <img 
                   src="https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417406/spotlight_aetwmd.png" 
                   alt="Light Icon" 
-                  className="w-8 h-8 object-contain filter invert brightness-200"
+                  className="w-14 h-14 object-contain filter invert brightness-200"
                 />
                 <div className="text-xs font-bold text-white uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Light</div>
               </div>
@@ -112,7 +112,7 @@ export default function AboutPage() {
                 <img 
                   src="https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417406/wave-sound_ux5uhf.png" 
                   alt="Sound Icon" 
-                  className="w-8 h-8 object-contain filter invert brightness-200"
+                  className="w-14 h-14 object-contain filter invert brightness-200"
                 />
                 <div className="text-xs font-bold text-white uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Sounds</div>
               </div>
@@ -120,7 +120,7 @@ export default function AboutPage() {
                 <img 
                   src="https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417406/sound-control_cv7kzt.png" 
                   alt="Quality Icon" 
-                  className="w-8 h-8 object-contain filter invert brightness-200"
+                  className="w-14 h-14 object-contain filter invert brightness-200"
                 />
                 <div className="text-xs font-bold text-white uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Quality</div>
               </div>
