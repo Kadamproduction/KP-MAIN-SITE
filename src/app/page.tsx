@@ -15,6 +15,7 @@ import PageLoader from '@/components/PageLoader';
 import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
+import ProjectsSection from '@/components/ProjectsSection';
 
 // Local social media SVG icons for task 4
 const InstagramIcon = (props: any) => (
@@ -44,17 +45,17 @@ const WhatsAppIcon = (props: any) => (
   </svg>
 );
 
-// 9 Stable Mixkit public loop video URLs for the 3x3 grid
+// 3 portrait Cloudinary videos (Task 1 vertical 9:16 layout) repeated to fill 9 grid cells
 const videoSources = [
-  'https://assets.mixkit.co/videos/preview/mixkit-party-crowd-loop-462-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-dj-playing-music-at-a-club-42512-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-concert-crowd-with-lights-out-4548-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-dj-on-his-mixing-console-42352-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-dj-controlling-music-42515-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-audience-raising-hands-at-a-concert-40899-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-people-dancing-at-a-concert-4552-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-concert-stage-flashing-lights-41006-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-dancing-under-lights-42564-large.mp4'
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012632/Trim-6.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012629/Trim-3-1.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012627/Trim-1.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012632/Trim-6.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012629/Trim-3-1.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012627/Trim-1.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012632/Trim-6.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012629/Trim-3-1.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012627/Trim-1.mp4'
 ];
 
 const marqueeServices = [
@@ -544,6 +545,9 @@ export default function HomePage() {
 
           </div>
         </section>
+
+        {/* Task 2: Sticky stacking Projects section */}
+        <ProjectsSection />
 
         {/* 1.7 CALL TO ACTION (CTA) SECTION */}
         <section className="relative py-32 px-6 md:px-12 bg-black border-t border-white/5 overflow-hidden flex flex-col items-center justify-center text-center">
