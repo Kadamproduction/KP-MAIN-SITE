@@ -262,8 +262,8 @@ export default function ServicesPage() {
                     boxShadow: `0 0 30px ${service.color}03, inset 0 0 30px ${service.color}02`
                   }}
                 >
-                  {/* Thumbnail area (aspect 4:3 with increased height) */}
-                  <div className="relative w-full aspect-[4/3] overflow-hidden">
+                  {/* Thumbnail area (aspect 4:5 Instagram Portrait size) */}
+                  <div className="relative w-full aspect-[4/5] overflow-hidden">
                     <img 
                       src={service.image} 
                       alt={service.title}
