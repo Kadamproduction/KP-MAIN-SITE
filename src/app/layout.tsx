@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Space_Grotesk } from 'next/font/google';
+import { Inter, Space_Grotesk, Lora, Courier_Prime, Gloock } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
 
@@ -12,6 +12,26 @@ const inter = Inter({
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-space-grotesk',
+  display: 'swap',
+});
+
+const lora = Lora({
+  subsets: ['latin'],
+  variable: '--font-lora',
+  display: 'swap',
+});
+
+const courierPrime = Courier_Prime({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-courier-prime',
+  display: 'swap',
+});
+
+const gloock = Gloock({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-gloock',
   display: 'swap',
 });
 
@@ -38,7 +58,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} dark h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${lora.variable} ${courierPrime.variable} ${gloock.variable} dark h-full antialiased`}>
       <body className="min-h-full bg-black text-white flex flex-col font-sans select-none overflow-x-hidden">
         {children}
         {/* Load Lottie player for premium vector animations */}

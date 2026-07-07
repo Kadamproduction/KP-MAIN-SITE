@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@theme {
+  --font-lora: var(--font-lora);
+  --font-courier: var(--font-courier-prime);
+  --font-gloock: var(--font-gloock);
+}
+
 :root {
   --background: #000000;
   --foreground: #ffffff;
