@@ -158,9 +158,10 @@ export default function HomePage() {
               muted 
               loop 
               playsInline 
-              className="w-full h-full object-cover brightness-[0.4]"
+              preload="auto"
+              className="w-full h-full object-cover brightness-[0.75]"
             />
-            <div className="absolute inset-0 bg-black/40 bg-gradient-to-t from-black via-transparent to-black" />
+            <div className="absolute inset-0 bg-black/15 bg-gradient-to-t from-black/60 via-transparent to-black/60" />
           </div>
 
           {/* Task 4: Social Icons stacked vertically on absolute LEFT side of hero section */}
@@ -353,44 +354,49 @@ export default function HomePage() {
             {cylinderStats.map((stat, idx) => (
               <div 
                 key={idx}
-                className="relative aspect-[9/16] w-full rounded-[2rem] overflow-hidden border border-white/10 hover:border-purple-550/30 hover:scale-[1.02] hover:shadow-[0_0_35px_rgba(139,92,246,0.2)] transition-all duration-500 flex flex-col justify-end shadow-2xl group"
+                className="relative w-full rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col hover:border-purple-550/30 hover:scale-[1.02] hover:shadow-[0_0_35px_rgba(139,92,246,0.15)] transition-all duration-500 shadow-2xl"
               >
-                {/* Full-Height Video Backdrop */}
+                {/* Tall Video component */}
                 <video 
                   src={videoSources[idx]} 
                   autoPlay 
                   muted 
                   loop 
                   playsInline 
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="w-full aspect-[9/13] lg:aspect-[9/13] object-cover rounded-[1.8rem] md:rounded-[2.2rem]"
                 />
                 
-                {/* Gradient and Bottom Content Overlay */}
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/85 to-transparent p-6 pt-20 flex flex-col items-center text-center relative z-10">
-                  <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider min-h-[32px] flex items-center justify-center">
+                {/* Padded Content below the video */}
+                <div className="flex-1 flex flex-col justify-between items-center text-center p-4 pt-6">
+                  {/* Courier Prime Font description text */}
+                  <p 
+                    className="text-white font-bold uppercase tracking-wider text-xs sm:text-sm min-h-[48px] flex items-center justify-center"
+                    style={{ fontFamily: 'var(--font-courier-prime), Courier, monospace' }}
+                  >
                     {stat.description}
                   </p>
                   
-                  <div className="w-full border-t border-dashed border-zinc-800 my-4" />
+                  {/* Dotted/Dashed Line Divider */}
+                  <div className="w-full border-t border-dashed border-zinc-700/60 my-5" />
 
-                  <span className="text-3xl font-black text-white font-sans tracking-tight">
-                    {stat.number}
-                  </span>
-                  
-                  <span className="text-[10px] text-zinc-550 font-black uppercase tracking-widest mt-1">
-                    {stat.label}
+                  {/* Lora Font Stat label text */}
+                  <span 
+                    className="text-md sm:text-lg md:text-xl font-bold text-white tracking-wide uppercase"
+                    style={{ fontFamily: 'var(--font-lora), Lora, serif' }}
+                  >
+                    {stat.number} {stat.label}
                   </span>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Mobile Swipeable Card Carousel (1 card at a time, full 9:16 aspect-ratio) */}
+          {/* Mobile Swipeable Card Carousel (1 card at a time, matches screenshot styling) */}
           <div className="md:hidden w-full flex flex-col items-center gap-6 relative z-20">
             <div 
-              className="w-full max-w-[320px] aspect-[9/16] rounded-[2rem] overflow-hidden border border-white/10 flex flex-col justify-end relative shadow-2xl"
+              className="w-full max-w-[320px] rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col relative shadow-2xl"
             >
-              {/* Full-Height Video Backdrop */}
+              {/* Tall Video component */}
               <video 
                 key={sectionVideoIdx}
                 src={videoSources[sectionVideoIdx]} 
@@ -398,23 +404,28 @@ export default function HomePage() {
                 muted 
                 loop 
                 playsInline 
-                className="absolute inset-0 w-full h-full object-cover"
+                className="w-full aspect-[9/13] object-cover rounded-[1.8rem]"
               />
               
-              {/* Gradient and Bottom Content Overlay */}
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/85 to-transparent p-6 pt-20 flex flex-col items-center text-center relative z-10">
-                <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider min-h-[32px] flex items-center justify-center">
+              {/* Padded Content below the video */}
+              <div className="flex-1 flex flex-col justify-between items-center text-center p-4 pt-6">
+                {/* Courier Prime Font description text */}
+                <p 
+                  className="text-white font-bold uppercase tracking-wider text-xs min-h-[48px] flex items-center justify-center"
+                  style={{ fontFamily: 'var(--font-courier-prime), Courier, monospace' }}
+                >
                   {cylinderStats[sectionVideoIdx].description}
                 </p>
                 
-                <div className="w-full border-t border-dashed border-zinc-800 my-4" />
+                {/* Dotted/Dashed Line Divider */}
+                <div className="w-full border-t border-dashed border-zinc-700/60 my-5" />
                 
-                <span className="text-3xl font-black text-white font-sans tracking-tight">
-                  {cylinderStats[sectionVideoIdx].number}
-                </span>
-                
-                <span className="text-[10px] text-zinc-550 font-black uppercase tracking-widest mt-1">
-                  {cylinderStats[sectionVideoIdx].label}
+                {/* Lora Font Stat label text */}
+                <span 
+                  className="text-md font-bold text-white tracking-wide uppercase"
+                  style={{ fontFamily: 'var(--font-lora), Lora, serif' }}
+                >
+                  {cylinderStats[sectionVideoIdx].number} {cylinderStats[sectionVideoIdx].label}
                 </span>
               </div>
             </div>
