@@ -122,13 +122,13 @@ export default function HomePage() {
 
   const scrollVibrantsLeft = () => {
     if (vibrantsRef.current) {
-      vibrantsRef.current.scrollBy({ left: -320, behavior: 'smooth' });
+      vibrantsRef.current.scrollBy({ left: -324, behavior: 'smooth' });
     }
   };
 
   const scrollVibrantsRight = () => {
     if (vibrantsRef.current) {
-      vibrantsRef.current.scrollBy({ left: 320, behavior: 'smooth' });
+      vibrantsRef.current.scrollBy({ left: 324, behavior: 'smooth' });
     }
   };
 
@@ -486,15 +486,15 @@ export default function HomePage() {
                 className="flex gap-6 overflow-x-auto pb-6 scrollbar-none snap-x snap-mandatory scroll-smooth"
               >
                 {[
-                  { title: 'FESTIVALS', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80' },
-                  { title: 'CONCERT', image: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=600&q=80' },
-                  { title: 'WEDDING', image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=600&q=80' },
-                  { title: 'EVENTS', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80' },
-                  { title: 'ROAD SHOWS', image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80' }
+                  { title: 'FESTIVALS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417440/Untitled-design-20_sm7myc.png' },
+                  { title: 'CONCERT', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417386/Untitled-design-14_ogyqmd.png' },
+                  { title: 'WEDDING', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783012636/Untitled-design-13.png' },
+                  { title: 'ROAD SHOWS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417856/Untitled-design-32_atcfrs.png' },
+                  { title: 'UNIQUE EVENTS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417448/Untitled-design-25_f2t475.png' }
                 ].map((item, idx) => (
                   <div 
                     key={idx}
-                    className="w-[260px] sm:w-[300px] aspect-[3/4] flex-shrink-0 snap-center rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group"
+                    className="w-[260px] sm:w-[300px] aspect-[3/4] flex-shrink-0 snap-start rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group transition-all duration-500 hover:border-purple-500/20"
                   >
                     <img 
                       src={item.image} 
@@ -502,7 +502,10 @@ export default function HomePage() {
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.7]"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-                    <span className="absolute bottom-6 left-6 text-white font-black tracking-widest text-sm uppercase" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                    <span 
+                      className="absolute bottom-6 left-6 text-white font-normal tracking-widest text-sm uppercase" 
+                      style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+                    >
                       {item.title}
                     </span>
                   </div>

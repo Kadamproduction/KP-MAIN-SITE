@@ -119,18 +119,18 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
   return (
     <div 
       ref={cardRef} 
-      className="sticky h-[85vh] w-full flex items-start justify-center"
+      className="sticky h-[80vh] md:h-[85vh] w-full flex items-center justify-center"
       style={{ 
-        top: `${96 + index * 28}px`,
+        top: `${80 + index * 28}px`,
         perspective: 1000
       }}
     >
       <motion.div 
         style={{ scale }}
-        className="w-full bg-[#0C0C0C] rounded-[40px] sm:rounded-[50px] md:rounded-[60px] border-2 border-[#D7E2EA] p-6 sm:p-8 md:p-10 flex flex-col justify-between shadow-2xl relative"
+        className="w-full bg-[#0C0C0C] rounded-[30px] sm:rounded-[40px] md:rounded-[50px] border border-[#D7E2EA]/40 p-4 sm:p-6 md:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden"
       >
         {/* Top Row Layout */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#D7E2EA]/10 pb-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#D7E2EA]/10 pb-4 md:pb-6">
           <div className="flex items-center gap-4">
             <span className="text-4xl sm:text-6xl font-black text-[#D7E2EA]/20 leading-none">
               {project.number}
@@ -140,7 +140,7 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
                 {project.category}
               </span>
               <h3 
-                className="text-xl sm:text-2xl font-black text-[#D7E2EA]"
+                className="text-lg sm:text-2xl font-black text-[#D7E2EA]"
                 style={{ fontFamily: 'Space Grotesk, sans-serif' }}
               >
                 {project.name}
@@ -152,13 +152,10 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
         </div>
 
         {/* Bottom Row Layout: 2-Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-10 gap-6 mt-6 flex-1 items-stretch">
-          {/* Left Column (40% width): 2 stacked images */}
-          <div className="md:col-span-4 flex flex-col gap-4 justify-between">
-            <div 
-              className="relative w-full rounded-[30px] sm:rounded-[40px] overflow-hidden border border-white/5 shadow-md flex-1"
-              style={{ height: 'clamp(130px, 16vw, 230px)' }}
-            >
+        <div className="grid grid-cols-1 md:grid-cols-10 gap-4 mt-4 flex-1 items-stretch">
+          {/* Left Column (40% width): 2 stacked images (Desktop only to prevent mobile cutoff) */}
+          <div className="hidden md:flex md:col-span-4 flex-col gap-4 justify-between">
+            <div className="relative w-full rounded-[20px] sm:rounded-[30px] overflow-hidden border border-white/5 shadow-md h-[120px] lg:h-[160px]">
               <img 
                 src={project.images.col1_img1} 
                 alt={`${project.name} preview 1`}
@@ -166,10 +163,7 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
               />
             </div>
             
-            <div 
-              className="relative w-full rounded-[30px] sm:rounded-[40px] overflow-hidden border border-white/5 shadow-md flex-1"
-              style={{ height: 'clamp(160px, 22vw, 340px)' }}
-            >
+            <div className="relative w-full rounded-[20px] sm:rounded-[30px] overflow-hidden border border-white/5 shadow-md h-[150px] lg:h-[200px]">
               <img 
                 src={project.images.col1_img2} 
                 alt={`${project.name} preview 2`}
@@ -178,16 +172,15 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
             </div>
           </div>
 
-          {/* Right Column (60% width): 1 tall image */}
-          <div className="md:col-span-6 relative rounded-[30px] sm:rounded-[40px] overflow-hidden border border-white/5 shadow-md min-h-[260px] md:min-h-0">
+          {/* Right Column (60% width on desktop, 100% on mobile): 1 tall image */}
+          <div className="col-span-1 md:col-span-6 relative rounded-[20px] sm:rounded-[30px] overflow-hidden border border-white/5 shadow-md min-h-[180px] sm:min-h-[220px] md:min-h-0 aspect-[16/10] md:aspect-auto">
             <img 
               src={project.images.col2_img} 
               alt={`${project.name} main cover`}
-              className="absolute inset-0 w-full h-full object-cover filter brightness-[0.8] hover:scale-103 transition-transform duration-700"
+              className="md:absolute md:inset-0 w-full h-full object-cover filter brightness-[0.8] hover:scale-103 transition-transform duration-700"
             />
           </div>
         </div>
-
       </motion.div>
     </div>
   );
