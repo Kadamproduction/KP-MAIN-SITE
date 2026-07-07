@@ -26,48 +26,13 @@ export default function SpotlightNavbar() {
   const navbarRef = useRef<HTMLDivElement>(null);
   
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-
-  // Track mouse coordinates over the navbar for spotlight glow effect
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!navbarRef.current) return;
-      const rect = navbarRef.current.getBoundingClientRect();
-      setMousePos({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
-    };
-
-    const navbarElement = navbarRef.current;
-    if (navbarElement) {
-      navbarElement.addEventListener('mousemove', handleMouseMove);
-    }
-
-    return () => {
-      if (navbarElement) {
-        navbarElement.removeEventListener('mousemove', handleMouseMove);
-      }
-    };
-  }, []);
 
   return (
     <>
       <div 
         ref={navbarRef}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
         className="fixed top-0 left-0 right-0 h-16 md:h-20 bg-[#050505]/80 backdrop-blur-xl border-b border-white/8 z-50 px-6 md:px-12 flex items-center justify-between transition-all duration-300"
       >
-        {/* Spotlight mouse cursor overlay glow */}
-        <div 
-          className="absolute inset-0 pointer-events-none transition-opacity duration-500 hidden md:block"
-          style={{
-            opacity: isHovered ? 1 : 0,
-            background: `radial-gradient(${isHovered ? '600px' : '400px'} circle at ${mousePos.x}px ${mousePos.y}px, rgba(139, 92, 246, 0.12), transparent 80%)`,
-          }}
-        />
 
         {/* Brand Left Logo */}
         <Link href="/" className="flex items-center gap-3 relative z-50 group cursor-pointer">

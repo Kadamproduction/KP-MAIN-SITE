@@ -141,9 +141,6 @@ export default function HomePage() {
         <PageLoader onComplete={() => setLoadingComplete(true)} />
       )}
 
-      {/* Smooth Trailing Custom Cursor */}
-      <CursorFollower />
-
       {/* Top Navbar */}
       <SpotlightNavbar />
 
@@ -153,68 +150,25 @@ export default function HomePage() {
         {/* HERO SECTION */}
         <section className="relative h-screen flex flex-col justify-center items-center overflow-hidden">
           
-          {/* Layer 1: Desktop/Tablet 3x3 Grid (9 videos, portrait aspect-ratio 9:16) */}
-          <div className="hidden md:grid absolute inset-0 grid-cols-3 grid-rows-3 gap-[2px] opacity-40 select-none pointer-events-none">
-            {videoSources.map((src, idx) => (
-              <motion.div 
-                key={idx}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: idx * 0.05, duration: 0.8 }}
-                className="relative w-full h-full overflow-hidden aspect-[9/16]"
-              >
-                <video 
-                  src={src} 
-                  autoPlay 
-                  muted 
-                  loop 
-                  playsInline 
-                  className="w-full h-full object-cover filter blur-[2px] brightness-[0.5]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 to-pink-900/10" />
-              </motion.div>
-            ))}
+          {/* Layer 1: Optimized Full Screen Background Video (Cloudinary vertical source) */}
+          <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
+            <video 
+              src="https://res.cloudinary.com/zr9jqpwb/video/upload/upscaled-video_ajtb3f.mp4"
+              autoPlay 
+              muted 
+              loop 
+              playsInline 
+              className="w-full h-full object-cover brightness-[0.4]"
+            />
+            <div className="absolute inset-0 bg-black/40 bg-gradient-to-t from-black via-transparent to-black" />
           </div>
 
-          {/* Layer 1: Mobile Carousel (1 video at a time, aspect ratio 16:9, swipeable) */}
-          <div className="md:hidden absolute inset-0 w-full h-full flex flex-col justify-center items-center opacity-40 select-none pointer-events-none">
-            <div className="relative w-full aspect-video overflow-hidden">
-              <video 
-                key={currentVideoIdx}
-                src={videoSources[currentVideoIdx]}
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="w-full h-full object-cover filter blur-[2px] brightness-[0.5]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 to-pink-900/10" />
-            </div>
-            
-            {/* Carousel navigation indicators */}
-            <div className="absolute bottom-6 flex gap-2 pointer-events-auto z-30">
-              {videoSources.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentVideoIdx(idx)}
-                  className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
-                    currentVideoIdx === idx ? 'bg-purple-500 w-4' : 'bg-white/30 hover:bg-white/50'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Layer 2: Gradient Radial Overlay */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.85)_100%)] pointer-events-none" />
-
-          {/* Task 4: Social Icons stacked vertically on absolute right side of hero section */}
-          <div className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 flex-col gap-4 z-30">
+          {/* Task 4: Social Icons stacked vertically on absolute LEFT side of hero section */}
+          <div className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 flex-col gap-6 z-30">
             {[
               { name: 'Instagram', icon: InstagramIcon, href: 'https://instagram.com' },
               { name: 'WhatsApp', icon: WhatsAppIcon, href: 'https://wa.me/919537330003' },
-              { name: 'YouTube', icon: YoutubeIcon, href: 'https://youtube.com' },
-              { name: 'Facebook', icon: FacebookIcon, href: 'https://facebook.com' }
+              { name: 'Email', icon: Mail, href: 'mailto:contact@kadamproduction.com' }
             ].map((social) => {
               const Icon = social.icon;
               return (
@@ -223,7 +177,7 @@ export default function HomePage() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-xl bg-white/3 border border-white/5 flex items-center justify-center text-white hover:text-white hover:bg-gradient-to-tr hover:from-purple-500 hover:to-pink-500 hover:scale-110 hover:shadow-[0_0_15px_rgba(139,92,246,0.6)] border-purple-500/0 hover:border-purple-500/20 transition-all duration-300 cursor-pointer"
+                  className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
                 >
                   <Icon className="w-5 h-5" />
                 </a>
@@ -231,47 +185,61 @@ export default function HomePage() {
             })}
           </div>
 
-          {/* Layer 3: Hero Content */}
-          <div className="relative z-10 max-w-5xl mx-auto px-6 text-center space-y-6 pt-16">
-            <FlipText 
-              text="CREATING ATMOSPHERE NOT JUST EVENT" 
-              className="text-3xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none"
-              delay={0.6}
-            />
+          {/* Layer 3: Split Hero Content (Text Left, Lottie Right) */}
+          <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+            
+            {/* Left Side: Headlines */}
+            <div className="md:col-span-7 flex flex-col justify-center items-start text-left space-y-6 pt-16 md:pt-0">
+              <div className="space-y-1">
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white uppercase leading-none" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                  CREATING
+                </h2>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white uppercase leading-none" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                  ATMOSPHERE
+                </h2>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white uppercase leading-none" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                  NOT JUST
+                </h2>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white uppercase leading-none" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                  EVENT
+                </h2>
+              </div>
 
-            <motion.p
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.1, duration: 0.8 }}
-              className="text-xs sm:text-sm md:text-base text-zinc-400 font-semibold tracking-wide max-w-2xl mx-auto leading-relaxed"
-            >
-              We deliver high-energy DJ performances with premium sound and light, creating unforgettable experiences.
-            </motion.p>
+              <p className="text-xs sm:text-sm md:text-base text-zinc-400 font-semibold tracking-wide max-w-lg leading-relaxed select-text italic">
+                &ldquo;We deliver high-energy DJ performances with premium sound and light, creating unforgettable experiences&rdquo;
+              </p>
 
-            {/* CTA Buttons */}
-            <motion.div 
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.3, duration: 0.8 }}
-              className="flex flex-wrap justify-center gap-4 pt-4"
-            >
-              <button 
-                onClick={() => router.push('/services')}
-                className="px-6 py-3.5 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] hover:from-[#9462ff] hover:to-[#ff58ad] text-white rounded-full text-xs font-bold tracking-wider flex items-center gap-2 cursor-pointer shadow-lg shadow-purple-500/15"
-                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-              >
-                EXPLORE SERVICES
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              
-              <button 
-                onClick={() => router.push('/gallery')}
-                className="px-6 py-3.5 bg-transparent hover:bg-white/5 text-white border border-white/20 hover:border-white/40 rounded-full text-xs font-bold tracking-wider cursor-pointer transition-all"
-                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-              >
-                VIEW GALLERY
-              </button>
-            </motion.div>
+              {/* CTA Buttons */}
+              <div className="flex gap-4 pt-4">
+                <button 
+                  onClick={() => router.push('/services')}
+                  className="px-6 py-3.5 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] hover:from-[#9462ff] hover:to-[#ff58ad] text-white rounded-full text-xs font-bold tracking-wider flex items-center gap-2 cursor-pointer shadow-lg shadow-purple-500/15"
+                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                >
+                  EXPLORE SERVICES
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+                
+                <button 
+                  onClick={() => router.push('/gallery')}
+                  className="px-6 py-3.5 bg-transparent hover:bg-white/5 text-white border border-white/20 hover:border-white/40 rounded-full text-xs font-bold tracking-wider cursor-pointer transition-all"
+                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                >
+                  VIEW GALLERY
+                </button>
+              </div>
+            </div>
+
+            {/* Right Side: Circular metallic logo Lottie player */}
+            <div className="md:col-span-5 flex items-center justify-center relative w-full aspect-square max-w-[420px] mx-auto">
+              <div 
+                dangerouslySetInnerHTML={{
+                  __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
+                }}
+                className="w-full h-full flex items-center justify-center"
+              />
+            </div>
+
           </div>
 
           {/* Scroll down indicator */}
@@ -385,23 +353,20 @@ export default function HomePage() {
             {cylinderStats.map((stat, idx) => (
               <div 
                 key={idx}
-                className="relative rounded-[2rem] overflow-hidden border border-white/10 bg-zinc-950/40 hover:border-purple-500/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(139,92,246,0.15)] transition-all duration-500 flex flex-col h-[520px]"
+                className="relative aspect-[9/16] w-full rounded-[2rem] overflow-hidden border border-white/10 hover:border-purple-550/30 hover:scale-[1.02] hover:shadow-[0_0_35px_rgba(139,92,246,0.2)] transition-all duration-500 flex flex-col justify-end shadow-2xl group"
               >
-                {/* Top Video (takes up h-2/3) */}
-                <div className="relative w-full h-[60%] overflow-hidden">
-                  <video 
-                    src={videoSources[idx]} 
-                    autoPlay 
-                    muted 
-                    loop 
-                    playsInline 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/10 to-transparent pointer-events-none" />
-                </div>
-
-                {/* Bottom Panel (takes up h-1/3) */}
-                <div className="p-6 flex-1 flex flex-col justify-between items-center text-center">
+                {/* Full-Height Video Backdrop */}
+                <video 
+                  src={videoSources[idx]} 
+                  autoPlay 
+                  muted 
+                  loop 
+                  playsInline 
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                
+                {/* Gradient and Bottom Content Overlay */}
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/85 to-transparent p-6 pt-20 flex flex-col items-center text-center relative z-10">
                   <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider min-h-[32px] flex items-center justify-center">
                     {stat.description}
                   </p>
@@ -420,27 +385,24 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Mobile Swipeable Card Carousel (1 card at a time, 16:9 aspect-ratio video) */}
+          {/* Mobile Swipeable Card Carousel (1 card at a time, full 9:16 aspect-ratio) */}
           <div className="md:hidden w-full flex flex-col items-center gap-6 relative z-20">
             <div 
-              className="w-full max-w-[320px] rounded-[2rem] overflow-hidden border border-white/10 bg-zinc-950/40 flex flex-col h-[500px]"
+              className="w-full max-w-[320px] aspect-[9/16] rounded-[2rem] overflow-hidden border border-white/10 flex flex-col justify-end relative shadow-2xl"
             >
-              {/* Top Video (takes up h-2/3) */}
-              <div className="relative w-full h-[60%] overflow-hidden">
-                <video 
-                  key={sectionVideoIdx}
-                  src={videoSources[sectionVideoIdx]} 
-                  autoPlay 
-                  muted 
-                  loop 
-                  playsInline 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/10 to-transparent pointer-events-none" />
-              </div>
-
-              {/* Bottom Panel */}
-              <div className="p-6 flex-1 flex flex-col justify-between items-center text-center">
+              {/* Full-Height Video Backdrop */}
+              <video 
+                key={sectionVideoIdx}
+                src={videoSources[sectionVideoIdx]} 
+                autoPlay 
+                muted 
+                loop 
+                playsInline 
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              
+              {/* Gradient and Bottom Content Overlay */}
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/85 to-transparent p-6 pt-20 flex flex-col items-center text-center relative z-10">
                 <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider min-h-[32px] flex items-center justify-center">
                   {cylinderStats[sectionVideoIdx].description}
                 </p>

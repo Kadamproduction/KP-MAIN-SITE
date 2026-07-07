@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 
 const inter = Inter({
@@ -40,6 +41,11 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} dark h-full antialiased`}>
       <body className="min-h-full bg-black text-white flex flex-col font-sans select-none overflow-x-hidden">
         {children}
+        {/* Load Lottie player for premium vector animations */}
+        <Script 
+          src="https://unpkg.com/@lottiefiles/lottie-player@2.0.4/dist/lottie-player.js" 
+          strategy="afterInteractive" 
+        />
       </body>
     </html>
   );
