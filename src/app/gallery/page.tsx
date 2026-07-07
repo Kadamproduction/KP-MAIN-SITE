@@ -8,32 +8,17 @@ import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
 
-// 24+ high-quality stock event production images
+// 9 high-quality Cloudinary event production images
 const galleryImages = [
-  { id: 1, category: 'Weddings', title: 'Luxury Reception Setup', event: 'Soni Wedding 2026', src: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80' },
-  { id: 2, category: 'Festivals', title: 'Neon Laser Show', event: 'Sunburn Arena', src: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80' },
-  { id: 3, category: 'Concerts', title: 'Mainstage Production', event: 'Arijit Singh Live', src: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=800&q=80' },
-  { id: 4, category: 'Corporate', title: 'Keynote Stage Lighting', event: 'Tech Summit 2025', src: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80' },
-  { id: 5, category: 'Road Shows', title: 'Truck Mounted LED Truss', event: 'Gujarat Election Rally', src: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80' },
-  { id: 6, category: 'Weddings', title: 'Glow Sangeet Night', event: 'Patel Sangeet 2025', src: 'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=800&q=80' },
-  { id: 7, category: 'Festivals', title: 'Pyrotechnics & Sparks', event: 'EDM Night Ahmedabad', src: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=800&q=80' },
-  { id: 8, category: 'Concerts', title: 'Outdoor Concert Sound', event: 'Rock Festival Baroda', src: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=800&q=80' },
-  { id: 9, category: 'Corporate', title: 'Gala Awards Dinner', event: 'Reliance Corporate Meet', src: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80' },
-  { id: 10, category: 'Road Shows', title: 'Mobile DJ Console', event: 'Ganpati Visarjan Rally', src: 'https://images.unsplash.com/photo-1516873240891-4bf014598ab4?auto=format&fit=crop&w=800&q=80' },
-  { id: 11, category: 'Weddings', title: 'Open Air Varmala Stage', event: 'Shah Royal Wedding', src: 'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=800&q=80' },
-  { id: 12, category: 'Festivals', title: 'Laser Wave Ceiling', event: 'Elysian Festival', src: 'https://images.unsplash.com/photo-1482440308425-276ad0f28b19?auto=format&fit=crop&w=800&q=80' },
-  { id: 13, category: 'Concerts', title: 'LED Wall Setup', event: 'Diljit Dosanjh Live', src: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=800&q=80' },
-  { id: 14, category: 'Corporate', title: 'VIP Launch Event', event: 'BMW Car Unveiling', src: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80' },
-  { id: 15, category: 'Road Shows', title: 'Silent Generator Setup', event: 'Film City Shoot', src: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=800&q=80' },
-  { id: 16, category: 'Weddings', title: 'White Floral Mandap', event: 'Mehta Mandap Night', src: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80' },
-  { id: 17, category: 'Festivals', title: 'Arena Sound System', event: 'Dandiya Garba Night', src: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=800&q=80' },
-  { id: 18, category: 'Concerts', title: 'Guitarist Silhouette', event: 'Youth Rock Fest', src: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80' },
-  { id: 19, category: 'Corporate', title: 'Panel Discussion Setup', event: 'Forbes Gujarat Meet', src: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80' },
-  { id: 20, category: 'Road Shows', title: 'Mobile LED Display truck', event: 'Promotional Brand Tour', src: 'https://images.unsplash.com/photo-1569025743873-ea3a9ade89f9?auto=format&fit=crop&w=800&q=80' },
-  { id: 21, category: 'Weddings', title: 'Truss Gate Entry Lights', event: 'Joshi Reception 2026', src: 'https://images.unsplash.com/photo-1549417229-aa67d3263c09?auto=format&fit=crop&w=800&q=80' },
-  { id: 22, category: 'Festivals', title: 'Massive Crowd Confetti', event: 'Holi EDM bash', src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80' },
-  { id: 23, category: 'Concerts', title: 'Pyrotechnics Stage Spark', event: 'Metal Night Surat', src: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=800&q=80' },
-  { id: 24, category: 'Corporate', title: 'LED Interactive Backdrop', event: 'Product Launch meet', src: 'https://images.unsplash.com/photo-1551818255-e6e10975bc17?auto=format&fit=crop&w=800&q=80' }
+  { id: 1, category: 'Weddings', title: 'Premium Varmala Stage', event: 'Wedding Ceremony', src: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783012636/Untitled-design-13.png' },
+  { id: 2, category: 'Festivals', title: 'Cultural Garba Arena', event: 'Navratri Dandiya', src: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417406/Untitled-design-18_tdjp2b.png' },
+  { id: 3, category: 'Concerts', title: 'Live Rock concert audio', event: 'Sunburn Arena', src: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417444/Untitled-design-21_atubxz.png' },
+  { id: 4, category: 'Corporate', title: 'Interactive Truss rig', event: 'Launch Production', src: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417440/Untitled-design-20_sm7myc.png' },
+  { id: 5, category: 'Road Shows', title: 'Mobile LED Truss', event: 'Gujarat Promotion', src: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417424/Untitled-design-17_ubz6ho.png' },
+  { id: 6, category: 'Weddings', title: 'Royal Reception Stage', event: 'Elite reception setup', src: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417394/Untitled-design-15_bdfxt9.png' },
+  { id: 7, category: 'Festivals', title: 'Neon Laser EDM show', event: 'Music Festival live', src: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417386/Untitled-design-14_ogyqmd.png' },
+  { id: 8, category: 'Concerts', title: 'Mainstage LED wall', event: 'Ahmedabad Concert Live', src: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417856/Untitled-design-32_atcfrs.png' },
+  { id: 9, category: 'Corporate', title: 'High-end lighting design', event: 'VIP Corporate Meet', src: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417448/Untitled-design-25_f2t475.png' }
 ];
 
 const categories = ['All Events', 'Weddings', 'Festivals', 'Concerts', 'Corporate', 'Road Shows'];
