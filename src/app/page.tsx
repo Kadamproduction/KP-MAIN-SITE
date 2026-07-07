@@ -191,8 +191,18 @@ export default function HomePage() {
           {/* Layer 3: Split Hero Content (Text Left, Lottie Right) */}
           <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
             
-            {/* Left Side: Headlines */}
-            <div className="md:col-span-7 flex flex-col justify-center items-start text-left space-y-6 pt-16 md:pt-0">
+            {/* Right Side: Circular metallic logo Lottie player (First on mobile via order class) */}
+            <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[280px] sm:max-w-[340px] lg:max-w-[560px] mx-auto">
+              <div 
+                dangerouslySetInnerHTML={{
+                  __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
+                }}
+                className="w-full h-full flex items-center justify-center"
+              />
+            </div>
+
+            {/* Left Side: Headlines (Last on mobile, centered text) */}
+            <div className="md:col-span-7 order-last md:order-first flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-6 pt-6 md:pt-0">
               {/* Extra spacing in between Gloock font headings */}
               <div className="space-y-4">
                 <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
@@ -214,10 +224,10 @@ export default function HomePage() {
               </p>
 
               {/* CTA Buttons */}
-              <div className="flex gap-4 pt-4">
+              <div className="flex flex-col sm:flex-row gap-4 pt-4 w-full justify-center md:justify-start items-center">
                 <button 
                   onClick={() => router.push('/services')}
-                  className="px-6 py-3.5 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] hover:from-[#9462ff] hover:to-[#ff58ad] text-white rounded-full text-xs font-bold tracking-wider flex items-center gap-2 cursor-pointer shadow-lg shadow-purple-500/15"
+                  className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] hover:from-[#9462ff] hover:to-[#ff58ad] text-white rounded-full text-xs font-bold tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-purple-500/15"
                   style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
                   EXPLORE SERVICES
@@ -226,7 +236,7 @@ export default function HomePage() {
                 
                 <button 
                   onClick={() => router.push('/gallery')}
-                  className="px-6 py-3.5 bg-transparent hover:bg-white/5 text-white border border-white/20 hover:border-white/40 rounded-full text-xs font-bold tracking-wider cursor-pointer transition-all"
+                  className="w-full sm:w-auto px-6 py-3.5 bg-transparent hover:bg-white/5 text-white border border-white/20 hover:border-white/40 rounded-full text-xs font-bold tracking-wider cursor-pointer transition-all"
                   style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
                   VIEW GALLERY
@@ -234,24 +244,14 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Side: Circular metallic logo Lottie player (Increased Dimensions) */}
-            <div className="md:col-span-5 flex items-center justify-center relative w-full aspect-square max-w-[500px] lg:max-w-[560px] mx-auto">
-              <div 
-                dangerouslySetInnerHTML={{
-                  __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
-                }}
-                className="w-full h-full flex items-center justify-center"
-              />
-            </div>
-
           </div>
 
-          {/* Scroll down indicator */}
+          {/* Scroll down indicator (hidden on mobile/tablet view) */}
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: [0, 8, 0] }}
             transition={{ delay: 2, duration: 2, repeat: Infinity }}
-            className="absolute bottom-8 flex flex-col items-center gap-1.5 text-zinc-550 text-[10px] tracking-[0.2em] font-extrabold uppercase pointer-events-none select-none"
+            className="hidden md:flex absolute bottom-8 flex flex-col items-center gap-1.5 text-zinc-550 text-[10px] tracking-[0.2em] font-extrabold uppercase pointer-events-none select-none"
           >
             <span>Scroll Down</span>
             <ChevronDown className="w-4 h-4 text-zinc-500" />
@@ -345,19 +345,21 @@ export default function HomePage() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-550/5 rounded-full blur-[120px] pointer-events-none" />
           
           <div className="text-center max-w-4xl space-y-3 mb-16">
-            <FlipText 
-              text="OUR STAGES IN ACTION" 
-              className="text-3xl md:text-5xl font-normal uppercase tracking-wider"
-            />
+            <h2 
+              className="text-2xl sm:text-4xl md:text-5xl font-normal uppercase tracking-widest text-white leading-normal"
+              style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+            >
+              OUR STAGES IN ACTION
+            </h2>
             <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">A glance at our production footage</p>
           </div>
 
-          {/* Desktop/Tablet 3x2 Grid (6 portrait video cards) */}
-          <div className="hidden md:grid grid-cols-3 gap-6 max-w-6xl mx-auto w-full relative z-20">
+          {/* Universal Grid (Stacks vertically on mobile, 3-columns on desktop) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto w-full relative z-20">
             {cylinderStats.map((stat, idx) => (
               <div 
                 key={idx}
-                className="relative w-full rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col hover:border-purple-550/30 hover:shadow-[0_0_35px_rgba(139,92,246,0.15)] transition-all duration-500 shadow-2xl"
+                className="relative w-full max-w-[340px] md:max-w-none mx-auto rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col hover:border-purple-550/30 hover:shadow-[0_0_35px_rgba(139,92,246,0.15)] transition-all duration-500 shadow-2xl"
               >
                 {/* Tall Video component */}
                 <video 
@@ -366,7 +368,7 @@ export default function HomePage() {
                   muted 
                   loop 
                   playsInline 
-                  className="w-full aspect-[9/16] lg:aspect-[9/16] object-cover rounded-[1.8rem] md:rounded-[2.2rem]"
+                  className="w-full aspect-[9/16] object-cover rounded-[1.8rem] md:rounded-[2.2rem]"
                 />
                 
                 {/* Padded Content below the video */}
@@ -393,59 +395,6 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-
-          {/* Mobile Swipeable Card Carousel (1 card at a time, matches screenshot styling) */}
-          <div className="md:hidden w-full flex flex-col items-center gap-6 relative z-20">
-            <div 
-              className="w-full max-w-[320px] rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col relative shadow-2xl"
-            >
-              {/* Tall Video component */}
-              <video 
-                key={sectionVideoIdx}
-                src={videoSources[sectionVideoIdx]} 
-                autoPlay 
-                muted 
-                loop 
-                playsInline 
-                className="w-full aspect-[9/16] object-cover rounded-[1.8rem]"
-              />
-              
-              {/* Padded Content below the video */}
-              <div className="flex-1 flex flex-col justify-between items-center text-center p-4 pt-6">
-                {/* Courier Prime Font description text */}
-                <p 
-                  className="text-white font-bold uppercase tracking-wider text-xs min-h-[48px] flex items-center justify-center"
-                  style={{ fontFamily: 'var(--font-courier-prime), Courier, monospace' }}
-                >
-                  {cylinderStats[sectionVideoIdx].description}
-                </p>
-                
-                {/* Dotted/Dashed Line Divider */}
-                <div className="w-full border-t border-dashed border-zinc-700/60 my-5" />
-                
-                {/* Lora Font Stat label text */}
-                <span 
-                  className="text-md font-bold text-white tracking-wide uppercase"
-                  style={{ fontFamily: 'var(--font-lora), Lora, serif' }}
-                >
-                  {cylinderStats[sectionVideoIdx].number} {cylinderStats[sectionVideoIdx].label}
-                </span>
-              </div>
-            </div>
-            
-            {/* Dots */}
-            <div className="flex gap-2">
-              {cylinderStats.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSectionVideoIdx(idx)}
-                  className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
-                    sectionVideoIdx === idx ? 'bg-purple-500 w-4' : 'bg-white/30 hover:bg-white/50'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
         </section>
 
         {/* 1.5 OUR VIBRANTS SECTION (Task 3 Carousel Slider) */}
@@ -470,8 +419,8 @@ export default function HomePage() {
                 </p>
               </div>
 
-              {/* Slider Navigation circular arrow buttons */}
-              <div className="flex gap-4">
+              {/* Slider Navigation circular arrow buttons (Desktop only) */}
+              <div className="hidden md:flex gap-4">
                 <button 
                   onClick={scrollVibrantsLeft}
                   className="w-12 h-12 rounded-full bg-black border border-white/10 hover:border-purple-550/40 flex items-center justify-center text-white hover:bg-purple-500/10 transition-all cursor-pointer shadow-lg"
@@ -487,15 +436,49 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Column: Infinite sliding image cards & Description block */}
+            {/* Right Column: Sliding image cards & Description block */}
             <div className="lg:col-span-7 space-y-8">
-              <div className="flex gap-6 overflow-hidden pb-6">
+              
+              {/* Mobile Card Container (Shows exactly ONE card, no previews on the side) */}
+              <div className="md:hidden w-full max-w-[280px] sm:max-w-[320px] mx-auto overflow-hidden rounded-3xl relative border border-white/5 bg-zinc-950/40 shadow-lg group">
+                <img 
+                  src={vibrantsItems[0].image} 
+                  alt={vibrantsItems[0].title} 
+                  className="w-full aspect-[3/4] object-cover filter brightness-[0.7]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+                <span 
+                  className="absolute bottom-6 left-6 text-white font-normal tracking-widest text-sm uppercase" 
+                  style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+                >
+                  {vibrantsItems[0].title}
+                </span>
+              </div>
+
+              {/* Mobile Slider Controls (Shifted under the card) */}
+              <div className="flex md:hidden justify-center gap-6 mt-4">
+                <button 
+                  onClick={scrollVibrantsLeft}
+                  className="w-12 h-12 rounded-full bg-black border border-white/10 flex items-center justify-center text-white hover:bg-white/10 active:scale-95 transition-all cursor-pointer shadow-lg"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button 
+                  onClick={scrollVibrantsRight}
+                  className="w-12 h-12 rounded-full bg-black border border-white/10 flex items-center justify-center text-white hover:bg-white/10 active:scale-95 transition-all cursor-pointer shadow-lg"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Desktop Slider Container (Shows multiple cards side-by-side) */}
+              <div className="hidden md:flex gap-6 overflow-hidden pb-6">
                 {vibrantsItems.map((item, idx) => (
                   <motion.div 
                     key={item.title}
                     layout
                     transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-                    className="w-[260px] sm:w-[300px] aspect-[3/4] flex-shrink-0 snap-start rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group transition-all duration-500 hover:border-purple-500/20"
+                    className="w-[260px] sm:w-[300px] aspect-[3/4] flex-shrink-0 rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group transition-all duration-500 hover:border-purple-500/20"
                   >
                     <img 
                       src={item.image} 
