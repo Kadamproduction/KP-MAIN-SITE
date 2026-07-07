@@ -102,25 +102,25 @@ export default function AboutPage() {
             <div className="grid grid-cols-3 gap-4 pt-6 border-t border-white/5">
               <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-3">
                 <img 
-                  src="https://res.cloudinary.com/zr9jqpwb/image/upload/spotlight_aetwmd.png" 
+                  src="https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417406/spotlight_aetwmd.png" 
                   alt="Light Icon" 
-                  className="w-8 h-8 object-contain filter brightness-[0.9]"
+                  className="w-8 h-8 object-contain filter invert brightness-200"
                 />
                 <div className="text-xs font-bold text-white uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Light</div>
               </div>
               <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-3">
                 <img 
-                  src="https://res.cloudinary.com/zr9jqpwb/image/upload/wave-sound_ux5uhf.png" 
+                  src="https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417406/wave-sound_ux5uhf.png" 
                   alt="Sound Icon" 
-                  className="w-8 h-8 object-contain filter brightness-[0.9]"
+                  className="w-8 h-8 object-contain filter invert brightness-200"
                 />
                 <div className="text-xs font-bold text-white uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Sounds</div>
               </div>
               <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-3">
                 <img 
-                  src="https://res.cloudinary.com/zr9jqpwb/image/upload/sound-control_cv7kzt.png" 
+                  src="https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417406/sound-control_cv7kzt.png" 
                   alt="Quality Icon" 
-                  className="w-8 h-8 object-contain filter brightness-[0.9]"
+                  className="w-8 h-8 object-contain filter invert brightness-200"
                 />
                 <div className="text-xs font-bold text-white uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Quality</div>
               </div>
