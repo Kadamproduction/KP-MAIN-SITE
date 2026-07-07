@@ -159,7 +159,7 @@ export default function Footer() {
           © {currentYear} Kadam Production. All rights reserved.
         </p>
         <p className="text-[10px] text-zinc-650 flex items-center gap-1">
-          Designed with ❤️ by <span className="text-zinc-400 font-bold uppercase">Kadam Production Agency</span>
+          Designed by <a href="https://www.trishulhub.in" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white font-bold uppercase transition-colors">Trishulhub agency</a>
         </p>
       </div>
     </footer>
