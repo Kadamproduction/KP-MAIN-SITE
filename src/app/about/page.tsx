@@ -33,9 +33,8 @@ const milestones = [
 ];
 
 const teamMembers = [
-  { name: 'Vijay Kadam', role: 'Founder & Main DJ', bio: 'Pioneered custom sound rigging and DJ performance styles.', src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80' },
-  { name: 'Amit Kadam', role: 'Head of Lighting Design', bio: 'Specialist in custom laser mappings and moving head structures.', src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80' },
-  { name: 'Rajesh Sharma', role: 'Senior Sound Engineer', bio: 'Maintains optimal decibel balance and line array rigging safety.', src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80' },
+  { name: 'ROHAN', role: 'Managing Director', bio: 'Directing creative operations, production strategies, and high-end light & sound installations.', src: 'https://res.cloudinary.com/zr9jqpwb/image/upload/WhatsApp-Image-2026-01-10-at-8.52.25-PM-3_vohntj.png' },
+  { name: 'DISHANT', role: 'Managing Director', bio: 'Overseeing event execution, client coordination, and technical system setups.', src: 'https://res.cloudinary.com/zr9jqpwb/image/upload/WhatsApp-Image-2026-01-10-at-8.52.25-PM-2_ug0sl5.png' },
 ];
 
 export default function AboutPage() {
@@ -171,17 +170,19 @@ export default function AboutPage() {
 
         {/* TEAM CAROUSEL SECTION */}
         <section className="py-24 max-w-7xl mx-auto px-6 border-t border-white/5">
-          <div className="text-center max-w-xl mx-auto mb-16 space-y-3">
+          <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
             <h2 
               className="text-3xl sm:text-4xl md:text-5xl font-normal uppercase tracking-widest text-white leading-tight"
               style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
             >
               THE CREW
             </h2>
-            <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">Meet the production masterminds</p>
+            <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest leading-relaxed">
+              Strong management behind every perfectly executed event
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {teamMembers.map((member, idx) => (
               <motion.div
                 key={member.name}
