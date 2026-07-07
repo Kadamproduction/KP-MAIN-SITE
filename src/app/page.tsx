@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   ArrowRight, Calendar, Sparkles, Volume2, 
   Music, Lightbulb, PartyPopper, Play, Clock, 
   Sliders, CalendarDays, Zap, Phone, Mail, MapPin, 
-  ChevronDown, Film, Building2, Radio
+  ChevronDown, Film, Building2, Radio, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import FlipText from '@/components/FlipText';
 import CylinderCarousel from '@/components/CylinderCarousel';
@@ -117,6 +117,22 @@ export default function HomePage() {
   const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
   const [sectionVideoIdx, setSectionVideoIdx] = useState(0);
 
+  const vibrantsRef = useRef<HTMLDivElement>(null);
+
+  const scrollVibrantsLeft = () => {
+    if (vibrantsRef.current) {
+      vibrantsRef.current.scrollBy({ left: -320, behavior: 'smooth' });
+    }
+  };
+
+  const scrollVibrantsRight = () => {
+    if (vibrantsRef.current) {
+      vibrantsRef.current.scrollBy({ left: 320, behavior: 'smooth' });
+    }
+  };
+
+
+  
   return (
     <>
       {/* 0-100% Page Loader */}
@@ -270,19 +286,19 @@ export default function HomePage() {
         </section>
 
         {/* 1.3 SERVICES MARQUEE SECTION */}
-        <section className="relative py-16 bg-[#030303] border-y border-white/5 overflow-hidden">
+        <section className="relative py-8 bg-[#030303] border-y border-white/5 overflow-hidden">
           {/* Row 1: Left to Right */}
-          <div className="flex gap-16 animate-marquee whitespace-nowrap py-4">
+          <div className="flex gap-5 animate-marquee whitespace-nowrap py-2">
             {marqueeServices.map((service, idx) => {
               const Icon = service.icon;
               return (
                 <div 
                   key={idx}
-                  className="inline-flex items-center gap-4 px-8 py-5 rounded-2xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#8B5CF6]/30 hover:bg-[#8B5CF6]/5 transition-all duration-300 group"
+                  className="inline-flex items-center gap-2.5 px-4 py-2 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#8B5CF6]/30 hover:bg-[#8B5CF6]/5 transition-all duration-300 group"
                 >
-                  <Icon className="w-6 h-6 transition-transform group-hover:scale-110" style={{ color: service.color }} />
+                  <Icon className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:scale-110" style={{ color: service.color }} />
                   <span 
-                    className="text-xl font-bold tracking-wider text-white"
+                    className="text-xs md:text-sm font-bold tracking-wider text-white"
                     style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                   >
                     {service.label}
@@ -296,11 +312,11 @@ export default function HomePage() {
               return (
                 <div 
                   key={`dup-${idx}`}
-                  className="inline-flex items-center gap-4 px-8 py-5 rounded-2xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#8B5CF6]/30 hover:bg-[#8B5CF6]/5 transition-all duration-300 group"
+                  className="inline-flex items-center gap-2.5 px-4 py-2 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#8B5CF6]/30 hover:bg-[#8B5CF6]/5 transition-all duration-300 group"
                 >
-                  <Icon className="w-6 h-6 transition-transform group-hover:scale-110" style={{ color: service.color }} />
+                  <Icon className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:scale-110" style={{ color: service.color }} />
                   <span 
-                    className="text-xl font-bold tracking-wider text-white"
+                    className="text-xs md:text-sm font-bold tracking-wider text-white"
                     style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                   >
                     {service.label}
@@ -311,17 +327,17 @@ export default function HomePage() {
           </div>
 
           {/* Row 2: Right to Left (Reverse direction) */}
-          <div className="flex gap-16 animate-marquee-reverse whitespace-nowrap py-4 mt-6 opacity-70">
+          <div className="flex gap-5 animate-marquee-reverse whitespace-nowrap py-2 mt-4 opacity-70">
             {marqueeServices.slice().reverse().map((service, idx) => {
               const Icon = service.icon;
               return (
                 <div 
                   key={idx}
-                  className="inline-flex items-center gap-4 px-8 py-5 rounded-2xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#EC4899]/30 hover:bg-[#EC4899]/5 transition-all duration-300 group"
+                  className="inline-flex items-center gap-2.5 px-4 py-2 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#EC4899]/30 hover:bg-[#EC4899]/5 transition-all duration-300 group"
                 >
-                  <Icon className="w-6 h-6 transition-transform group-hover:scale-110" style={{ color: service.color }} />
+                  <Icon className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:scale-110" style={{ color: service.color }} />
                   <span 
-                    className="text-xl font-bold tracking-wider text-white"
+                    className="text-xs md:text-sm font-bold tracking-wider text-white"
                     style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                   >
                     {service.label}
@@ -335,11 +351,11 @@ export default function HomePage() {
               return (
                 <div 
                   key={`dup-rev-${idx}`}
-                  className="inline-flex items-center gap-4 px-8 py-5 rounded-2xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#EC4899]/30 hover:bg-[#EC4899]/5 transition-all duration-300 group"
+                  className="inline-flex items-center gap-2.5 px-4 py-2 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#EC4899]/30 hover:bg-[#EC4899]/5 transition-all duration-300 group"
                 >
-                  <Icon className="w-6 h-6 transition-transform group-hover:scale-110" style={{ color: service.color }} />
+                  <Icon className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:scale-110" style={{ color: service.color }} />
                   <span 
-                    className="text-xl font-bold tracking-wider text-white"
+                    className="text-xs md:text-sm font-bold tracking-wider text-white"
                     style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                   >
                     {service.label}
@@ -363,44 +379,86 @@ export default function HomePage() {
             <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">A glance at our production footage</p>
           </div>
 
-          {/* Desktop/Tablet 3x3 Grid (9 portrait videos) */}
-          <div className="hidden md:grid grid-cols-3 gap-6 max-w-5xl mx-auto w-full relative z-20">
-            {videoSources.map((src, idx) => (
+          {/* Desktop/Tablet 3x2 Grid (6 portrait video cards) */}
+          <div className="hidden md:grid grid-cols-3 gap-6 max-w-6xl mx-auto w-full relative z-20">
+            {cylinderStats.map((stat, idx) => (
               <div 
                 key={idx}
-                className="relative aspect-[9/16] rounded-3xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(139,92,246,0.2)] transition-all duration-500 bg-zinc-950/40"
+                className="relative rounded-[2rem] overflow-hidden border border-white/10 bg-zinc-950/40 hover:border-purple-500/30 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(139,92,246,0.15)] transition-all duration-500 flex flex-col h-[520px]"
               >
+                {/* Top Video (takes up h-2/3) */}
+                <div className="relative w-full h-[60%] overflow-hidden">
+                  <video 
+                    src={videoSources[idx]} 
+                    autoPlay 
+                    muted 
+                    loop 
+                    playsInline 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/10 to-transparent pointer-events-none" />
+                </div>
+
+                {/* Bottom Panel (takes up h-1/3) */}
+                <div className="p-6 flex-1 flex flex-col justify-between items-center text-center">
+                  <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider min-h-[32px] flex items-center justify-center">
+                    {stat.description}
+                  </p>
+                  
+                  <div className="w-full border-t border-dashed border-zinc-800 my-4" />
+
+                  <span className="text-3xl font-black text-white font-sans tracking-tight">
+                    {stat.number}
+                  </span>
+                  
+                  <span className="text-[10px] text-zinc-550 font-black uppercase tracking-widest mt-1">
+                    {stat.label}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile Swipeable Card Carousel (1 card at a time, 16:9 aspect-ratio video) */}
+          <div className="md:hidden w-full flex flex-col items-center gap-6 relative z-20">
+            <div 
+              className="w-full max-w-[320px] rounded-[2rem] overflow-hidden border border-white/10 bg-zinc-950/40 flex flex-col h-[500px]"
+            >
+              {/* Top Video (takes up h-2/3) */}
+              <div className="relative w-full h-[60%] overflow-hidden">
                 <video 
-                  src={src} 
+                  key={sectionVideoIdx}
+                  src={videoSources[sectionVideoIdx]} 
                   autoPlay 
                   muted 
                   loop 
                   playsInline 
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/10 to-transparent pointer-events-none" />
               </div>
-            ))}
-          </div>
 
-          {/* Mobile Swipeable Slider (1 video, 16:9 aspect-ratio) */}
-          <div className="md:hidden w-full flex flex-col items-center gap-6 relative z-20">
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/5 shadow-xl bg-zinc-950/40">
-              <video 
-                key={sectionVideoIdx}
-                src={videoSources[sectionVideoIdx]}
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+              {/* Bottom Panel */}
+              <div className="p-6 flex-1 flex flex-col justify-between items-center text-center">
+                <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider min-h-[32px] flex items-center justify-center">
+                  {cylinderStats[sectionVideoIdx].description}
+                </p>
+                
+                <div className="w-full border-t border-dashed border-zinc-800 my-4" />
+                
+                <span className="text-3xl font-black text-white font-sans tracking-tight">
+                  {cylinderStats[sectionVideoIdx].number}
+                </span>
+                
+                <span className="text-[10px] text-zinc-550 font-black uppercase tracking-widest mt-1">
+                  {cylinderStats[sectionVideoIdx].label}
+                </span>
+              </div>
             </div>
             
             {/* Dots */}
             <div className="flex gap-2">
-              {videoSources.map((_, idx) => (
+              {cylinderStats.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSectionVideoIdx(idx)}
@@ -413,111 +471,74 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 1.5 VIDEO SHOWCASE SECTION */}
-        <section className="relative py-28 px-6 md:px-12 bg-[#030303] overflow-hidden">
-          <div className="max-w-7xl mx-auto space-y-12">
+        {/* 1.5 OUR VIBRANTS SECTION (Task 3 Carousel Slider) */}
+        <section className="relative py-28 px-6 md:px-12 bg-[#030303] overflow-hidden border-t border-white/5">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Heading */}
-            <div className="text-center space-y-2 max-w-xl mx-auto">
-              <FlipText 
-                text="OUR ATMOSPHERE" 
-                className="text-3xl md:text-5xl font-black uppercase"
-              />
-              <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">Experience the energy of Kadam Production live</p>
+            {/* Left Column: Headings & Slide Controls */}
+            <div className="lg:col-span-5 flex flex-col justify-between h-full py-6 space-y-8">
+              <div className="space-y-2">
+                <span className="text-3xl md:text-5xl font-extrabold tracking-widest text-zinc-650 uppercase block" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                  CHOOSE
+                </span>
+                <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">
+                  OUR <br />
+                  VIBRANTS
+                </h2>
+              </div>
+
+              {/* Slider Navigation circular arrow buttons */}
+              <div className="flex gap-4">
+                <button 
+                  onClick={scrollVibrantsLeft}
+                  className="w-12 h-12 rounded-full bg-black border border-white/10 hover:border-purple-550/40 flex items-center justify-center text-white hover:bg-purple-500/10 transition-all cursor-pointer shadow-lg"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button 
+                  onClick={scrollVibrantsRight}
+                  className="w-12 h-12 rounded-full bg-black border border-white/10 hover:border-pink-555/40 flex items-center justify-center text-white hover:bg-pink-500/10 transition-all cursor-pointer shadow-lg"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
-            {/* Asymmetric Showcase Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-6">
-              
-              {/* Left Large Video (7 cols) */}
-              <motion.div 
-                initial={{ opacity: 0, x: -40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="lg:col-span-7 relative h-[320px] md:h-[500px] rounded-3xl overflow-hidden group border border-white/5 hover:border-[#8B5CF6]/30 transition-all shadow-lg"
+            {/* Right Column: Sliding image cards & Description block */}
+            <div className="lg:col-span-7 space-y-8">
+              <div 
+                ref={vibrantsRef}
+                className="flex gap-6 overflow-x-auto pb-6 scrollbar-none snap-x snap-mandatory scroll-smooth"
               >
-                <video 
-                  src="https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-dancing-under-lights-42564-large.mp4"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="absolute inset-0 w-full h-full object-cover filter brightness-[0.7] group-hover:scale-105 transition-transform duration-700"
-                />
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-                <div className="absolute bottom-8 left-8 space-y-2">
-                  <h4 className="text-2xl font-bold text-white uppercase" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Wedding Celebrations</h4>
-                  <p className="text-xs text-zinc-400 font-medium">Where love meets professional rhythm and lights.</p>
-                </div>
-                {/* Visual hover play icon */}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/40 flex items-center justify-center text-white">
-                    <Play className="w-6 h-6 ml-1" />
+                {[
+                  { title: 'FESTIVALS', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80' },
+                  { title: 'CONCERT', image: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=600&q=80' },
+                  { title: 'WEDDING', image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=600&q=80' },
+                  { title: 'EVENTS', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80' },
+                  { title: 'ROAD SHOWS', image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80' }
+                ].map((item, idx) => (
+                  <div 
+                    key={idx}
+                    className="w-[260px] sm:w-[300px] aspect-[3/4] flex-shrink-0 snap-center rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group"
+                  >
+                    <img 
+                      src={item.image} 
+                      alt={item.title} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.7]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+                    <span className="absolute bottom-6 left-6 text-white font-black tracking-widest text-sm uppercase" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                      {item.title}
+                    </span>
                   </div>
-                </div>
-              </motion.div>
+                ))}
+              </div>
 
-              {/* Right Small Videos Stack (5 cols) */}
-              <div className="lg:col-span-5 flex flex-col gap-6">
-                
-                {/* Small Video 1 */}
-                <motion.div 
-                  initial={{ opacity: 0, x: 40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8 }}
-                  className="relative h-[238px] rounded-3xl overflow-hidden group border border-white/5 hover:border-[#EC4899]/30 transition-all shadow-lg"
-                >
-                  <video 
-                    src="https://assets.mixkit.co/videos/preview/mixkit-people-dancing-at-a-concert-4552-large.mp4"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="absolute inset-0 w-full h-full object-cover filter brightness-[0.7] group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-                  <div className="absolute bottom-6 left-6 space-y-1">
-                    <h4 className="text-lg font-bold text-white uppercase" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Festival Energy</h4>
-                    <p className="text-[10px] text-zinc-400 font-medium">Massive crowd vibes, lasers, and bass drops.</p>
-                  </div>
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/40 flex items-center justify-center text-white">
-                      <Play className="w-4 h-4 ml-0.5" />
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Small Video 2 */}
-                <motion.div 
-                  initial={{ opacity: 0, x: 40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="relative h-[238px] rounded-3xl overflow-hidden group border border-white/5 hover:border-[#06B6D4]/30 transition-all shadow-lg"
-                >
-                  <video 
-                    src="https://assets.mixkit.co/videos/preview/mixkit-concert-stage-flashing-lights-41006-large.mp4"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="absolute inset-0 w-full h-full object-cover filter brightness-[0.7] group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-                  <div className="absolute bottom-6 left-6 space-y-1">
-                    <h4 className="text-lg font-bold text-white uppercase" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Concert Production</h4>
-                    <p className="text-[10px] text-zinc-400 font-medium">Cinematic stage construction, Truss setups and LED panels.</p>
-                  </div>
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/40 flex items-center justify-center text-white">
-                      <Play className="w-4 h-4 ml-0.5" />
-                    </div>
-                  </div>
-                </motion.div>
-
+              {/* Description block at the bottom right */}
+              <div className="flex justify-end pr-4">
+                <p className="text-xs md:text-sm text-zinc-400 font-semibold leading-relaxed max-w-md text-left">
+                  Music isn&apos;t just played—it&apos;s experienced. We organize events that blend powerful sound, smooth transitions, and crowd-reading skills to create an electric atmosphere from start to finish.
+                </p>
               </div>
             </div>
 
