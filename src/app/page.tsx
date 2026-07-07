@@ -118,18 +118,20 @@ export default function HomePage() {
   const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
   const [sectionVideoIdx, setSectionVideoIdx] = useState(0);
 
-  const vibrantsRef = useRef<HTMLDivElement>(null);
+  const [vibrantsItems, setVibrantsItems] = useState([
+    { title: 'FESTIVALS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417440/Untitled-design-20_sm7myc.png' },
+    { title: 'CONCERT', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417386/Untitled-design-14_ogyqmd.png' },
+    { title: 'WEDDING', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783012636/Untitled-design-13.png' },
+    { title: 'ROAD SHOWS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417856/Untitled-design-32_atcfrs.png' },
+    { title: 'UNIQUE EVENTS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417448/Untitled-design-25_f2t475.png' }
+  ]);
 
   const scrollVibrantsLeft = () => {
-    if (vibrantsRef.current) {
-      vibrantsRef.current.scrollBy({ left: -324, behavior: 'smooth' });
-    }
+    setVibrantsItems((prev) => [prev[prev.length - 1], ...prev.slice(0, prev.length - 1)]);
   };
 
   const scrollVibrantsRight = () => {
-    if (vibrantsRef.current) {
-      vibrantsRef.current.scrollBy({ left: 324, behavior: 'smooth' });
-    }
+    setVibrantsItems((prev) => [...prev.slice(1), prev[0]]);
   };
 
 
@@ -452,13 +454,12 @@ export default function HomePage() {
             
             {/* Left Column: Headings & Slide Controls */}
             <div className="lg:col-span-5 flex flex-col justify-between h-full py-6 space-y-8">
-              <div className="space-y-2">
-                <span className="text-3xl md:text-5xl font-extrabold tracking-[0.2em] text-zinc-650 uppercase block" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
-                  CHOOSE
-                </span>
-                <h2 className="text-5xl md:text-7xl font-normal text-white uppercase tracking-widest leading-none">
-                  OUR <br />
-                  VIBRANTS
+              <div className="space-y-4">
+                <h2 
+                  className="text-4xl md:text-6xl font-normal uppercase tracking-wider bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent hero-heading leading-tight"
+                  style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+                >
+                  CHOOSE <br className="hidden md:inline" /> OUR VIBRANTS
                 </h2>
               </div>
 
@@ -479,22 +480,15 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Column: Sliding image cards & Description block */}
+            {/* Right Column: Infinite sliding image cards & Description block */}
             <div className="lg:col-span-7 space-y-8">
-              <div 
-                ref={vibrantsRef}
-                className="flex gap-6 overflow-x-auto pb-6 scrollbar-none snap-x snap-mandatory scroll-smooth"
-              >
-                {[
-                  { title: 'FESTIVALS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417440/Untitled-design-20_sm7myc.png' },
-                  { title: 'CONCERT', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417386/Untitled-design-14_ogyqmd.png' },
-                  { title: 'WEDDING', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783012636/Untitled-design-13.png' },
-                  { title: 'ROAD SHOWS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417856/Untitled-design-32_atcfrs.png' },
-                  { title: 'UNIQUE EVENTS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417448/Untitled-design-25_f2t475.png' }
-                ].map((item, idx) => (
-                  <div 
-                    key={idx}
-                    className="w-[260px] sm:w-[300px] aspect-[3/4] flex-shrink-0 snap-start rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group transition-all duration-500 hover:border-purple-500/20"
+              <div className="flex gap-6 overflow-hidden pb-6">
+                {vibrantsItems.map((item, idx) => (
+                  <motion.div 
+                    key={item.title}
+                    layout
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    className="w-[260px] sm:w-[300px] aspect-[3/4] flex-shrink-0 rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group transition-all duration-500 hover:border-purple-500/20"
                   >
                     <img 
                       src={item.image} 
@@ -508,7 +502,7 @@ export default function HomePage() {
                     >
                       {item.title}
                     </span>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 
@@ -527,36 +521,28 @@ export default function HomePage() {
         <ProjectsSection />
 
         {/* 1.7 CALL TO ACTION (CTA) SECTION */}
-        <section className="relative py-32 px-6 md:px-12 bg-black border-t border-white/5 overflow-hidden flex flex-col items-center justify-center text-center">
+        <section className="relative py-24 px-6 md:px-12 bg-black border-t border-white/5 overflow-hidden flex flex-col items-center justify-center text-center">
           {/* Ambient colorful backdrop glows */}
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-[120px] pointer-events-none" />
           
-          <div className="max-w-3xl space-y-6 relative z-10">
-            <h2 
-              className="text-4xl md:text-7xl font-black uppercase tracking-tight leading-none text-white"
-            >
-              READY TO CREATE <br />
-              <span className="gradient-text-accent">MAGIC?</span>
-            </h2>
-            
-            <p className="text-sm md:text-base text-zinc-450 leading-relaxed max-w-xl mx-auto">
-              Let&apos;s turn your event into an unforgettable experience with world-class sound, lighting design, lasers, and entertainment.
-            </p>
-
+          <div className="relative z-10">
             <motion.div
               initial={{ scale: 0.95 }}
-              whileHover={{ scale: 1.02 }}
-              className="pt-4 block w-fit mx-auto"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              className="block w-fit mx-auto"
             >
-              <button
-                onClick={() => router.push('/contact')}
-                className="px-8 py-4 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] hover:from-[#9462ff] hover:to-[#ff58ad] text-white rounded-full text-sm font-bold tracking-widest uppercase cursor-pointer active:scale-98 transition-all flex items-center gap-2.5 shadow-xl shadow-purple-500/15"
+              <a
+                href="https://wa.link/7dtu1l"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-10 py-5 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] hover:from-[#9462ff] hover:to-[#ff58ad] text-white rounded-full text-sm font-bold tracking-widest uppercase cursor-pointer transition-all flex items-center gap-3 shadow-2xl shadow-purple-500/25 border border-white/10"
                 style={{ fontFamily: 'Space Grotesk, sans-serif' }}
               >
-                <CalendarDays className="w-4.5 h-4.5" />
+                <WhatsAppIcon className="w-5 h-5 fill-white" />
                 BOOK YOUR EVENT NOW
-              </button>
+              </a>
             </motion.div>
           </div>
         </section>

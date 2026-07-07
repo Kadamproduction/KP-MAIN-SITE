@@ -31,7 +31,7 @@ export default function SpotlightNavbar() {
     <>
       <div 
         ref={navbarRef}
-        className="fixed top-0 left-0 right-0 h-16 md:h-20 bg-[#050505]/80 backdrop-blur-xl border-b border-white/8 z-50 px-6 md:px-12 flex items-center justify-center transition-all duration-300"
+        className="fixed top-0 left-0 right-0 h-16 md:h-20 bg-transparent border-none z-50 px-6 md:px-12 flex items-center justify-center transition-all duration-300"
       >
         {/* Center Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-12 relative z-50">

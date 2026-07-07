@@ -119,9 +119,9 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
   return (
     <div 
       ref={cardRef} 
-      className="sticky h-[80vh] md:h-[85vh] w-full flex items-center justify-center"
+      className="sticky h-[82vh] md:h-[90vh] w-full flex items-center justify-center"
       style={{ 
-        top: `${80 + index * 28}px`,
+        top: `${64 + index * 28}px`,
         perspective: 1000
       }}
     >
@@ -155,7 +155,7 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
         <div className="grid grid-cols-1 md:grid-cols-10 gap-4 mt-4 flex-1 items-stretch">
           {/* Left Column (40% width): 2 stacked images (Desktop only to prevent mobile cutoff) */}
           <div className="hidden md:flex md:col-span-4 flex-col gap-4 justify-between">
-            <div className="relative w-full rounded-[20px] sm:rounded-[30px] overflow-hidden border border-white/5 shadow-md h-[120px] lg:h-[160px]">
+            <div className="relative w-full rounded-[20px] sm:rounded-[30px] overflow-hidden border border-white/5 shadow-md h-[140px] lg:h-[190px]">
               <img 
                 src={project.images.col1_img1} 
                 alt={`${project.name} preview 1`}
@@ -163,7 +163,7 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
               />
             </div>
             
-            <div className="relative w-full rounded-[20px] sm:rounded-[30px] overflow-hidden border border-white/5 shadow-md h-[150px] lg:h-[200px]">
+            <div className="relative w-full rounded-[20px] sm:rounded-[30px] overflow-hidden border border-white/5 shadow-md h-[180px] lg:h-[250px]">
               <img 
                 src={project.images.col1_img2} 
                 alt={`${project.name} preview 2`}
