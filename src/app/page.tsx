@@ -40,8 +40,8 @@ const FacebookIcon = (props: any) => (
 );
 
 const WhatsAppIcon = (props: any) => (
-  <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" {...props}>
+    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.73-1.455L0 24zm6.59-4.846c1.66.986 3.292 1.48 4.961 1.482 5.378 0 9.752-4.343 9.756-9.684.002-2.587-1.002-5.02-2.827-6.848-1.825-1.829-4.254-2.836-6.845-2.837-5.38 0-9.755 4.342-9.759 9.685-.001 1.951.493 3.498 1.47 5.147L2.146 20.35l4.501-1.196zm10.741-6.1c-.29-.145-1.716-.848-1.982-.945-.266-.096-.459-.145-.653.145-.193.29-.749.945-.918 1.139-.169.194-.339.219-.629.073-.29-.145-1.226-.452-2.336-1.442-.864-.771-1.447-1.724-1.616-2.014-.169-.29-.018-.447.127-.591.131-.13.29-.339.436-.509.145-.17.193-.29.29-.484.097-.194.048-.363-.024-.509-.073-.145-.653-1.573-.895-2.153-.235-.568-.475-.489-.653-.498-.169-.008-.363-.01-.557-.01-.194 0-.508.073-.774.363-.266.29-1.016.992-1.016 2.42 0 1.428 1.039 2.808 1.184 3.002.145.194 2.043 3.12 4.95 4.378.692.299 1.232.478 1.652.612.695.221 1.329.19 1.829.115.557-.083 1.716-.702 1.958-1.38.242-.678.242-1.258.17-1.38-.072-.122-.266-.194-.557-.339z"/>
   </svg>
 );
 
@@ -167,9 +167,9 @@ export default function HomePage() {
           {/* Task 4: Social Icons stacked vertically on absolute LEFT side of hero section */}
           <div className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 flex-col gap-6 z-30">
             {[
-              { name: 'Instagram', icon: InstagramIcon, href: 'https://instagram.com' },
-              { name: 'WhatsApp', icon: WhatsAppIcon, href: 'https://wa.me/919537330003' },
-              { name: 'Email', icon: Mail, href: 'mailto:contact@kadamproduction.com' }
+              { name: 'Instagram', icon: InstagramIcon, href: 'https://www.instagram.com/kadamproduction?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
+              { name: 'WhatsApp', icon: WhatsAppIcon, href: 'https://wa.link/7dtu1l' },
+              { name: 'Email', icon: Mail, href: 'mailto:kadamprodution123@gmail.com?body=Hi%20kadam%20Production%20' }
             ].map((social) => {
               const Icon = social.icon;
               return (
@@ -193,16 +193,16 @@ export default function HomePage() {
             <div className="md:col-span-7 flex flex-col justify-center items-start text-left space-y-6 pt-16 md:pt-0">
               {/* Extra spacing in between Gloock font headings */}
               <div className="space-y-4">
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
                   CREATING
                 </h2>
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
                   ATMOSPHERE
                 </h2>
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
                   NOT JUST
                 </h2>
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
                   EVENT
                 </h2>
               </div>
@@ -342,10 +342,10 @@ export default function HomePage() {
           {/* Ambient Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-550/5 rounded-full blur-[120px] pointer-events-none" />
           
-          <div className="text-center max-w-xl space-y-3 mb-16">
+          <div className="text-center max-w-4xl space-y-3 mb-16">
             <FlipText 
               text="OUR STAGES IN ACTION" 
-              className="text-3xl md:text-5xl font-black uppercase tracking-widest"
+              className="text-3xl md:text-5xl font-normal uppercase tracking-wider"
             />
             <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">A glance at our production footage</p>
           </div>
@@ -456,7 +456,7 @@ export default function HomePage() {
                 <span className="text-3xl md:text-5xl font-extrabold tracking-[0.2em] text-zinc-650 uppercase block" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
                   CHOOSE
                 </span>
-                <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-widest leading-none">
+                <h2 className="text-5xl md:text-7xl font-normal text-white uppercase tracking-widest leading-none">
                   OUR <br />
                   VIBRANTS
                 </h2>
