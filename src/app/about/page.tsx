@@ -50,11 +50,13 @@ export default function AboutPage() {
         <section className="relative min-h-[60vh] flex items-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-950/10 via-black to-black py-12">
           <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Col: Titles & Heading */}
-            <div className="space-y-6 text-center lg:text-left">
-              <FlipText 
-                text="ABOUT KADAM PRODUCTION" 
-                className="text-4xl md:text-6xl font-black uppercase tracking-tight justify-center lg:justify-start"
-              />
+            <div className="space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start">
+              <h1 
+                className="text-4xl sm:text-5xl md:text-6xl font-normal uppercase tracking-wide leading-tight text-white"
+                style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+              >
+                ABOUT <br className="hidden sm:inline" /> KADAM PRODUCTION
+              </h1>
               <p className="text-sm md:text-md text-zinc-400 font-semibold tracking-wider max-w-xl leading-relaxed">
                 10+ years of creating unforgettable experiences. Gujarat&apos;s leading production agency supplying high-end audio setups, truss structures, and silent generator fleets.
               </p>
@@ -86,7 +88,10 @@ export default function AboutPage() {
         <section className="py-24 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Left Column: Counters & Vision */}
           <div className="space-y-8">
-            <h3 className="text-2xl font-black uppercase tracking-tight text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+            <h3 
+              className="text-2xl sm:text-3xl font-normal uppercase tracking-wider text-white"
+              style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+            >
               OUR VISION & VALUES
             </h3>
             <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed font-semibold">
@@ -95,24 +100,39 @@ export default function AboutPage() {
 
             {/* Values stats row */}
             <div className="grid grid-cols-3 gap-4 pt-6 border-t border-white/5">
-              <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl">
-                <Award className="w-6 h-6 text-purple-450 mx-auto mb-2" />
-                <div className="text-sm font-bold text-white uppercase">Quality</div>
+              <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-3">
+                <img 
+                  src="https://res.cloudinary.com/zr9jqpwb/image/upload/spotlight_aetwmd.png" 
+                  alt="Light Icon" 
+                  className="w-8 h-8 object-contain filter brightness-[0.9]"
+                />
+                <div className="text-xs font-bold text-white uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Light</div>
               </div>
-              <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl">
-                <ShieldCheck className="w-6 h-6 text-pink-450 mx-auto mb-2" />
-                <div className="text-sm font-bold text-white uppercase">Safety</div>
+              <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-3">
+                <img 
+                  src="https://res.cloudinary.com/zr9jqpwb/image/upload/wave-sound_ux5uhf.png" 
+                  alt="Sound Icon" 
+                  className="w-8 h-8 object-contain filter brightness-[0.9]"
+                />
+                <div className="text-xs font-bold text-white uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Sounds</div>
               </div>
-              <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl">
-                <Heart className="w-6 h-6 text-[#06B6D4] mx-auto mb-2" />
-                <div className="text-sm font-bold text-white uppercase">Passion</div>
+              <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-3">
+                <img 
+                  src="https://res.cloudinary.com/zr9jqpwb/image/upload/sound-control_cv7kzt.png" 
+                  alt="Quality Icon" 
+                  className="w-8 h-8 object-contain filter brightness-[0.9]"
+                />
+                <div className="text-xs font-bold text-white uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Quality</div>
               </div>
             </div>
           </div>
 
           {/* Right Column: Timeline */}
           <div className="space-y-6">
-            <h3 className="text-2xl font-black uppercase tracking-tight text-white mb-8" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+            <h3 
+              className="text-2xl sm:text-3xl font-normal uppercase tracking-wider text-white mb-8"
+              style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+            >
               OUR JOURNEY
             </h3>
 
@@ -151,11 +171,13 @@ export default function AboutPage() {
 
         {/* TEAM CAROUSEL SECTION */}
         <section className="py-24 max-w-7xl mx-auto px-6 border-t border-white/5">
-          <div className="text-center max-w-xl mx-auto mb-16 space-y-2">
-            <FlipText 
-              text="THE CREW" 
-              className="text-3xl md:text-5xl font-black uppercase"
-            />
+          <div className="text-center max-w-xl mx-auto mb-16 space-y-3">
+            <h2 
+              className="text-3xl sm:text-4xl md:text-5xl font-normal uppercase tracking-widest text-white leading-tight"
+              style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+            >
+              THE CREW
+            </h2>
             <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">Meet the production masterminds</p>
           </div>
 

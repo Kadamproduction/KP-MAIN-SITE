@@ -113,7 +113,8 @@ export default function GalleryPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4 }}
-                className="relative group rounded-2xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 break-inside-avoid shadow-lg bg-zinc-900/30"
+                className="relative group rounded-2xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 break-inside-avoid shadow-lg bg-zinc-900/30 cursor-pointer"
+                onClick={() => setLightboxIndex(idx)}
               >
                 <img 
                   src={image.src} 
@@ -121,27 +122,12 @@ export default function GalleryPage() {
                   className="w-full h-auto object-cover"
                 />
                 
-                {/* Visual Overlay on Hover */}
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <div className="text-center p-6 space-y-2">
-                    <span 
-                      className="text-[9px] font-bold px-2 py-0.5 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] text-white rounded-full uppercase tracking-widest"
-                      style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                    >
-                      {image.category}
-                    </span>
-                    <h3 className="text-xl font-bold text-white uppercase">{image.title}</h3>
-                    <p className="text-xs text-zinc-400 font-semibold">{image.event}</p>
+                {/* Subtle visual hover mask with a centralized max icon */}
+                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-350 flex items-center justify-center pointer-events-none">
+                  <div className="w-10 h-10 rounded-full bg-black/75 border border-white/20 flex items-center justify-center text-white backdrop-blur-md">
+                    <Maximize2 className="w-4 h-4" />
                   </div>
                 </div>
-
-                {/* Lightbox trigger top-right */}
-                <button
-                  onClick={() => setLightboxIndex(idx)}
-                  className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer text-white border border-white/10"
-                >
-                  <Maximize2 className="w-4 h-4" />
-                </button>
               </motion.div>
             ))}
           </motion.div>
