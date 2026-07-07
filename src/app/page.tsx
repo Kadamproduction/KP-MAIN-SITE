@@ -153,15 +153,15 @@ export default function HomePage() {
           {/* Layer 1: Optimized Full Screen Background Video (Cloudinary vertical source) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
             <video 
-              src="https://res.cloudinary.com/zr9jqpwb/video/upload/upscaled-video_ajtb3f.mp4"
+              src="https://res.cloudinary.com/zr9jqpwb/video/upload/v1783417456/upscaled-video_v3jizt.mp4"
               autoPlay 
               muted 
               loop 
               playsInline 
               preload="auto"
-              className="w-full h-full object-cover brightness-[0.55]"
+              className="w-full h-full object-cover brightness-[0.45]"
             />
-            <div className="absolute inset-0 bg-black/35 bg-gradient-to-t from-black/60 via-transparent to-black/60" />
+            <div className="absolute inset-0 bg-black/45 bg-gradient-to-t from-black/60 via-transparent to-black/60" />
           </div>
 
           {/* Task 4: Social Icons stacked vertically on absolute LEFT side of hero section */}
@@ -191,17 +191,18 @@ export default function HomePage() {
             
             {/* Left Side: Headlines */}
             <div className="md:col-span-7 flex flex-col justify-center items-start text-left space-y-6 pt-16 md:pt-0">
-              <div className="space-y-1">
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white uppercase leading-none" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              {/* Extra spacing in between Gloock font headings */}
+              <div className="space-y-4">
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
                   CREATING
                 </h2>
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white uppercase leading-none" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
                   ATMOSPHERE
                 </h2>
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white uppercase leading-none" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
                   NOT JUST
                 </h2>
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white uppercase leading-none" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
                   EVENT
                 </h2>
               </div>
@@ -231,8 +232,8 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Side: Circular metallic logo Lottie player */}
-            <div className="md:col-span-5 flex items-center justify-center relative w-full aspect-square max-w-[420px] mx-auto">
+            {/* Right Side: Circular metallic logo Lottie player (Increased Dimensions) */}
+            <div className="md:col-span-5 flex items-center justify-center relative w-full aspect-square max-w-[500px] lg:max-w-[560px] mx-auto">
               <div 
                 dangerouslySetInnerHTML={{
                   __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
@@ -344,7 +345,7 @@ export default function HomePage() {
           <div className="text-center max-w-xl space-y-3 mb-16">
             <FlipText 
               text="OUR STAGES IN ACTION" 
-              className="text-3xl md:text-5xl font-black uppercase tracking-tight"
+              className="text-3xl md:text-5xl font-black uppercase tracking-widest"
             />
             <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">A glance at our production footage</p>
           </div>
@@ -452,10 +453,10 @@ export default function HomePage() {
             {/* Left Column: Headings & Slide Controls */}
             <div className="lg:col-span-5 flex flex-col justify-between h-full py-6 space-y-8">
               <div className="space-y-2">
-                <span className="text-3xl md:text-5xl font-extrabold tracking-widest text-zinc-650 uppercase block" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                <span className="text-3xl md:text-5xl font-extrabold tracking-[0.2em] text-zinc-650 uppercase block" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
                   CHOOSE
                 </span>
-                <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">
+                <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-widest leading-none">
                   OUR <br />
                   VIBRANTS
                 </h2>

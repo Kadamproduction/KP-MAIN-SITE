@@ -31,30 +31,10 @@ export default function SpotlightNavbar() {
     <>
       <div 
         ref={navbarRef}
-        className="fixed top-0 left-0 right-0 h-16 md:h-20 bg-[#050505]/80 backdrop-blur-xl border-b border-white/8 z-50 px-6 md:px-12 flex items-center justify-between transition-all duration-300"
+        className="fixed top-0 left-0 right-0 h-16 md:h-20 bg-[#050505]/80 backdrop-blur-xl border-b border-white/8 z-50 px-6 md:px-12 flex items-center justify-center transition-all duration-300"
       >
-
-        {/* Brand Left Logo */}
-        <Link href="/" className="flex items-center gap-3 relative z-50 group cursor-pointer">
-          <motion.div 
-            animate={{ y: [0, -4, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-tr from-[#8B5CF6] to-[#EC4899] flex items-center justify-center shadow-lg shadow-purple-500/25 border border-purple-500/25 group-hover:scale-105 transition-all select-none"
-          >
-            <span className="text-xl md:text-2xl font-black text-white font-mono">K</span>
-          </motion.div>
-          <div>
-            <h1 className="text-sm md:text-md font-black tracking-tight text-white select-none">
-              KADAM PRODUCTION
-            </h1>
-            <span className="text-[8px] md:text-[9px] text-[#A1A1AA] font-bold tracking-[0.2em] uppercase select-none">
-              Atmosphere & Lights
-            </span>
-          </div>
-        </Link>
-
         {/* Center Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 relative z-50">
+        <nav className="hidden md:flex items-center gap-12 relative z-50">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -79,21 +59,10 @@ export default function SpotlightNavbar() {
           })}
         </nav>
 
-        {/* Right CTA Button (Desktop) */}
-        <div className="hidden md:flex items-center relative z-50">
-          <button
-            onClick={() => router.push('/contact')}
-            className="px-6 py-2.5 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] hover:from-[#9462ff] hover:to-[#ff58ad] text-white rounded-full text-xs font-bold tracking-wider active:scale-[0.98] transition-all cursor-pointer shadow-lg shadow-purple-500/10 hover:shadow-purple-500/20"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-          >
-            BOOK NOW
-          </button>
-        </div>
-
         {/* Mobile Hamburger menu */}
         <button 
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden p-2 rounded-xl bg-white/3 border border-white/5 text-zinc-400 hover:text-white cursor-pointer relative z-50"
+          className="md:hidden p-2 rounded-xl bg-white/3 border border-white/5 text-zinc-400 hover:text-white cursor-pointer absolute right-6 z-50"
         >
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
