@@ -103,24 +103,10 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* MAP & INFORMATION CARDS CONTAINER */}
+        {/* INFORMATION CARDS & MAP CONTAINER */}
         <section className="max-w-7xl mx-auto px-6 py-16 space-y-16">
           
-          {/* TASK 5: FULL-WIDTH EMBEDDED GOOGLE MAP */}
-          <div className="w-full relative rounded-3xl overflow-hidden border-2 border-white/10 shadow-2xl">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.218559092472!2d72.7733!3d21.19447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04f4c2813137d%3A0x1e01d78bc6b5c0dc!2sKadam%20Production!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-              width="100%" 
-              height="600" 
-              style={{ border: 0 }} 
-              allowFullScreen={true}
-              loading="lazy" 
-              referrerPolicy="no-referrer-when-downgrade"
-              className="w-full h-[400px] md:h-[600px] filter invert-[90%] hue-rotate-[180deg] contrast-[105%]"
-            />
-          </div>
-
-          {/* BELOW MAP: CONTACT INFO CARDS GRID */}
+          {/* CONTACT INFO CARDS GRID */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             
             {/* CARD 1: PHONE */}
@@ -202,6 +188,20 @@ export default function ContactPage() {
               </div>
             </div>
 
+          </div>
+
+          {/* FULL-WIDTH EMBEDDED GOOGLE MAP */}
+          <div className="w-full relative rounded-3xl overflow-hidden border-2 border-white/10 shadow-2xl">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.218559092472!2d72.7733!3d21.19447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04f4c2813137d%3A0x1e01d78bc6b5c0dc!2sKadam%20Production!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+              width="100%" 
+              height="400" 
+              style={{ border: 0 }} 
+              allowFullScreen={true}
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              className="w-full h-[300px] md:h-[400px] filter invert-[90%] hue-rotate-[180deg] contrast-[105%]"
+            />
           </div>
 
         </section>
