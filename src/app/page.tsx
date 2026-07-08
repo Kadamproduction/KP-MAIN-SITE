@@ -171,7 +171,7 @@ export default function HomePage() {
       <div className="relative min-h-screen bg-black text-white select-none">
         
         {/* HERO SECTION */}
-        <section className="relative min-h-screen md:h-screen flex flex-col justify-center items-center overflow-hidden pt-24 pb-16 md:pt-0 md:pb-0">
+        <section className="relative min-h-screen md:h-screen flex flex-col justify-center items-center overflow-hidden pt-16 pb-12 md:pt-0 md:pb-0">
           
           {/* Layer 1: Optimized Full Screen Background Video (Cloudinary vertical source) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
@@ -211,7 +211,7 @@ export default function HomePage() {
           </div>
 
           {/* Layer 3: Split Hero Content (Text Left, Lottie Right) */}
-          <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center pt-16 md:pt-0">
+          <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center pt-2 md:pt-0">
             
             {/* Right Side: Circular metallic logo Lottie player (First on mobile via order class) */}
             <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[280px] sm:max-w-[340px] lg:max-w-[560px] mx-auto">
