@@ -64,24 +64,18 @@ export default function AboutPage() {
               </p>
             </div>
 
-            {/* Right Col: Graphic/Gradient Showcase */}
+            {/* Right Col: Graphic Showcase Image */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
-              className="relative aspect-video lg:aspect-square w-full max-w-md mx-auto rounded-3xl overflow-hidden border border-white/10 flex items-center justify-center p-8 bg-[#080808]"
+              className="relative aspect-[4/3] w-full max-w-md mx-auto rounded-3xl overflow-hidden border border-white/10 bg-[#080808]"
             >
-              {/* Spinning background glow */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 via-pink-500/10 to-orange-500/10 animate-pulse" />
-              
-              {/* Graphic core */}
-              <div className="text-center relative z-10 space-y-4">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-[#8B5CF6] to-[#EC4899] flex items-center justify-center mx-auto shadow-lg shadow-purple-500/25">
-                  <Flame className="w-10 h-10 text-white animate-bounce" />
-                </div>
-                <h3 className="text-2xl font-black tracking-tight" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>SINCE 2014</h3>
-                <p className="text-xs text-zinc-500 max-w-xs font-semibold leading-relaxed">Rigging professional line arrays, laser structures, and silent generators for film sets, Dandiyas, and high-profile stages.</p>
-              </div>
+              <img 
+                src="https://res.cloudinary.com/zr9jqpwb/image/upload/v1783012636/Untitled-design-13.png" 
+                alt="Kadam Production Stage Setup" 
+                className="w-full h-full object-cover"
+              />
             </motion.div>
           </div>
         </section>
