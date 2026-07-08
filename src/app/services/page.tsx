@@ -227,18 +227,18 @@ export default function ServicesPage() {
       <div className="relative min-h-screen bg-black text-white pt-24 select-none overflow-x-hidden">
         
         {/* HERO BANNER SECTION */}
-        <section className="relative h-[360px] flex items-center justify-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-950/10 via-black to-black">
+        <section className="relative h-[360px] flex items-center justify-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-900/30 via-black to-black">
           {/* Wave visualizer */}
-          <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-40" />
+          <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-80" />
 
           {/* Titles */}
           <div className="relative z-10 text-center space-y-4 px-6">
             <h1 
-              className="text-5xl md:text-7xl font-normal uppercase tracking-wider leading-tight"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal uppercase tracking-wider leading-none"
               style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
             >
-              <span className="text-white block mb-2">OUR</span>
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent hero-heading block pb-1">
+              <span className="text-white mr-3">OUR</span>
+              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent hero-heading pb-1">
                 SERVICES
               </span>
             </h1>
