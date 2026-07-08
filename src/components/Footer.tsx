@@ -50,9 +50,11 @@ export default function Footer() {
         {/* Brand Description */}
         <div className="space-y-6">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#8B5CF6] to-[#EC4899] flex items-center justify-center border border-purple-500/20">
-              <Film className="w-5 h-5 text-white" />
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="Kadam Production Logo" 
+              className="w-10 h-10 rounded-full border border-white/10 object-cover"
+            />
             <div>
               <h4 className="text-md font-black tracking-tight text-white">KADAM PRODUCTION</h4>
               <span className="text-[8px] text-[#A1A1AA] font-bold tracking-[0.2em] uppercase">Atmosphere & Lights</span>
@@ -136,7 +138,14 @@ export default function Footer() {
             </li>
             <li className="flex gap-3 text-zinc-400">
               <MapPin className="w-4 h-4 text-cyan-500 flex-shrink-0" />
-              <span>Gujarat, India</span>
+              <a 
+                href="https://maps.google.com/?q=Kadam%20Production,%205QVF%2BQ8M,%20Gaurav%20Path%20Road,%20Palanpur,%20Surat,%20Gujarat%20394510" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-white transition-colors"
+              >
+                Gujarat, India
+              </a>
             </li>
             <li className="flex gap-3 text-zinc-400">
               <Clock className="w-4 h-4 text-orange-500 flex-shrink-0" />

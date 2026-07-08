@@ -193,7 +193,7 @@ export default function ContactPage() {
           {/* FULL-WIDTH EMBEDDED GOOGLE MAP */}
           <div className="w-full relative rounded-3xl overflow-hidden border-2 border-white/10 shadow-2xl">
             <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.218559092472!2d72.7733!3d21.19447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04f4c2813137d%3A0x1e01d78bc6b5c0dc!2sKadam%20Production!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+              src="https://maps.google.com/maps?q=Kadam%20Production,%205QVF%2BQ8M,%20Gaurav%20Path%20Road,%20Palanpur,%20Surat,%20Gujarat%20394510&t=&z=16&ie=UTF8&iwloc=&output=embed"
               width="100%" 
               height="400" 
               style={{ border: 0 }} 
