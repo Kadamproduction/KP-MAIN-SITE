@@ -118,10 +118,10 @@ export default function GalleryPage() {
       <CursorFollower />
       <SpotlightNavbar />
 
-      <div className="relative min-h-screen bg-black text-white pt-24 select-none pb-20">
+      <div className="relative min-h-screen bg-black text-white select-none pb-20">
         
         {/* HERO BANNER SECTION */}
-        <section className="relative h-[360px] flex items-center justify-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-900/30 via-black to-black">
+        <section className="relative h-[380px] pt-16 flex items-center justify-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-900/30 via-black to-black">
           {/* Wave visualizer */}
           <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-80" />
 

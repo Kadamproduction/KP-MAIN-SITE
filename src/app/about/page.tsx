@@ -43,10 +43,10 @@ export default function AboutPage() {
       <CursorFollower />
       <SpotlightNavbar />
 
-      <div className="relative min-h-screen bg-black text-white pt-24 select-none pb-20">
+      <div className="relative min-h-screen bg-black text-white select-none pb-20">
         
         {/* SPLIT HERO SECTION */}
-        <section className="relative min-h-[60vh] flex items-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-950/10 via-black to-black py-12">
+        <section className="relative min-h-[60vh] flex items-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-950/10 via-black to-black pt-32 pb-16">
           <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Col: Titles & Heading */}
             <div className="space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start">
