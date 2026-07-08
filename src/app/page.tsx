@@ -47,15 +47,15 @@ const WhatsAppIcon = (props: any) => (
 
 // 3 portrait Cloudinary videos (Task 1 vertical 9:16 layout) repeated to fill 9 grid cells
 const videoSources = [
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012632/Trim-6.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012629/Trim-3-1.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012627/Trim-1.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783418612/Untitled_design_2_pbfqf3.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783418673/download_2_sispkn.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783418682/Untitled_design_3_lw9eld.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012632/Trim-6.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012629/Trim-3-1.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/v1783012627/Trim-1.mp4'
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783012632/Trim-6.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783012629/Trim-3-1.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783012627/Trim-1.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783418612/Untitled_design_2_pbfqf3.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783418673/download_2_sispkn.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783418682/Untitled_design_3_lw9eld.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783012632/Trim-6.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783012629/Trim-3-1.mp4',
+  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783012627/Trim-1.mp4'
 ];
 
 const marqueeServices = [
@@ -176,13 +176,13 @@ export default function HomePage() {
           {/* Layer 1: Optimized Full Screen Background Video (Cloudinary vertical source) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
             <video 
-              src="https://res.cloudinary.com/zr9jqpwb/video/upload/v1783417456/upscaled-video_v3jizt.mp4"
+              src="https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783417456/upscaled-video_v3jizt.mp4"
               autoPlay 
               muted 
               loop 
               playsInline 
               preload="auto"
-              onCanPlayThrough={() => setVideoLoaded(true)}
+              onLoadedData={() => setVideoLoaded(true)}
               className="w-full h-full object-cover brightness-[0.45]"
             />
             <div className="absolute inset-0 bg-black/45 bg-gradient-to-t from-black/60 via-transparent to-black/60" />
