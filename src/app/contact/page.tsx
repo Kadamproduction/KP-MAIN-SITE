@@ -1,15 +1,71 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { 
   Phone, Mail, MapPin, Clock, 
   Sparkles, Globe 
 } from 'lucide-react';
-import FlipText from '@/components/FlipText';
 import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
 
 export default function ContactPage() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Render organic sound wave flowing animation on canvas for premium visual effect
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationId: number;
+    let phase = 0;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = 360;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.lineWidth = 1.5;
+      
+      const waves = [
+        { color: 'rgba(139, 92, 246, 0.15)', amp: 55, freq: 0.003, speed: 0.04 },
+        { color: 'rgba(236, 72, 153, 0.12)', amp: 45, freq: 0.005, speed: 0.03 },
+        { color: 'rgba(6, 182, 212, 0.10)', amp: 35, freq: 0.004, speed: 0.05 }
+      ];
+
+      waves.forEach((w) => {
+        ctx.strokeStyle = w.color;
+        ctx.beginPath();
+        
+        for (let x = 0; x < canvas.width; x++) {
+          const y = canvas.height / 2 + Math.sin(x * w.freq + phase) * w.amp * Math.sin(x / 400);
+          if (x === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        
+        ctx.stroke();
+      });
+
+      phase += 0.02;
+      animationId = requestAnimationFrame(draw);
+    };
+    draw();
+
+    return () => {
+      window.removeEventListener('resize', resize);
+      cancelAnimationFrame(animationId);
+    };
+  }, []);
+
   return (
     <>
       <CursorFollower />
@@ -17,15 +73,26 @@ export default function ContactPage() {
 
       <div className="relative min-h-screen bg-black text-white pt-24 select-none pb-20">
         
-        {/* HERO TITLE HEADER */}
-        <section className="py-20 text-center space-y-3 px-6 bg-gradient-to-b from-purple-950/10 via-black to-black border-b border-white/5">
-          <FlipText 
-            text="LET'S CREATE TOGETHER" 
-            className="text-4xl md:text-6xl font-black uppercase tracking-tight"
-          />
-          <p className="text-xs sm:text-sm text-zinc-550 font-semibold tracking-[0.2em] uppercase">
-            Ready to make your event stage unforgettable?
-          </p>
+        {/* HERO BANNER SECTION */}
+        <section className="relative h-[360px] flex items-center justify-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-900/30 via-black to-black">
+          {/* Wave visualizer */}
+          <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-80" />
+
+          {/* Titles */}
+          <div className="relative z-10 text-center space-y-4 px-6">
+            <h1 
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal uppercase tracking-wider leading-none"
+              style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+            >
+              <span className="text-white mr-3">CONTACT</span>
+              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent hero-heading pb-1">
+                US
+              </span>
+            </h1>
+            <p className="text-xs sm:text-sm text-zinc-355 font-semibold tracking-[0.2em] uppercase">
+              Ready to make your event stage unforgettable?
+            </p>
+          </div>
         </section>
 
         {/* MAP & INFORMATION CARDS CONTAINER */}
