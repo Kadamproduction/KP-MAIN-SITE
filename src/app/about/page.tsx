@@ -51,10 +51,13 @@ export default function AboutPage() {
             {/* Left Col: Titles & Heading */}
             <div className="space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start">
               <h1 
-                className="text-4xl sm:text-5xl md:text-6xl font-normal uppercase tracking-wide leading-tight text-white"
+                className="text-4xl sm:text-5xl md:text-6xl font-normal uppercase tracking-wider leading-tight"
                 style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
               >
-                ABOUT <br className="hidden sm:inline" /> KADAM PRODUCTION
+                <span className="text-white block mb-2">ABOUT</span>
+                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent hero-heading block pb-1">
+                  KADAM PRODUCTION
+                </span>
               </h1>
               <p className="text-sm md:text-md text-zinc-400 font-semibold tracking-wider max-w-xl leading-relaxed">
                 10+ years of creating unforgettable experiences. Gujarat&apos;s leading production agency supplying high-end audio setups, truss structures, and silent generator fleets.
