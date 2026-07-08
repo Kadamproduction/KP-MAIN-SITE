@@ -3,11 +3,19 @@
 import { useEffect, useRef } from 'react';
 import { 
   Phone, Mail, MapPin, Clock, 
-  Sparkles, Globe 
+  Sparkles, Globe
 } from 'lucide-react';
 import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
+
+const InstagramIcon = (props: any) => (
+  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  </svg>
+);
 
 export default function ContactPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -136,7 +144,30 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* CARD 2: EMAIL */}
+            {/* CARD 2: INSTAGRAM */}
+            <div className="bg-zinc-900/40 border border-white/5 p-8 rounded-3xl shadow-lg flex flex-col justify-between hover:border-orange-500/20 hover:bg-orange-500/3 transition-all duration-300 group">
+              <div className="space-y-4">
+                <div className="w-12 h-12 rounded-2xl bg-orange-500/10 border border-orange-500/20 text-orange-400 flex items-center justify-center">
+                  <InstagramIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-zinc-550 uppercase tracking-widest mb-1">Instagram</h4>
+                  <a 
+                    href="https://www.instagram.com/kadamproduction?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-lg font-bold text-white hover:text-orange-400 block transition-colors"
+                  >
+                    kadamproduction
+                  </a>
+                </div>
+              </div>
+              <div className="pt-6 border-t border-white/5 mt-6 text-[10px] text-zinc-550 font-bold uppercase tracking-wider">
+                Follow our latest updates
+              </div>
+            </div>
+
+            {/* CARD 3: EMAIL */}
             <div className="bg-zinc-900/40 border border-white/5 p-8 rounded-3xl shadow-lg flex flex-col justify-between hover:border-purple-500/20 hover:bg-purple-500/3 transition-all duration-300 group">
               <div className="space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center">
@@ -154,7 +185,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* CARD 3: LOCATION */}
+            {/* CARD 4: LOCATION */}
             <div className="bg-zinc-900/40 border border-white/5 p-8 rounded-3xl shadow-lg flex flex-col justify-between hover:border-cyan-500/20 hover:bg-cyan-500/3 transition-all duration-300 group">
               <div className="space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center">
@@ -168,23 +199,6 @@ export default function ContactPage() {
               </div>
               <div className="pt-6 border-t border-white/5 mt-6 text-[10px] text-zinc-550 font-bold uppercase tracking-wider">
                 Kadam Production Office
-              </div>
-            </div>
-
-            {/* CARD 4: OPERATING HOURS */}
-            <div className="bg-zinc-900/40 border border-white/5 p-8 rounded-3xl shadow-lg flex flex-col justify-between hover:border-orange-500/20 hover:bg-orange-500/3 transition-all duration-300 group">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-orange-500/10 border border-orange-500/20 text-orange-400 flex items-center justify-center">
-                  <Clock className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-zinc-550 uppercase tracking-widest mb-1">Operating Hours</h4>
-                  <p className="text-lg font-bold text-white uppercase">24/7 Availability</p>
-                  <p className="text-zinc-500 text-xs font-semibold mt-1">Office: Mon-Sat, 10AM-7PM</p>
-                </div>
-              </div>
-              <div className="pt-6 border-t border-white/5 mt-6 text-[10px] text-zinc-550 font-bold uppercase tracking-wider">
-                Support available for live events
               </div>
             </div>
 
