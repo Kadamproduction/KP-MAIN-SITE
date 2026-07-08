@@ -110,13 +110,16 @@ export default function SpotlightNavbar() {
                 transition={{ delay: navItems.length * 0.08 }}
                 className="pt-6 border-t border-white/5"
               >
-                <button
-                  onClick={() => { setMobileOpen(false); router.push('/contact'); }}
-                  className="w-full py-4 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] text-white rounded-2xl text-md font-bold tracking-widest uppercase cursor-pointer active:scale-98 transition-all"
+                <a
+                  href="https://wa.link/7dtu1l"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileOpen(false)}
+                  className="w-full py-4 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] text-white rounded-2xl text-md font-bold tracking-widest uppercase cursor-pointer active:scale-98 transition-all flex items-center justify-center"
                   style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
                   BOOK NOW
-                </button>
+                </a>
               </motion.div>
             </div>
           </motion.div>

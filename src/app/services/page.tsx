@@ -321,9 +321,11 @@ export default function ServicesPage() {
 
                     {/* Book Now Button */}
                     <div className="pt-8">
-                      <button 
-                        onClick={() => router.push('/contact')}
-                        className="w-full py-3.5 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer transition-all border"
+                      <a 
+                        href="https://wa.link/7dtu1l"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full py-3.5 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer transition-all border text-center"
                         style={{
                           background: `${service.color}15`,
                           borderColor: `${service.color}30`,
@@ -340,7 +342,7 @@ export default function ServicesPage() {
                       >
                         Book Now
                         <ArrowRight className="w-4 h-4" />
-                      </button>
+                      </a>
                     </div>
                   </div>
 
