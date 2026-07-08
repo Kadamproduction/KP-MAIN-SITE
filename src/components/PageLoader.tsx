@@ -5,18 +5,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface PageLoaderProps {
   onComplete: () => void;
+  isReady: boolean;
 }
 
-export default function PageLoader({ onComplete }: PageLoaderProps) {
+export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
   const [showLogo, setShowLogo] = useState(true);
   const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
-    // 1. Hide the logo after exactly 2 seconds
-    const logoTimer = setTimeout(() => {
+    if (isReady) {
+      // Hide the logo immediately when ready
       setShowLogo(false);
       
-      // 2. Start curtain split exit animation immediately after logo fades
+      // Start curtain split exit animation
       const exitTimer = setTimeout(() => {
         setIsActive(false);
         onComplete();
@@ -25,12 +26,8 @@ export default function PageLoader({ onComplete }: PageLoaderProps) {
       return () => {
         clearTimeout(exitTimer);
       };
-    }, 2000);
-
-    return () => {
-      clearTimeout(logoTimer);
-    };
-  }, [onComplete]);
+    }
+  }, [isReady, onComplete]);
 
   return (
     <AnimatePresence>
@@ -61,7 +58,7 @@ export default function PageLoader({ onComplete }: PageLoaderProps) {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.4 }}
-                  className="w-48 h-48 flex items-center justify-center pointer-events-auto"
+                  className="w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center pointer-events-auto"
                   dangerouslySetInnerHTML={{
                     __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
                   }}

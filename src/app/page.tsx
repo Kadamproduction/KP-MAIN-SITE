@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
@@ -115,8 +115,29 @@ const cylinderStats = [
 export default function HomePage() {
   const router = useRouter();
   const [loadingComplete, setLoadingComplete] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
   const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
   const [sectionVideoIdx, setSectionVideoIdx] = useState(0);
+
+  useEffect(() => {
+    // Minimum display time for page loader logo
+    const minTimer = setTimeout(() => {
+      setMinTimeElapsed(true);
+    }, 1800);
+
+    // Fallback maximum timeout (6 seconds) to prevent infinite loaders
+    const fallbackTimer = setTimeout(() => {
+      setVideoLoaded(true);
+    }, 6000);
+
+    return () => {
+      clearTimeout(minTimer);
+      clearTimeout(fallbackTimer);
+    };
+  }, []);
+
+  const isReady = videoLoaded && minTimeElapsed;
 
   const [vibrantsItems, setVibrantsItems] = useState([
     { title: 'FESTIVALS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417440/Untitled-design-20_sm7myc.png' },
@@ -140,7 +161,7 @@ export default function HomePage() {
     <>
       {/* 0-100% Page Loader */}
       {!loadingComplete && (
-        <PageLoader onComplete={() => setLoadingComplete(true)} />
+        <PageLoader onComplete={() => setLoadingComplete(true)} isReady={isReady} />
       )}
 
       {/* Top Navbar */}
@@ -161,6 +182,7 @@ export default function HomePage() {
               loop 
               playsInline 
               preload="auto"
+              onCanPlayThrough={() => setVideoLoaded(true)}
               className="w-full h-full object-cover brightness-[0.45]"
             />
             <div className="absolute inset-0 bg-black/45 bg-gradient-to-t from-black/60 via-transparent to-black/60" />
