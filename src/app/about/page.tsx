@@ -29,7 +29,7 @@ const milestones = [
   { year: '2016', event: '100 Events Completed', description: 'First major milestone delivering wedding sound setups.' },
   { year: '2018', event: 'Team Expansion', description: 'Grew to 20+ professionals and introduced laser programming.' },
   { year: '2020', event: '500+ Events', description: 'Became an industry leader for concert light structures.' },
-  { year: '2024', event: '1000+ Events', description: 'Continuing excellence with massive silent generators and full setups.' }
+  { year: 'PRESENT', event: '1000+ Events', description: 'Continuing excellence with massive silent generators and full setups.' }
 ];
 
 const teamMembers = [
