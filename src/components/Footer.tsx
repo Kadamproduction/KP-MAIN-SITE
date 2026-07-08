@@ -13,16 +13,9 @@ const InstagramIcon = (props: any) => (
   </svg>
 );
 
-const YoutubeIcon = (props: any) => (
-  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
-    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
-  </svg>
-);
-
-const FacebookIcon = (props: any) => (
-  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+const WhatsAppIcon = (props: any) => (
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" {...props}>
+    <path d="M12.004 0C5.378 0 0 5.377 0 12.002c0 2.112.551 4.165 1.597 5.975L.053 24l6.17-1.619a11.955 11.955 0 005.78 1.48C18.63 23.861 24 18.483 24 11.859c0-3.21-1.25-6.228-3.518-8.496A11.948 11.948 0 0012.004 0zM12 21.855c-1.93 0-3.824-.505-5.49-1.462l-.393-.225-3.66.96.976-3.566-.247-.393a9.817 9.817 0 01-1.503-5.17c0-5.417 4.408-9.824 9.825-9.824 2.624 0 5.091 1.022 6.945 2.877a9.756 9.756 0 012.877 6.947c-.004 5.421-4.413 9.827-9.83 9.827zm5.347-7.3c-.293-.146-1.733-.855-2.002-.953-.268-.098-.463-.146-.658.146-.195.293-.756.953-.927 1.149-.17.195-.341.22-.634.073-.293-.146-1.237-.456-2.356-1.455-.87-.777-1.458-1.738-1.629-2.031-.17-.293-.018-.452.128-.597.132-.131.293-.342.439-.513.147-.171.196-.293.293-.488.098-.195.049-.366-.024-.513-.073-.146-.658-1.587-.902-2.172-.239-.574-.481-.494-.66-.503-.17-.009-.366-.009-.561-.009-.195 0-.512.073-.78.366-.268.293-1.024 1-1.024 2.439 0 1.439 1.049 2.829 1.165 2.99.117.161 2.063 3.149 5.0 4.42.699.303 1.245.484 1.669.619.702.224 1.342.193 1.848.117.563-.083 1.733-.708 1.977-1.391.244-.683.244-1.269.171-1.391-.073-.122-.269-.196-.562-.342z"/>
   </svg>
 );
 
@@ -30,9 +23,9 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { name: 'Instagram', icon: InstagramIcon, href: 'https://instagram.com' },
-    { name: 'YouTube', icon: YoutubeIcon, href: 'https://youtube.com' },
-    { name: 'Facebook', icon: FacebookIcon, href: 'https://facebook.com' },
+    { name: 'Instagram', icon: InstagramIcon, href: 'https://www.instagram.com/kadamproduction?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
+    { name: 'Email', icon: Mail, href: 'mailto:kadamproduction123@gmail.com?body=Hi%20kadam%20Production%20' },
+    { name: 'WhatsApp', icon: WhatsAppIcon, href: 'https://wa.link/7dtu1l' },
   ];
 
   const quickLinks = [
