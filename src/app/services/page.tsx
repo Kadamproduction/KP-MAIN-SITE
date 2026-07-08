@@ -29,7 +29,7 @@ const servicesData = [
       'SFX Sparklers & Dry-Ice Low Fog',
       'Experienced DJ & MC hosts'
     ],
-    image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=600&q=80',
+    image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417394/Untitled-design-15_bdfxt9.png',
   },
   {
     id: 2,
@@ -45,7 +45,7 @@ const servicesData = [
       'Heavy Duty Truss frames',
       'On-site sound technicians'
     ],
-    image: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=600&q=80',
+    image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417440/Untitled-design-20_sm7myc.png',
   },
   {
     id: 3,
@@ -61,7 +61,7 @@ const servicesData = [
       'High voltage generator backups',
       'Crowd barrier controls support'
     ],
-    image: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=600&q=80',
+    image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417856/Untitled-design-32_atcfrs.png',
   },
   {
     id: 4,
@@ -77,7 +77,7 @@ const servicesData = [
       'Corporate Podium & Stage layout',
       'Keynote presentation systems'
     ],
-    image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80',
+    image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417424/Untitled-design-17_ubz6ho.png',
   },
   {
     id: 5,
@@ -93,7 +93,7 @@ const servicesData = [
       'Mobile power generators fleet',
       'Dynamic rally visual design'
     ],
-    image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80',
+    image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783012636/Untitled-design-13.png',
   },
   {
     id: 6,
@@ -109,7 +109,7 @@ const servicesData = [
       'Fog, Bubble & Smoke effects',
       'Premium wireless mic support'
     ],
-    image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=600&q=80',
+    image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/ChatGPT_Image_Jul_8_2026_02_29_02_PM_dfrv2l.png',
   },
   {
     id: 7,
@@ -125,7 +125,7 @@ const servicesData = [
       'Confetti blast launchers',
       'Licensed crew operations'
     ],
-    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80',
+    image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/ChatGPT_Image_Jul_8_2026_02_56_39_PM_nux2y0.png',
   },
   {
     id: 8,
@@ -141,7 +141,7 @@ const servicesData = [
       'Weight certified safety rigging',
       'LED panel scaffolding borders'
     ],
-    image: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=600&q=80',
+    image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/ChatGPT_Image_Jul_8_2026_02_34_55_PM_nbkkog.png',
   },
   {
     id: 9,
@@ -157,7 +157,7 @@ const servicesData = [
       'Logistics & transit coordination',
       'Rigging safety inspections'
     ],
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80',
+    image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417424/Untitled-design-17.png',
   }
 ];
 
