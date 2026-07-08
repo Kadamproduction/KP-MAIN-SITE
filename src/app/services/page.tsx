@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
@@ -9,8 +9,6 @@ import {
   ChevronLeft, ChevronRight, PartyPopper,
   Radio, Building2
 } from 'lucide-react';
-import Particles, { ParticlesProvider } from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
 import FlipText from '@/components/FlipText';
 import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
@@ -166,12 +164,6 @@ const servicesData = [
 export default function ServicesPage() {
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [init, setInit] = useState(false);
-
-  const particlesInit = useCallback(async (engine: any) => {
-    await loadSlim(engine);
-    setInit(true);
-  }, []);
 
   // Render organic sound wave flowing animation on canvas for premium visual effect
   useEffect(() => {
@@ -235,93 +227,7 @@ export default function ServicesPage() {
       <div className="relative min-h-screen bg-black text-white pt-24 select-none overflow-x-hidden">
         
         {/* HERO BANNER SECTION */}
-        <section className="relative h-[420px] flex items-center justify-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-950/10 via-black to-black">
-          {/* Background Video Loop (Muted, looping, small & optimized) */}
-          <video
-            src="https://res.cloudinary.com/zr9jqpwb/video/upload/q_auto,w_800/download_4_mulnrb.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster="https://res.cloudinary.com/zr9jqpwb/video/upload/f_gif,w_800,q_auto/download_4_mulnrb.gif"
-            className="absolute inset-0 w-full h-full object-cover opacity-25 pointer-events-none"
-          />
-
-          {/* Interactive particles background link overlay */}
-          <ParticlesProvider init={particlesInit}>
-            {init && (
-              <Particles
-                id="tsparticles"
-                options={{
-                  background: {
-                    color: {
-                      value: "transparent",
-                    },
-                  },
-                  fpsLimit: 120,
-                  interactivity: {
-                    events: {
-                      onClick: {
-                        enable: false,
-                      },
-                      onHover: {
-                        enable: true,
-                        mode: "grab",
-                      },
-                    },
-                    modes: {
-                      grab: {
-                        distance: 140,
-                        links: {
-                          opacity: 0.5,
-                        },
-                      },
-                    },
-                  },
-                  particles: {
-                    color: {
-                      value: "#ffffff",
-                    },
-                    links: {
-                      color: "#8B5CF6",
-                      distance: 150,
-                      enable: true,
-                      opacity: 0.15,
-                      width: 1,
-                    },
-                    move: {
-                      direction: "none",
-                      enable: true,
-                      outModes: {
-                        default: "bounce",
-                      },
-                      random: false,
-                      speed: 1,
-                      straight: false,
-                    },
-                    number: {
-                      density: {
-                        enable: true,
-                      },
-                      value: 40,
-                    },
-                    opacity: {
-                      value: 0.35,
-                    },
-                    shape: {
-                      type: "circle",
-                    },
-                    size: {
-                      value: { min: 1, max: 3 },
-                    },
-                  },
-                  detectRetina: true,
-                }}
-                className="absolute inset-0 w-full h-full pointer-events-none"
-              />
-            )}
-          </ParticlesProvider>
-
+        <section className="relative h-[360px] flex items-center justify-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-950/10 via-black to-black">
           {/* Wave visualizer */}
           <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-40" />
 
