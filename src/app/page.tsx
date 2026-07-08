@@ -171,12 +171,12 @@ export default function HomePage() {
       <div className="relative min-h-screen bg-black text-white select-none">
         
         {/* HERO SECTION */}
-        <section className="relative h-screen flex flex-col justify-center items-center overflow-hidden">
+        <section className="relative min-h-screen md:h-screen flex flex-col justify-center items-center overflow-hidden pt-24 pb-16 md:pt-0 md:pb-0">
           
           {/* Layer 1: Optimized Full Screen Background Video (Cloudinary vertical source) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
             <video 
-              src="https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783417456/upscaled-video_v3jizt.mp4"
+              src="https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto,w_1080/v1783417456/upscaled-video_v3jizt.mp4"
               autoPlay 
               muted 
               loop 
@@ -211,7 +211,7 @@ export default function HomePage() {
           </div>
 
           {/* Layer 3: Split Hero Content (Text Left, Lottie Right) */}
-          <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+          <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center pt-16 md:pt-0">
             
             {/* Right Side: Circular metallic logo Lottie player (First on mobile via order class) */}
             <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[280px] sm:max-w-[340px] lg:max-w-[560px] mx-auto">
@@ -233,11 +233,8 @@ export default function HomePage() {
                 <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
                   ATMOSPHERE
                 </h2>
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
-                  NOT JUST
-                </h2>
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
-                  EVENT
+                <h2 className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
+                  NOT JUST EVENT
                 </h2>
               </div>
 
@@ -368,10 +365,13 @@ export default function HomePage() {
           
           <div className="text-center max-w-4xl space-y-3 mb-16">
             <h2 
-              className="text-2xl sm:text-4xl md:text-5xl font-normal uppercase tracking-widest text-white leading-normal"
+              className="text-2xl sm:text-4xl md:text-5xl font-normal uppercase tracking-widest leading-normal"
               style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
             >
-              OUR STAGES IN ACTION
+              <span className="text-white mr-3">OUR STAGES IN</span>
+              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent hero-heading pb-1">
+                ACTION
+              </span>
             </h2>
             <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">A glance at our production footage</p>
           </div>
@@ -549,7 +549,7 @@ export default function HomePage() {
                 href="https://wa.link/7dtu1l"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-10 py-5 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] hover:from-[#9462ff] hover:to-[#ff58ad] text-white rounded-full text-sm font-bold tracking-widest uppercase cursor-pointer transition-all flex items-center gap-3 shadow-2xl shadow-purple-500/25 border border-white/10"
+                className="px-6 py-4 md:px-10 md:py-5 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] hover:from-[#9462ff] hover:to-[#ff58ad] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase cursor-pointer transition-all flex items-center gap-3 shadow-2xl shadow-purple-500/25 border border-white/10"
                 style={{ fontFamily: 'Space Grotesk, sans-serif' }}
               >
                 <WhatsAppIcon className="w-5 h-5 fill-white" />
