@@ -115,7 +115,7 @@ export default function SpotlightNavbar() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileOpen(false)}
-                  className="w-full py-4 bg-[#C524C6] hover:bg-[#a81fa9] text-white rounded-2xl text-md font-bold tracking-widest uppercase cursor-pointer active:scale-98 transition-all flex items-center justify-center"
+                  className="w-full py-4 bg-[#9E1C9E] hover:bg-[#831683] text-white rounded-2xl text-md font-bold tracking-widest uppercase cursor-pointer active:scale-98 transition-all flex items-center justify-center"
                   style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
                   BOOK NOW

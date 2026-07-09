@@ -264,7 +264,7 @@ export default function ServicesPage() {
                   transition={{ delay: idx * 0.05, duration: 0.5 }}
                   className="w-full group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 flex flex-col justify-between"
                   style={{
-                    boxShadow: `0 0 30px ${service.color}03, inset 0 0 30px ${service.color}02`
+                    boxShadow: '0 0 30px rgba(255,255,255,0.02), inset 0 0 30px rgba(255,255,255,0.01)'
                   }}
                 >
                   {/* Thumbnail area (aspect 4:5 Instagram Portrait size) */}
@@ -275,18 +275,6 @@ export default function ServicesPage() {
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
-                    
-                    {/* Floating Icon badge */}
-                    <div 
-                      className="absolute top-6 left-6 w-14 h-14 rounded-2xl flex items-center justify-center border animate-pulse-slow"
-                      style={{
-                        background: `${service.color}15`,
-                        borderColor: `${service.color}35`,
-                        backdropFilter: 'blur(10px)'
-                      }}
-                    >
-                      <Icon className="w-6 h-6 text-white" style={{ color: service.color }} />
-                    </div>
                   </div>
 
                   {/* Text Contents */}
@@ -295,7 +283,7 @@ export default function ServicesPage() {
                       <h3 className="text-lg font-bold text-white uppercase tracking-tight" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                         {service.title}
                       </h3>
-                      <p className="text-[10px] font-extrabold uppercase tracking-wider mt-0.5" style={{ color: service.color }}>
+                      <p className="text-[10px] font-extrabold uppercase tracking-wider mt-0.5 text-zinc-400">
                         {service.subtitle}
                       </p>
                       
@@ -307,11 +295,8 @@ export default function ServicesPage() {
                       <ul className="mt-6 space-y-2.5">
                         {service.features.map((feature, fIdx) => (
                           <li key={fIdx} className="flex items-center gap-3 text-xs text-zinc-350">
-                            <div 
-                              className="w-4 h-4 rounded-md border flex items-center justify-center flex-shrink-0"
-                              style={{ borderColor: `${service.color}30`, background: `${service.color}08` }}
-                            >
-                              <Check className="w-3 h-3" style={{ color: service.color }} />
+                            <div className="w-4 h-4 rounded-md border border-white/20 bg-white/5 flex items-center justify-center flex-shrink-0">
+                              <Check className="w-3 h-3 text-white" />
                             </div>
                             <span className="font-semibold">{feature}</span>
                           </li>
@@ -325,23 +310,10 @@ export default function ServicesPage() {
                         href="https://wa.link/7dtu1l"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full py-3.5 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer transition-all border text-center"
-                        style={{
-                          background: `${service.color}15`,
-                          borderColor: `${service.color}30`,
-                          color: '#FFFFFF'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = `${service.color}30`;
-                          e.currentTarget.style.borderColor = `${service.color}50`;
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = `${service.color}15`;
-                          e.currentTarget.style.borderColor = `${service.color}30`;
-                        }}
+                        className="w-full py-3.5 bg-white text-black hover:bg-zinc-200 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 border border-transparent text-center shadow-md"
                       >
                         Book Now
-                        <ArrowRight className="w-4 h-4" />
+                        <ArrowRight className="w-4 h-4 text-black" />
                       </a>
                     </div>
                   </div>
@@ -350,7 +322,7 @@ export default function ServicesPage() {
                   <div 
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl"
                     style={{
-                      boxShadow: `0 0 50px ${service.color}20, inset 0 0 50px ${service.color}10`
+                      boxShadow: '0 0 50px rgba(255,255,255,0.1), inset 0 0 50px rgba(255,255,255,0.05)'
                     }}
                   />
                 </motion.div>

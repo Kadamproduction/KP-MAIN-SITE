@@ -353,7 +353,7 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-4 pt-4 w-full justify-center md:justify-start items-center">
                 <button 
                   onClick={() => router.push('/services')}
-                  className="w-full sm:w-auto px-6 py-3.5 bg-[#C524C6] hover:bg-[#a81fa9] text-white rounded-full text-xs font-bold tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-purple-500/15 transition-all duration-300"
+                  className="w-full sm:w-auto px-6 py-3.5 bg-[#9E1C9E] hover:bg-[#831683] text-white rounded-full text-xs font-bold tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-purple-500/15 transition-all duration-300"
                   style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
                   EXPLORE SERVICES
@@ -706,7 +706,7 @@ export default function HomePage() {
         <ProjectsSection />
 
         {/* 1.7 CALL TO ACTION (CTA) SECTION */}
-        <section className="z-30 relative -mt-12 pt-4 pb-20 md:py-24 px-6 md:px-12 bg-[#0C0C0C] md:-mt-0 overflow-hidden flex flex-col items-center justify-center text-center">
+        <section className="z-30 relative -mt-18 pt-4 pb-20 md:py-24 px-6 md:px-12 bg-[#0C0C0C] md:-mt-0 overflow-hidden flex flex-col items-center justify-center text-center">
           {/* Ambient colorful backdrop glows */}
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none hidden md:block" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-[120px] pointer-events-none hidden md:block" />
@@ -722,7 +722,7 @@ export default function HomePage() {
                 href="https://wa.link/7dtu1l"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-4 md:px-10 md:py-5 bg-[#C524C6] hover:bg-[#a81fa9] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase cursor-pointer transition-all flex items-center gap-3 shadow-2xl shadow-purple-500/25 border border-white/10 duration-300"
+                className="px-6 py-4 md:px-10 md:py-5 bg-[#9E1C9E] hover:bg-[#831683] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase cursor-pointer transition-all flex items-center gap-3 shadow-2xl shadow-purple-500/25 border border-white/10 duration-300"
                 style={{ fontFamily: 'Space Grotesk, sans-serif' }}
               >
                 <WhatsAppIcon className="w-5 h-5 fill-white" />
