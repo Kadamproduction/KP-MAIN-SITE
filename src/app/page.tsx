@@ -343,7 +343,7 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-4 pt-4 w-full justify-center md:justify-start items-center">
                 <button 
                   onClick={() => router.push('/services')}
-                  className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] hover:from-[#9462ff] hover:to-[#ff58ad] text-white rounded-full text-xs font-bold tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-purple-500/15"
+                  className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 hover:brightness-110 text-white rounded-full text-xs font-bold tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-purple-500/15 transition-all duration-300"
                   style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
                   EXPLORE SERVICES
@@ -712,7 +712,7 @@ export default function HomePage() {
                 href="https://wa.link/7dtu1l"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-4 md:px-10 md:py-5 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] hover:from-[#9462ff] hover:to-[#ff58ad] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase cursor-pointer transition-all flex items-center gap-3 shadow-2xl shadow-purple-500/25 border border-white/10"
+                className="px-6 py-4 md:px-10 md:py-5 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 hover:brightness-110 text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase cursor-pointer transition-all flex items-center gap-3 shadow-2xl shadow-purple-500/25 border border-white/10 duration-300"
                 style={{ fontFamily: 'Space Grotesk, sans-serif' }}
               >
                 <WhatsAppIcon className="w-5 h-5 fill-white" />

@@ -227,7 +227,7 @@ export default function ServicesPage() {
       <div className="relative min-h-screen bg-black text-white select-none overflow-x-hidden">
         
         {/* HERO BANNER SECTION */}
-        <section className="relative h-[380px] pt-16 flex items-center justify-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-900/30 via-black to-black">
+        <section className="relative h-[250px] md:h-[350px] pt-16 flex items-center justify-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-900/30 via-black to-black">
           {/* Wave visualizer */}
           <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-80" />
 
@@ -242,17 +242,17 @@ export default function ServicesPage() {
                 SERVICES
               </span>
             </h1>
-            <p className="text-xs sm:text-sm text-zinc-350 font-semibold tracking-[0.2em] uppercase">
+            <p className="text-xs sm:text-sm text-zinc-355 font-semibold tracking-[0.2em] uppercase">
               Everything you need for an unforgettable event
             </p>
           </div>
         </section>
 
         {/* SERVICES GRID SECTION */}
-        <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto relative">
+        <section className="py-10 md:py-16 px-6 md:px-12 max-w-7xl mx-auto relative">
           
           {/* Universal Responsive Grid (Stacks vertically on mobile, 3 columns on desktop) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
             {servicesData.map((service, idx) => {
               const Icon = service.icon;
               return (
@@ -268,7 +268,7 @@ export default function ServicesPage() {
                   }}
                 >
                   {/* Thumbnail area (aspect 4:5 Instagram Portrait size) */}
-                  <div className="relative w-full aspect-[4/5] overflow-hidden">
+                  <div className="relative w-full aspect-[16/11] overflow-hidden">
                     <img 
                       src={service.image} 
                       alt={service.title}

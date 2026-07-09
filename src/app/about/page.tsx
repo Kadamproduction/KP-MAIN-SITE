@@ -46,7 +46,7 @@ export default function AboutPage() {
       <div className="relative min-h-screen bg-black text-white select-none pb-20">
         
         {/* SPLIT HERO SECTION */}
-        <section className="relative min-h-[60vh] flex items-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-950/10 via-black to-black pt-32 pb-16">
+        <section className="relative min-h-[60vh] flex items-center overflow-hidden border-b border-white/5 bg-gradient-to-b from-purple-950/10 via-black to-black pt-20 pb-8">
           <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Col: Titles & Heading */}
             <div className="space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start">
@@ -81,7 +81,7 @@ export default function AboutPage() {
         </section>
 
         {/* STORY & TIMELINE SECTION */}
-        <section className="py-24 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <section className="py-10 md:py-16 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Left Column: Counters & Vision */}
           <div className="space-y-8">
             <h3 
