@@ -67,7 +67,7 @@ export default function ProjectsSection() {
   return (
     <section 
       ref={containerRef}
-      className="relative bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-25 pt-12 pb-4 md:pb-28 px-6 md:px-12 flex flex-col items-center"
+      className="relative bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-25 pt-12 pb-[24vh] md:pb-28 px-6 md:px-12 flex flex-col items-center"
     >
       <div className="text-center max-w-2xl space-y-4 mb-6 md:mb-24 relative z-20">
         <h2 
@@ -118,24 +118,20 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
     offset: ['start start', 'end start']
   });
 
-  const targetScale = isMobile ? (0.85 + index * 0.075) : (1 - (totalCards - 1 - index) * 0.03);
+  const targetScale = 1 - (totalCards - 1 - index) * 0.03;
   const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
-
-  const isLastCard = index === totalCards - 1;
-  const opacityValues = (isMobile && !isLastCard) ? [1, 1, 0] : [1, 1, 1];
-  const opacity = useTransform(scrollYProgress, [0, 0.6, 0.9], opacityValues);
 
   return (
     <div 
       ref={cardRef} 
       className="sticky h-[56vh] md:h-[90vh] w-full flex items-center justify-center"
       style={{ 
-        top: isMobile ? `${64 + (totalCards - 1 - index) * 20}px` : `${64 + index * 28}px`,
+        top: isMobile ? `${64 + index * 84}px` : `${64 + index * 28}px`,
         perspective: 1000
       }}
     >
       <motion.div 
-        style={{ scale, opacity }}
+        style={{ scale }}
         className="w-full bg-[#0C0C0C] rounded-[30px] sm:rounded-[40px] md:rounded-[50px] border border-[#D7E2EA]/40 p-4 sm:p-6 md:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden"
       >
         {/* Top Row Layout */}
