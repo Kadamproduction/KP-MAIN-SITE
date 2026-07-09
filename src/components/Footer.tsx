@@ -1,8 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { 
-  Film, Phone, Mail, MapPin, Clock, ArrowUpRight 
+  Film, Phone, Mail, MapPin, Clock, ArrowUpRight, ChevronDown 
 } from 'lucide-react';
 
 const InstagramIcon = (props: any) => (
@@ -21,6 +22,8 @@ const WhatsAppIcon = (props: any) => (
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [quickLinksOpen, setQuickLinksOpen] = useState(false);
+  const [servicesLinksOpen, setServicesLinksOpen] = useState(false);
 
   const socialLinks = [
     { name: 'Instagram', icon: InstagramIcon, href: 'https://www.instagram.com/kadamproduction?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
@@ -46,7 +49,7 @@ export default function Footer() {
 
   return (
     <footer className="relative z-20 bg-[#020202] border-t border-white/5 pt-20 pb-10 px-6 md:px-12">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16">
         {/* Brand Description */}
         <div className="space-y-6">
           <Link href="/" className="flex items-center gap-3 group">
@@ -61,7 +64,7 @@ export default function Footer() {
             </div>
           </Link>
           
-          <p className="text-xs text-zinc-500 leading-relaxed max-w-sm">
+          <p className="text-xs text-zinc-550 leading-relaxed max-w-sm">
             Creating unforgettable atmospheres, not just events. Premium sound, lighting design, lasers, and professional DJ production since 2014.
           </p>
 
@@ -85,9 +88,15 @@ export default function Footer() {
         </div>
 
         {/* Quick Links */}
-        <div className="space-y-6">
-          <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-white">Quick Navigation</h4>
-          <ul className="space-y-3">
+        <div className="space-y-4 lg:space-y-6 pb-4 border-b border-white/5 lg:border-none lg:pb-0">
+          <button 
+            onClick={() => setQuickLinksOpen(!quickLinksOpen)}
+            className="flex items-center justify-between w-full text-left lg:pointer-events-none focus:outline-none"
+          >
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-white">Quick Navigation</h4>
+            <ChevronDown className={`w-4 h-4 text-zinc-400 transition-transform duration-300 lg:hidden ${quickLinksOpen ? 'rotate-180' : ''}`} />
+          </button>
+          <ul className={`space-y-3 transition-all duration-300 ${quickLinksOpen ? 'block' : 'hidden lg:block'}`}>
             {quickLinks.map((link) => (
               <li key={link.label}>
                 <Link 
@@ -103,9 +112,15 @@ export default function Footer() {
         </div>
 
         {/* Services */}
-        <div className="space-y-6">
-          <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-white">Our Services</h4>
-          <ul className="space-y-3">
+        <div className="space-y-4 lg:space-y-6 pb-4 border-b border-white/5 lg:border-none lg:pb-0">
+          <button 
+            onClick={() => setServicesLinksOpen(!servicesLinksOpen)}
+            className="flex items-center justify-between w-full text-left lg:pointer-events-none focus:outline-none"
+          >
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-white">Our Services</h4>
+            <ChevronDown className={`w-4 h-4 text-zinc-400 transition-transform duration-300 lg:hidden ${servicesLinksOpen ? 'rotate-180' : ''}`} />
+          </button>
+          <ul className={`space-y-3 transition-all duration-300 ${servicesLinksOpen ? 'block' : 'hidden lg:block'}`}>
             {servicesLinks.map((link) => (
               <li key={link.label}>
                 <Link 

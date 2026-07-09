@@ -58,13 +58,20 @@ const videoSources = [
   'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783012627/Trim-1.mp4'
 ];
 
-const marqueeServices = [
-  { icon: Music, label: 'WEDDINGS', color: '#EC4899' },
-  { icon: Sparkles, label: 'FESTIVALS', color: '#8B5CF6' },
-  { icon: Volume2, label: 'CONCERTS', color: '#06B6D4' },
-  { icon: Building2, label: 'CORPORATE', color: '#F97316' },
-  { icon: PartyPopper, label: 'PRIVATE EVENTS', color: '#8B5CF6' },
-  { icon: Radio, label: 'ROAD SHOWS', color: '#EC4899' }
+const marqueeUpperText = [
+  'WEDDINGS',
+  'FESTIVALS',
+  'CONCERTS',
+  'CORPORATE',
+  'ROAD SHOWS'
+];
+
+const marqueeLowerText = [
+  'PRIVATE PARTIES',
+  'STAGE SETUPS',
+  'LIGHT SHOWS',
+  'SOUND PRODUCTION',
+  'EVENT MANAGEMENT'
 ];
 
 const cylinderStats = [
@@ -120,6 +127,67 @@ export default function HomePage() {
   const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
   const [sectionVideoIdx, setSectionVideoIdx] = useState(0);
 
+  const isReady = videoLoaded && minTimeElapsed;
+
+  const stagesSliderRef = useRef<HTMLDivElement>(null);
+  const [activeStageIdx, setActiveStageIdx] = useState(0);
+
+  const scrollToStageSlide = (idx: number) => {
+    setActiveStageIdx(idx);
+    if (stagesSliderRef.current) {
+      const slider = stagesSliderRef.current;
+      const slideWidth = slider.scrollWidth / cylinderStats.length;
+      slider.scrollTo({
+        left: slideWidth * idx,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const handleStagesScroll = () => {
+    if (!stagesSliderRef.current) return;
+    const container = stagesSliderRef.current;
+    const children = container.children;
+    let closestIndex = 0;
+    let minDistance = Infinity;
+    const containerCenter = container.scrollLeft + container.clientWidth / 2;
+    
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i] as HTMLElement;
+      const childCenter = child.offsetLeft + child.clientWidth / 2;
+      const distance = Math.abs(childCenter - containerCenter);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = i;
+      }
+    }
+    
+    if (closestIndex !== activeStageIdx && closestIndex >= 0 && closestIndex < cylinderStats.length) {
+      setActiveStageIdx(closestIndex);
+    }
+  };
+
+  const handleStageVideoEnded = (idx: number) => {
+    if (idx === activeStageIdx) {
+      const nextIdx = (idx + 1) % cylinderStats.length;
+      scrollToStageSlide(nextIdx);
+    }
+  };
+
+  useEffect(() => {
+    if (!isReady) return;
+    cylinderStats.forEach((_, idx) => {
+      const video = document.getElementById(`stage-video-${idx}`) as HTMLVideoElement;
+      if (video) {
+        if (idx === activeStageIdx) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      }
+    });
+  }, [activeStageIdx, videoLoaded, minTimeElapsed]);
+
   useEffect(() => {
     // Minimum display time for page loader logo
     const minTimer = setTimeout(() => {
@@ -136,8 +204,6 @@ export default function HomePage() {
       clearTimeout(fallbackTimer);
     };
   }, []);
-
-  const isReady = videoLoaded && minTimeElapsed;
 
   const [vibrantsItems, setVibrantsItems] = useState([
     { title: 'FESTIVALS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417440/Untitled-design-20_sm7myc.png' },
@@ -211,10 +277,10 @@ export default function HomePage() {
           </div>
 
           {/* Layer 3: Split Hero Content (Text Left, Lottie Right) */}
-          <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center pt-2 md:pt-0">
+          <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-12 items-center pt-2 md:pt-0">
             
             {/* Right Side: Circular metallic logo Lottie player (First on mobile via order class) */}
-            <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[280px] sm:max-w-[340px] lg:max-w-[560px] mx-auto">
+            <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[320px] xs:max-w-[350px] sm:max-w-[380px] lg:max-w-[560px] mx-auto">
               <div 
                 dangerouslySetInnerHTML={{
                   __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
@@ -224,7 +290,7 @@ export default function HomePage() {
             </div>
 
             {/* Left Side: Headlines (Last on mobile, centered text) */}
-            <div className="md:col-span-7 order-last md:order-first flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-6 pt-6 md:pt-0">
+            <div className="md:col-span-7 order-last md:order-first flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-6 pt-2 md:pt-0">
               {/* Extra spacing in between Gloock font headings */}
               <div className="space-y-4">
                 <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
@@ -278,88 +344,72 @@ export default function HomePage() {
         </section>
 
         {/* 1.3 SERVICES MARQUEE SECTION */}
-        <section className="relative py-8 bg-[#030303] border-y border-white/5 overflow-hidden">
+        <section className="relative py-6 md:py-8 bg-[#030303] border-y border-white/5 overflow-hidden">
           {/* Row 1: Left to Right */}
           <div className="flex gap-5 animate-marquee whitespace-nowrap py-2">
-            {marqueeServices.map((service, idx) => {
-              const Icon = service.icon;
-              return (
-                <div 
-                  key={idx}
-                  className="inline-flex items-center gap-2.5 px-4 py-2 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#8B5CF6]/30 hover:bg-[#8B5CF6]/5 transition-all duration-300 group"
+            {marqueeUpperText.map((text, idx) => (
+              <div 
+                key={idx}
+                className="inline-flex items-center justify-center px-4 py-2.5 md:px-6 md:py-3.5 rounded-xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#8B5CF6]/30 hover:bg-[#8B5CF6]/5 transition-all duration-300"
+              >
+                <span 
+                  className="text-xs md:text-sm font-bold tracking-wider text-white"
+                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
-                  <Icon className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:scale-110" style={{ color: service.color }} />
-                  <span 
-                    className="text-xs md:text-sm font-bold tracking-wider text-white"
-                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                  >
-                    {service.label}
-                  </span>
-                </div>
-              );
-            })}
+                  {text}
+                </span>
+              </div>
+            ))}
             {/* Duplicated row for loop */}
-            {marqueeServices.map((service, idx) => {
-              const Icon = service.icon;
-              return (
-                <div 
-                  key={`dup-${idx}`}
-                  className="inline-flex items-center gap-2.5 px-4 py-2 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#8B5CF6]/30 hover:bg-[#8B5CF6]/5 transition-all duration-300 group"
+            {marqueeUpperText.map((text, idx) => (
+              <div 
+                key={`dup-${idx}`}
+                className="inline-flex items-center justify-center px-4 py-2.5 md:px-6 md:py-3.5 rounded-xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#8B5CF6]/30 hover:bg-[#8B5CF6]/5 transition-all duration-300"
+              >
+                <span 
+                  className="text-xs md:text-sm font-bold tracking-wider text-white"
+                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
-                  <Icon className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:scale-110" style={{ color: service.color }} />
-                  <span 
-                    className="text-xs md:text-sm font-bold tracking-wider text-white"
-                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                  >
-                    {service.label}
-                  </span>
-                </div>
-              );
-            })}
+                  {text}
+                </span>
+              </div>
+            ))}
           </div>
 
           {/* Row 2: Right to Left (Reverse direction) */}
           <div className="flex gap-5 animate-marquee-reverse whitespace-nowrap py-2 mt-4 opacity-70">
-            {marqueeServices.slice().reverse().map((service, idx) => {
-              const Icon = service.icon;
-              return (
-                <div 
-                  key={idx}
-                  className="inline-flex items-center gap-2.5 px-4 py-2 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#EC4899]/30 hover:bg-[#EC4899]/5 transition-all duration-300 group"
+            {marqueeLowerText.map((text, idx) => (
+              <div 
+                key={idx}
+                className="inline-flex items-center justify-center px-4 py-2.5 md:px-6 md:py-3.5 rounded-xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#EC4899]/30 hover:bg-[#EC4899]/5 transition-all duration-300"
+              >
+                <span 
+                  className="text-xs md:text-sm font-bold tracking-wider text-white"
+                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
-                  <Icon className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:scale-110" style={{ color: service.color }} />
-                  <span 
-                    className="text-xs md:text-sm font-bold tracking-wider text-white"
-                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                  >
-                    {service.label}
-                  </span>
-                </div>
-              );
-            })}
+                  {text}
+                </span>
+              </div>
+            ))}
             {/* Duplicated row */}
-            {marqueeServices.slice().reverse().map((service, idx) => {
-              const Icon = service.icon;
-              return (
-                <div 
-                  key={`dup-rev-${idx}`}
-                  className="inline-flex items-center gap-2.5 px-4 py-2 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#EC4899]/30 hover:bg-[#EC4899]/5 transition-all duration-300 group"
+            {marqueeLowerText.map((text, idx) => (
+              <div 
+                key={`dup-rev-${idx}`}
+                className="inline-flex items-center justify-center px-4 py-2.5 md:px-6 md:py-3.5 rounded-xl border border-white/5 bg-white/3 backdrop-blur-sm hover:border-[#EC4899]/30 hover:bg-[#EC4899]/5 transition-all duration-300"
+              >
+                <span 
+                  className="text-xs md:text-sm font-bold tracking-wider text-white"
+                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
-                  <Icon className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:scale-110" style={{ color: service.color }} />
-                  <span 
-                    className="text-xs md:text-sm font-bold tracking-wider text-white"
-                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                  >
-                    {service.label}
-                  </span>
-                </div>
-              );
-            })}
+                  {text}
+                </span>
+              </div>
+            ))}
           </div>
         </section>
 
         {/* 1.4 INTERACTIVE VIDEO GRID & CAROUSEL SECTION */}
-        <section className="relative py-28 px-6 md:px-12 bg-black overflow-hidden flex flex-col items-center border-t border-white/5">
+        <section className="relative pt-10 pb-20 md:py-28 px-6 md:px-12 bg-black overflow-hidden flex flex-col items-center border-t border-white/5">
           {/* Ambient Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-550/5 rounded-full blur-[120px] pointer-events-none" />
           
@@ -369,15 +419,15 @@ export default function HomePage() {
               style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
             >
               <span className="text-white mr-3">OUR STAGES IN</span>
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent hero-heading pb-1">
+              <span className="text-white hero-heading pb-1">
                 ACTION
               </span>
             </h2>
             <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">A glance at our production footage</p>
           </div>
 
-          {/* Universal Grid (Stacks vertically on mobile, 3-columns on desktop) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto w-full relative z-20">
+          {/* Universal Grid (Desktop View: 3-columns) */}
+          <div className="hidden md:grid grid-cols-3 gap-6 max-w-6xl mx-auto w-full relative z-20">
             {cylinderStats.map((stat, idx) => (
               <div 
                 key={idx}
@@ -417,6 +467,69 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+
+          {/* Mobile/Tablet View (Horizontal auto-scrolling swipeable carousel) */}
+          <div className="block md:hidden w-full relative z-20 px-4">
+            <div 
+              ref={stagesSliderRef}
+              onScroll={handleStagesScroll}
+              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            >
+              {cylinderStats.map((stat, idx) => {
+                const isActive = idx === activeStageIdx;
+                return (
+                  <div 
+                    key={idx}
+                    className="min-w-[85vw] snap-center relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col shadow-2xl"
+                  >
+                    {/* Tall Video component */}
+                    <video 
+                      id={`stage-video-${idx}`}
+                      src={videoSources[idx]} 
+                      autoPlay={isActive}
+                      muted 
+                      playsInline 
+                      onEnded={() => handleStageVideoEnded(idx)}
+                      className="w-full aspect-[9/16] object-cover rounded-[1.8rem]"
+                    />
+                    
+                    {/* Padded Content below the video */}
+                    <div className="flex-1 flex flex-col justify-between items-center text-center p-4 pt-6">
+                      {/* Courier Prime Font description text */}
+                      <p 
+                        className="text-white font-bold uppercase tracking-wider text-xs min-h-[48px] flex items-center justify-center"
+                        style={{ fontFamily: 'var(--font-courier-prime), Courier, monospace' }}
+                      >
+                        {stat.description}
+                      </p>
+                      
+                      {/* Dotted/Dashed Line Divider */}
+                      <div className="w-full border-t border-dashed border-zinc-700/60 my-5" />
+
+                      {/* Lora Font Stat label text */}
+                      <span 
+                        className="text-md font-bold text-white tracking-wide uppercase"
+                        style={{ fontFamily: 'var(--font-lora), Lora, serif' }}
+                      >
+                        {stat.number} {stat.label}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Bullet indicators for slider progress */}
+            <div className="flex justify-center gap-2 mt-4">
+              {cylinderStats.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => scrollToStageSlide(idx)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === activeStageIdx ? 'bg-white w-6' : 'bg-white/20'}`}
+                />
+              ))}
+            </div>
+          </div>
         </section>
 
         {/* 1.5 OUR VIBRANTS SECTION (Task 3 Carousel Slider) */}
@@ -431,7 +544,7 @@ export default function HomePage() {
                   style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
                 >
                   <span className="text-white block mb-2">CHOOSE</span>
-                  <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent hero-heading block">
+                  <span className="text-white hero-heading block">
                     OUR VIBRANTS
                   </span>
                 </h2>

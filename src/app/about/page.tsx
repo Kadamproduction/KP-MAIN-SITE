@@ -55,7 +55,7 @@ export default function AboutPage() {
                 style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
               >
                 <span className="text-white block mb-2">ABOUT</span>
-                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent hero-heading block pb-1">
+                <span className="text-white hero-heading block pb-1">
                   KADAM PRODUCTION
                 </span>
               </h1>

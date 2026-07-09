@@ -238,7 +238,7 @@ export default function ServicesPage() {
               style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
             >
               <span className="text-white mr-3">OUR</span>
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent hero-heading pb-1">
+              <span className="text-white hero-heading pb-1">
                 SERVICES
               </span>
             </h1>
