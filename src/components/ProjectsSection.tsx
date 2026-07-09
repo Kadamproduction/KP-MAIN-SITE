@@ -67,7 +67,7 @@ export default function ProjectsSection() {
   return (
     <section 
       ref={containerRef}
-      className="relative bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-25 pt-12 pb-4 md:py-28 px-6 md:px-12 flex flex-col items-center"
+      className="relative bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-25 pt-12 pb-[52vh] md:pb-28 px-6 md:px-12 flex flex-col items-center"
     >
       <div className="text-center max-w-2xl space-y-4 mb-6 md:mb-24 relative z-20">
         <h2 
