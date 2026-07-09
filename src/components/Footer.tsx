@@ -139,20 +139,20 @@ export default function Footer() {
           <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-white">Contact Info</h4>
           <ul className="space-y-4 text-xs">
             <li className="flex gap-3 text-zinc-400">
-              <Phone className="w-4 h-4 text-pink-500 flex-shrink-0" />
+              <Phone className="w-4 h-4 text-white flex-shrink-0" />
               <div>
                 <a href="tel:+919537330003" className="hover:text-white transition-all block font-semibold">+91 9537330003</a>
                 <a href="tel:+918866655651" className="hover:text-white transition-all block text-zinc-500 mt-1">+91 8866655651</a>
               </div>
             </li>
             <li className="flex gap-3 text-zinc-400">
-              <Mail className="w-4 h-4 text-purple-500 flex-shrink-0" />
+              <Mail className="w-4 h-4 text-white flex-shrink-0" />
               <a href="mailto:kadamproduction123@gmail.com" className="hover:text-white transition-all block">
                 kadamproduction123@gmail.com
               </a>
             </li>
             <li className="flex gap-3 text-zinc-400">
-              <MapPin className="w-4 h-4 text-cyan-500 flex-shrink-0" />
+              <MapPin className="w-4 h-4 text-white flex-shrink-0" />
               <a 
                 href="https://maps.google.com/?q=Kadam%20Production,%205QVF%2BQ8M,%20Gaurav%20Path%20Road,%20Palanpur,%20Surat,%20Gujarat%20394510" 
                 target="_blank" 
@@ -163,7 +163,7 @@ export default function Footer() {
               </a>
             </li>
             <li className="flex gap-3 text-zinc-400">
-              <Clock className="w-4 h-4 text-orange-500 flex-shrink-0" />
+              <Clock className="w-4 h-4 text-white flex-shrink-0" />
               <span>Available 24/7 for Events</span>
             </li>
           </ul>

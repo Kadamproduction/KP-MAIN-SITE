@@ -174,6 +174,37 @@ export default function HomePage() {
     }
   };
 
+  const vibrantsSliderRef = useRef<HTMLDivElement>(null);
+  const [activeVibrantIdx, setActiveVibrantIdx] = useState(0);
+
+  const scrollVibrantsMobile = (direction: 'left' | 'right') => {
+    if (vibrantsSliderRef.current) {
+      const slider = vibrantsSliderRef.current;
+      const slideWidth = slider.clientWidth + 16; // width + gap
+      const newIdx = direction === 'left' 
+        ? Math.max(0, activeVibrantIdx - 1)
+        : Math.min(vibrantsItems.length - 1, activeVibrantIdx + 1);
+      
+      setActiveVibrantIdx(newIdx);
+      slider.scrollTo({
+        left: slideWidth * newIdx,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const handleVibrantsScroll = () => {
+    if (vibrantsSliderRef.current) {
+      const slider = vibrantsSliderRef.current;
+      const slideWidth = slider.clientWidth + 16;
+      const scrollLeft = slider.scrollLeft;
+      const newIdx = Math.round(scrollLeft / slideWidth);
+      if (newIdx !== activeVibrantIdx && newIdx >= 0 && newIdx < vibrantsItems.length) {
+        setActiveVibrantIdx(newIdx);
+      }
+    }
+  };
+
   useEffect(() => {
     if (!isReady) return;
     cylinderStats.forEach((_, idx) => {
@@ -277,10 +308,10 @@ export default function HomePage() {
           </div>
 
           {/* Layer 3: Split Hero Content (Text Left, Lottie Right) */}
-          <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-12 items-center pt-2 md:pt-0">
+          <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-12 items-center pt-2 md:pt-0">
             
             {/* Right Side: Circular metallic logo Lottie player (First on mobile via order class) */}
-            <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[320px] xs:max-w-[350px] sm:max-w-[380px] lg:max-w-[560px] mx-auto">
+            <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[360px] xs:max-w-[400px] sm:max-w-[440px] lg:max-w-[560px] mx-auto">
               <div 
                 dangerouslySetInnerHTML={{
                   __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
@@ -290,7 +321,7 @@ export default function HomePage() {
             </div>
 
             {/* Left Side: Headlines (Last on mobile, centered text) */}
-            <div className="md:col-span-7 order-last md:order-first flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-6 pt-2 md:pt-0">
+            <div className="md:col-span-7 order-last md:order-first flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-6 pt-0 -mt-3 md:pt-0 md:mt-0">
               {/* Extra spacing in between Gloock font headings */}
               <div className="space-y-4">
                 <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
@@ -409,7 +440,7 @@ export default function HomePage() {
         </section>
 
         {/* 1.4 INTERACTIVE VIDEO GRID & CAROUSEL SECTION */}
-        <section className="relative pt-10 pb-20 md:py-28 px-6 md:px-12 bg-black overflow-hidden flex flex-col items-center border-t border-white/5">
+        <section className="relative pt-10 pb-4 md:py-28 px-6 md:px-12 bg-black overflow-hidden flex flex-col items-center border-t border-white/5">
           {/* Ambient Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-550/5 rounded-full blur-[120px] pointer-events-none" />
           
@@ -533,11 +564,11 @@ export default function HomePage() {
         </section>
 
         {/* 1.5 OUR VIBRANTS SECTION (Task 3 Carousel Slider) */}
-        <section className="relative py-28 px-6 md:px-12 bg-[#030303] overflow-hidden border-t border-white/5">
+        <section className="relative pt-6 pb-20 md:py-28 px-6 md:px-12 bg-[#030303] overflow-hidden border-t border-white/5">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
             {/* Left Column: Headings & Slide Controls */}
-            <div className="lg:col-span-5 flex flex-col justify-between h-full py-6 space-y-8">
+            <div className="lg:col-span-5 flex flex-col justify-between lg:h-full lg:py-6 space-y-4 lg:space-y-8 pb-4 lg:pb-0">
               <div className="space-y-4">
                 <h2 
                   className="text-4xl md:text-6xl font-normal uppercase tracking-wider leading-tight"
@@ -574,32 +605,45 @@ export default function HomePage() {
             {/* Right Column: Sliding image cards & Description block */}
             <div className="lg:col-span-7 space-y-8">
               
-              {/* Mobile Card Container (Shows exactly ONE card, no previews on the side) */}
-              <div className="md:hidden w-full max-w-[280px] sm:max-w-[320px] mx-auto overflow-hidden rounded-3xl relative border border-white/5 bg-zinc-950/40 shadow-lg group">
-                <img 
-                  src={vibrantsItems[0].image} 
-                  alt={vibrantsItems[0].title} 
-                  className="w-full aspect-[3/4] object-cover filter brightness-[0.7]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-                <span 
-                  className="absolute bottom-6 left-6 text-white font-normal tracking-widest text-sm uppercase" 
-                  style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+              {/* Mobile Card Carousel (Swipeable, snapping) */}
+              <div className="md:hidden w-full relative">
+                <div 
+                  ref={vibrantsSliderRef}
+                  onScroll={handleVibrantsScroll}
+                  className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full max-w-[280px] sm:max-w-[320px] mx-auto"
                 >
-                  {vibrantsItems[0].title}
-                </span>
+                  {vibrantsItems.map((item) => (
+                    <div 
+                      key={item.title}
+                      className="min-w-full snap-center rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group"
+                    >
+                      <img 
+                        src={item.image} 
+                        alt={item.title} 
+                        className="w-full aspect-[3/4] object-cover filter brightness-[0.7]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+                      <span 
+                        className="absolute bottom-6 left-6 text-white font-normal tracking-widest text-sm uppercase" 
+                        style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+                      >
+                        {item.title}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              {/* Mobile Slider Controls (Shifted under the card) */}
+              {/* Mobile Slider Controls (Shifted under the card, using mobile scroll helper) */}
               <div className="flex md:hidden justify-center gap-6 mt-4">
                 <button 
-                  onClick={scrollVibrantsLeft}
+                  onClick={() => scrollVibrantsMobile('left')}
                   className="w-12 h-12 rounded-full bg-black border border-white/10 flex items-center justify-center text-white hover:bg-white/10 active:scale-95 transition-all cursor-pointer shadow-lg"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button 
-                  onClick={scrollVibrantsRight}
+                  onClick={() => scrollVibrantsMobile('right')}
                   className="w-12 h-12 rounded-full bg-black border border-white/10 flex items-center justify-center text-white hover:bg-white/10 active:scale-95 transition-all cursor-pointer shadow-lg"
                 >
                   <ChevronRight className="w-5 h-5" />
@@ -646,10 +690,10 @@ export default function HomePage() {
         <ProjectsSection />
 
         {/* 1.7 CALL TO ACTION (CTA) SECTION */}
-        <section className="relative py-24 px-6 md:px-12 bg-black border-t border-white/5 overflow-hidden flex flex-col items-center justify-center text-center">
+        <section className="relative pt-2 pb-16 md:py-24 px-6 md:px-12 bg-black border-t border-white/5 overflow-hidden flex flex-col items-center justify-center text-center">
           {/* Ambient colorful backdrop glows */}
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none hidden md:block" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-[120px] pointer-events-none hidden md:block" />
           
           <div className="relative z-10">
             <motion.div

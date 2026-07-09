@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import LiveProjectButton from './LiveProjectButton';
 import FadeIn from './FadeIn';
@@ -67,9 +67,9 @@ export default function ProjectsSection() {
   return (
     <section 
       ref={containerRef}
-      className="relative bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-25 py-28 px-6 md:px-12 flex flex-col items-center"
+      className="relative bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-25 pt-4 pb-20 md:py-28 px-6 md:px-12 flex flex-col items-center"
     >
-      <div className="text-center max-w-2xl space-y-4 mb-24 relative z-20">
+      <div className="text-center max-w-2xl space-y-4 mb-6 md:mb-24 relative z-20">
         <h2 
           className="text-4xl md:text-6xl font-normal uppercase tracking-wider text-white hero-heading"
           style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
@@ -80,7 +80,7 @@ export default function ProjectsSection() {
       </div>
 
       {/* Sticky Stacking Cards Container */}
-      <div className="w-full max-w-6xl space-y-24 md:space-y-32 relative">
+      <div className="w-full max-w-6xl space-y-12 md:space-y-32 relative">
         {projectsData.map((project, idx) => {
           return (
             <CardWrapper 
@@ -106,6 +106,11 @@ interface CardWrapperProps {
 
 function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapperProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
 
   // Monitor this card's viewport position relative to scroll to apply downscale
   const { scrollYProgress } = useScroll({
@@ -113,7 +118,7 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
     offset: ['start start', 'end start']
   });
 
-  const targetScale = 1 - (totalCards - 1 - index) * 0.03;
+  const targetScale = isMobile ? 1 : (1 - (totalCards - 1 - index) * 0.03);
   const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
 
   return (
@@ -121,7 +126,7 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
       ref={cardRef} 
       className="sticky h-[82vh] md:h-[90vh] w-full flex items-center justify-center"
       style={{ 
-        top: `${64 + index * 28}px`,
+        top: isMobile ? '64px' : `${64 + index * 28}px`,
         perspective: 1000
       }}
     >
