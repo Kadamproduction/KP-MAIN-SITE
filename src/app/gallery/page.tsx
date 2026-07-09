@@ -153,7 +153,7 @@ export default function GalleryPage() {
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-6 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase cursor-pointer snap-start transition-all duration-300 border flex-shrink-0 ${
                     isActive 
-                      ? 'bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 border-transparent text-white shadow-lg shadow-purple-500/10' 
+                      ? 'bg-[#C524C6] border-transparent text-white shadow-lg shadow-purple-500/10' 
                       : 'bg-transparent border-white/10 hover:border-white/30 text-zinc-400 hover:text-white'
                   }`}
                   style={{ fontFamily: 'Space Grotesk, sans-serif' }}
