@@ -504,14 +504,17 @@ export default function HomePage() {
             <div 
               ref={stagesSliderRef}
               onScroll={handleStagesScroll}
-              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-6 scroll-px-6"
+              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
             >
+              {/* Left padding spacer */}
+              <div className="min-w-[4vw] flex-shrink-0" />
+
               {cylinderStats.map((stat, idx) => {
                 const isActive = idx === activeStageIdx;
                 return (
                   <div 
                     key={idx}
-                    className="min-w-[90vw] snap-center relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-3 sm:p-4 flex flex-col shadow-2xl"
+                    className="min-w-[88vw] snap-center relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col shadow-2xl"
                   >
                     {/* Tall Video component */}
                     <video 
@@ -548,6 +551,9 @@ export default function HomePage() {
                   </div>
                 );
               })}
+
+              {/* Right padding spacer */}
+              <div className="min-w-[4vw] flex-shrink-0" />
             </div>
 
             {/* Bullet indicators for slider progress */}
@@ -690,7 +696,7 @@ export default function HomePage() {
         <ProjectsSection />
 
         {/* 1.7 CALL TO ACTION (CTA) SECTION */}
-        <section className="relative pt-2 pb-16 md:py-24 px-6 md:px-12 bg-[#0C0C0C] border-t border-white/5 overflow-hidden flex flex-col items-center justify-center text-center">
+        <section className="relative pt-2 pb-16 md:py-24 px-6 md:px-12 bg-[#0C0C0C] overflow-hidden flex flex-col items-center justify-center text-center">
           {/* Ambient colorful backdrop glows */}
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none hidden md:block" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-[120px] pointer-events-none hidden md:block" />
