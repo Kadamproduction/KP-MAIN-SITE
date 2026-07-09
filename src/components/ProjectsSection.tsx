@@ -67,7 +67,7 @@ export default function ProjectsSection() {
   return (
     <section 
       ref={containerRef}
-      className="relative bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-25 pt-4 pb-20 md:py-28 px-6 md:px-12 flex flex-col items-center"
+      className="relative bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-25 pt-12 pb-20 md:py-28 px-6 md:px-12 flex flex-col items-center"
     >
       <div className="text-center max-w-2xl space-y-4 mb-6 md:mb-24 relative z-20">
         <h2 
@@ -118,13 +118,13 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
     offset: ['start start', 'end start']
   });
 
-  const targetScale = isMobile ? 1 : (1 - (totalCards - 1 - index) * 0.03);
+  const targetScale = isMobile ? (0.85 + index * 0.075) : (1 - (totalCards - 1 - index) * 0.03);
   const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
 
   return (
     <div 
       ref={cardRef} 
-      className="sticky h-[82vh] md:h-[90vh] w-full flex items-center justify-center"
+      className="sticky h-[65vh] md:h-[90vh] w-full flex items-center justify-center"
       style={{ 
         top: isMobile ? '64px' : `${64 + index * 28}px`,
         perspective: 1000

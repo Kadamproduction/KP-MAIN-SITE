@@ -440,7 +440,7 @@ export default function HomePage() {
         </section>
 
         {/* 1.4 INTERACTIVE VIDEO GRID & CAROUSEL SECTION */}
-        <section className="relative pt-10 pb-4 md:py-28 px-6 md:px-12 bg-black overflow-hidden flex flex-col items-center border-t border-white/5">
+        <section className="relative pt-10 pb-10 md:py-28 px-6 md:px-12 bg-black overflow-hidden flex flex-col items-center border-t border-white/5">
           {/* Ambient Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-550/5 rounded-full blur-[120px] pointer-events-none" />
           
@@ -500,18 +500,18 @@ export default function HomePage() {
           </div>
 
           {/* Mobile/Tablet View (Horizontal auto-scrolling swipeable carousel) */}
-          <div className="block md:hidden w-full relative z-20 px-4">
+          <div className="block md:hidden w-full relative z-20">
             <div 
               ref={stagesSliderRef}
               onScroll={handleStagesScroll}
-              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-6 scroll-px-6"
             >
               {cylinderStats.map((stat, idx) => {
                 const isActive = idx === activeStageIdx;
                 return (
                   <div 
                     key={idx}
-                    className="min-w-[85vw] snap-center relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col shadow-2xl"
+                    className="min-w-[90vw] snap-center relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-3 sm:p-4 flex flex-col shadow-2xl"
                   >
                     {/* Tall Video component */}
                     <video 
@@ -564,7 +564,7 @@ export default function HomePage() {
         </section>
 
         {/* 1.5 OUR VIBRANTS SECTION (Task 3 Carousel Slider) */}
-        <section className="relative pt-6 pb-20 md:py-28 px-6 md:px-12 bg-[#030303] overflow-hidden border-t border-white/5">
+        <section className="relative pt-12 pb-20 md:py-28 px-6 md:px-12 bg-[#030303] overflow-hidden border-t border-white/5">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
             {/* Left Column: Headings & Slide Controls */}
@@ -690,7 +690,7 @@ export default function HomePage() {
         <ProjectsSection />
 
         {/* 1.7 CALL TO ACTION (CTA) SECTION */}
-        <section className="relative pt-2 pb-16 md:py-24 px-6 md:px-12 bg-black border-t border-white/5 overflow-hidden flex flex-col items-center justify-center text-center">
+        <section className="relative pt-2 pb-16 md:py-24 px-6 md:px-12 bg-[#0C0C0C] border-t border-white/5 overflow-hidden flex flex-col items-center justify-center text-center">
           {/* Ambient colorful backdrop glows */}
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none hidden md:block" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-[120px] pointer-events-none hidden md:block" />
