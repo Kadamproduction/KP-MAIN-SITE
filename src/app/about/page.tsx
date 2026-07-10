@@ -43,6 +43,7 @@ export default function AboutPage() {
 
   // Autoplay relative scroll for Crew Slider (slides right every 3s)
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth >= 768) return;
     const slider = crewSliderRef.current;
     if (!slider) return;
     const interval = setInterval(() => {
@@ -201,10 +202,10 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="relative max-w-2xl mx-auto overflow-hidden">
+          <div className="relative max-w-2xl md:max-w-5xl mx-auto overflow-hidden md:overflow-visible">
             <div 
               ref={crewSliderRef}
-              className="flex gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full"
+              className="flex gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full md:grid md:grid-cols-2 md:gap-12 md:overflow-x-visible md:pb-0"
             >
               {teamMembers.map((member, idx) => (
                 <motion.div
@@ -213,7 +214,7 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className="min-w-[80vw] sm:min-w-[280px] snap-center flex-shrink-0 group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 w-full"
+                  className="min-w-[80vw] sm:min-w-[280px] md:min-w-0 snap-center flex-shrink-0 group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 w-full md:flex-shrink"
               >
                 <div className="relative w-full aspect-[3/4] overflow-hidden">
                   <img 

@@ -377,6 +377,36 @@ export default function ServicesPage() {
               );
             })}
           </div>
+
+          {/* PC Manual Navigation Buttons */}
+          <div className="hidden md:flex justify-center items-center gap-4 mt-6">
+            <button 
+              onClick={() => {
+                const slider = servicesSliderRef.current;
+                if (!slider) return;
+                const firstCard = slider.children[0] as HTMLElement;
+                const cardWidth = firstCard?.clientWidth || 380;
+                slider.scrollBy({ left: -(cardWidth + 24), behavior: 'smooth' });
+              }}
+              className="w-12 h-12 rounded-full border border-white/20 hover:border-white/50 bg-zinc-900/50 hover:bg-zinc-800 text-white flex items-center justify-center transition-all duration-300 cursor-pointer shadow-lg"
+              aria-label="Previous service"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={() => {
+                const slider = servicesSliderRef.current;
+                if (!slider) return;
+                const firstCard = slider.children[0] as HTMLElement;
+                const cardWidth = firstCard?.clientWidth || 380;
+                slider.scrollBy({ left: (cardWidth + 24), behavior: 'smooth' });
+              }}
+              className="w-12 h-12 rounded-full border border-white/20 hover:border-white/50 bg-zinc-900/50 hover:bg-zinc-800 text-white flex items-center justify-center transition-all duration-300 cursor-pointer shadow-lg"
+              aria-label="Next service"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
         </section>
 
         {/* FOOTER */}
