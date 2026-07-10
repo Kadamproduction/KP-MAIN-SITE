@@ -334,7 +334,7 @@ export default function HomePage() {
             <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[360px] xs:max-w-[400px] sm:max-w-[440px] lg:max-w-[560px] mx-auto">
               <div 
                 dangerouslySetInnerHTML={{
-                  __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1" renderer="canvas" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
+                  __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
                 }}
                 className="w-full h-full flex items-center justify-center"
               />
@@ -716,7 +716,7 @@ export default function HomePage() {
         <ProjectsSection />
 
         {/* 1.7 CALL TO ACTION (CTA) SECTION */}
-        <section className="z-30 relative -mt-28 pt-4 pb-20 md:py-16 px-6 md:px-12 bg-[#0C0C0C] md:-mt-20 overflow-hidden flex flex-col items-center justify-center text-center">
+        <section className="z-30 relative -mt-32 pt-4 pb-20 md:py-12 px-6 md:px-12 bg-[#0C0C0C] md:-mt-24 overflow-hidden flex flex-col items-center justify-center text-center">
           {/* Ambient colorful backdrop glows */}
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none hidden md:block" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-[120px] pointer-events-none hidden md:block" />
