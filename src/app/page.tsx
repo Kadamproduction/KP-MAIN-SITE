@@ -716,7 +716,7 @@ export default function HomePage() {
         <ProjectsSection />
 
         {/* 1.7 CALL TO ACTION (CTA) SECTION */}
-        <section className="z-30 relative -mt-32 pt-4 pb-20 md:py-12 px-6 md:px-12 bg-[#0C0C0C] md:-mt-24 overflow-hidden flex flex-col items-center justify-center text-center">
+        <section className="z-30 relative -mt-24 pt-4 pb-20 md:py-12 px-6 md:px-12 bg-[#0C0C0C] md:-mt-16 overflow-hidden flex flex-col items-center justify-center text-center">
           {/* Ambient colorful backdrop glows */}
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none hidden md:block" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-[120px] pointer-events-none hidden md:block" />
