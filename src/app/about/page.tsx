@@ -74,7 +74,7 @@ export default function AboutPage() {
             <div className="space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start">
               <h1 
                 className="text-4xl sm:text-5xl md:text-6xl font-normal uppercase tracking-wider leading-tight"
-                style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
               >
                 <span className="text-white block mb-2">ABOUT</span>
                 <span className="text-white hero-heading block pb-1">
@@ -108,7 +108,7 @@ export default function AboutPage() {
           <div className="space-y-8">
             <h3 
               className="text-2xl sm:text-3xl font-normal uppercase tracking-wider text-white"
-              style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
               OUR VISION & VALUES
             </h3>
@@ -149,7 +149,7 @@ export default function AboutPage() {
           <div className="space-y-6">
             <h3 
               className="text-2xl sm:text-3xl font-normal uppercase tracking-wider text-white mb-8"
-              style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
               OUR JOURNEY
             </h3>
@@ -192,7 +192,7 @@ export default function AboutPage() {
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
             <h2 
               className="text-3xl sm:text-4xl md:text-5xl font-normal uppercase tracking-widest text-white leading-tight"
-              style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
               THE CREW
             </h2>

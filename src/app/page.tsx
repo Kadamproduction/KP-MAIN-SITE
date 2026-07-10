@@ -344,13 +344,13 @@ export default function HomePage() {
             <div className="md:col-span-7 order-last md:order-first flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-6 pt-0 -mt-3 md:pt-0 md:mt-0">
               {/* Extra spacing in between Gloock font headings */}
               <div className="space-y-4">
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                   CREATING
                 </h2>
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                   ATMOSPHERE
                 </h2>
-                <h2 className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}>
+                <h2 className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl font-normal tracking-wider text-white uppercase leading-none" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                   NOT JUST EVENT
                 </h2>
               </div>
@@ -467,7 +467,7 @@ export default function HomePage() {
           <div className="text-center max-w-4xl space-y-3 mb-16">
             <h2 
               className="text-2xl sm:text-4xl md:text-5xl font-normal uppercase tracking-widest leading-normal"
-              style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
               <span className="text-white mr-3">OUR STAGES IN</span>
               <span className="text-white hero-heading pb-1">
@@ -499,7 +499,7 @@ export default function HomePage() {
                   {/* Courier Prime Font description text */}
                   <p 
                     className="text-white font-bold uppercase tracking-wider text-xs sm:text-sm min-h-[48px] flex items-center justify-center"
-                    style={{ fontFamily: 'var(--font-courier-prime), Courier, monospace' }}
+                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                   >
                     {stat.description}
                   </p>
@@ -510,7 +510,7 @@ export default function HomePage() {
                   {/* Lora Font Stat label text */}
                   <span 
                     className="text-md sm:text-lg md:text-xl font-bold text-white tracking-wide uppercase"
-                    style={{ fontFamily: 'var(--font-lora), Lora, serif' }}
+                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                   >
                     {stat.number} {stat.label}
                   </span>
@@ -552,7 +552,7 @@ export default function HomePage() {
                       {/* Courier Prime Font description text */}
                       <p 
                         className="text-white font-bold uppercase tracking-wider text-xs min-h-[48px] flex items-center justify-center"
-                        style={{ fontFamily: 'var(--font-courier-prime), Courier, monospace' }}
+                        style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                       >
                         {stat.description}
                       </p>
@@ -563,7 +563,7 @@ export default function HomePage() {
                       {/* Lora Font Stat label text */}
                       <span 
                         className="text-md font-bold text-white tracking-wide uppercase"
-                        style={{ fontFamily: 'var(--font-lora), Lora, serif' }}
+                        style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                       >
                         {stat.number} {stat.label}
                       </span>
@@ -598,7 +598,7 @@ export default function HomePage() {
               <div className="space-y-4">
                 <h2 
                   className="text-4xl md:text-6xl font-normal uppercase tracking-wider leading-tight"
-                  style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
                   <span className="text-white block mb-2">CHOOSE</span>
                   <span className="text-white hero-heading block">
@@ -651,7 +651,7 @@ export default function HomePage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                       <span 
                         className="absolute bottom-6 left-6 text-white font-normal tracking-widest text-sm uppercase" 
-                        style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+                        style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                       >
                         {item.title}
                       </span>
@@ -693,7 +693,7 @@ export default function HomePage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                     <span 
                       className="absolute bottom-6 left-6 text-white font-normal tracking-widest text-sm uppercase" 
-                      style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+                      style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                     >
                       {item.title}
                     </span>

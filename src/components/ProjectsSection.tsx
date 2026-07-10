@@ -72,7 +72,7 @@ export default function ProjectsSection() {
       <div className="text-center max-w-2xl space-y-4 mb-6 md:mb-24 relative z-20">
         <h2 
           className="text-4xl md:text-6xl font-normal uppercase tracking-wider text-white hero-heading"
-          style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+          style={{ fontFamily: 'Space Grotesk, sans-serif' }}
         >
           SIGNATURE PRODUCTIONS
         </h2>

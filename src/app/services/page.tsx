@@ -166,10 +166,11 @@ export default function ServicesPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const servicesSliderRef = useRef<HTMLDivElement>(null);
 
-  // Autoplay relative scroll for Services Slider (slides right every 3s)
+  // Autoplay relative scroll for Services Slider (slides right every 3s) & touch wrap-around
   useEffect(() => {
     const slider = servicesSliderRef.current;
     if (!slider) return;
+
     const interval = setInterval(() => {
       const maxScroll = slider.scrollWidth - slider.clientWidth;
       if (slider.scrollLeft >= maxScroll - 10) {
@@ -183,7 +184,30 @@ export default function ServicesPage() {
         });
       }
     }, 3000);
-    return () => clearInterval(interval);
+
+    let touchStartX = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartX = e.touches[0].clientX;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const maxScroll = slider.scrollWidth - slider.clientWidth;
+      if (slider.scrollLeft >= maxScroll - 15) {
+        const touchCurrentX = e.touches[0].clientX;
+        if (touchStartX - touchCurrentX > 20) { // Swiping left to go right past the end
+          slider.scrollTo({ left: 0, behavior: 'smooth' });
+        }
+      }
+    };
+
+    slider.addEventListener('touchstart', handleTouchStart, { passive: true });
+    slider.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+    return () => {
+      clearInterval(interval);
+      slider.removeEventListener('touchstart', handleTouchStart);
+      slider.removeEventListener('touchmove', handleTouchMove);
+    };
   }, []);
 
   // Render organic sound wave flowing animation on canvas for premium visual effect
@@ -256,7 +280,7 @@ export default function ServicesPage() {
           <div className="relative z-10 text-center space-y-4 px-6">
             <h1 
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal uppercase tracking-wider leading-none"
-              style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
               <span className="text-white mr-3">OUR</span>
               <span className="text-white hero-heading pb-1">

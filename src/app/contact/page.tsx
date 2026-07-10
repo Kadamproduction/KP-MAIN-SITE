@@ -90,7 +90,7 @@ export default function ContactPage() {
           <div className="relative z-10 text-center space-y-4 px-6">
             <h1 
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal uppercase tracking-wider leading-none"
-              style={{ fontFamily: 'var(--font-gloock), Gloock, serif' }}
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
             >
               <span className="text-white mr-3">CONTACT</span>
               <span className="text-white hero-heading pb-1">
