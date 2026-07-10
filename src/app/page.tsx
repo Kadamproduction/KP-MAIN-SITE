@@ -174,6 +174,22 @@ export default function HomePage() {
     }
   };
 
+  const [vibrantsItems, setVibrantsItems] = useState([
+    { title: 'FESTIVALS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417440/Untitled-design-20_sm7myc.png' },
+    { title: 'CONCERT', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417386/Untitled-design-14_ogyqmd.png' },
+    { title: 'WEDDING', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783012636/Untitled-design-13.png' },
+    { title: 'ROAD SHOWS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417856/Untitled-design-32_atcfrs.png' },
+    { title: 'UNIQUE EVENTS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417448/Untitled-design-25_f2t475.png' }
+  ]);
+
+  const scrollVibrantsLeft = () => {
+    setVibrantsItems((prev) => [prev[prev.length - 1], ...prev.slice(0, prev.length - 1)]);
+  };
+
+  const scrollVibrantsRight = () => {
+    setVibrantsItems((prev) => [...prev.slice(1), prev[0]]);
+  };
+
   const vibrantsSliderRef = useRef<HTMLDivElement>(null);
   const [activeVibrantIdx, setActiveVibrantIdx] = useState(0);
 
@@ -217,6 +233,28 @@ export default function HomePage() {
     return () => clearInterval(timer);
   }, [activeStageIdx, isReady]);
 
+  // Autoplay slider for Choose Our Vibrants Section (both mobile & desktop, every 3s)
+  useEffect(() => {
+    if (!isReady) return;
+    const timer = setInterval(() => {
+      if (window.innerWidth < 768) {
+        if (vibrantsSliderRef.current) {
+          const slider = vibrantsSliderRef.current;
+          const slideWidth = slider.clientWidth + 16;
+          const nextIdx = (activeVibrantIdx + 1) % vibrantsItems.length;
+          setActiveVibrantIdx(nextIdx);
+          slider.scrollTo({
+            left: slideWidth * nextIdx,
+            behavior: 'smooth'
+          });
+        }
+      } else {
+        scrollVibrantsRight();
+      }
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [isReady, activeVibrantIdx, vibrantsItems.length]);
+
   useEffect(() => {
     // Minimum display time for page loader logo
     const minTimer = setTimeout(() => {
@@ -233,22 +271,6 @@ export default function HomePage() {
       clearTimeout(fallbackTimer);
     };
   }, []);
-
-  const [vibrantsItems, setVibrantsItems] = useState([
-    { title: 'FESTIVALS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417440/Untitled-design-20_sm7myc.png' },
-    { title: 'CONCERT', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417386/Untitled-design-14_ogyqmd.png' },
-    { title: 'WEDDING', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783012636/Untitled-design-13.png' },
-    { title: 'ROAD SHOWS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417856/Untitled-design-32_atcfrs.png' },
-    { title: 'UNIQUE EVENTS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417448/Untitled-design-25_f2t475.png' }
-  ]);
-
-  const scrollVibrantsLeft = () => {
-    setVibrantsItems((prev) => [prev[prev.length - 1], ...prev.slice(0, prev.length - 1)]);
-  };
-
-  const scrollVibrantsRight = () => {
-    setVibrantsItems((prev) => [...prev.slice(1), prev[0]]);
-  };
 
 
   

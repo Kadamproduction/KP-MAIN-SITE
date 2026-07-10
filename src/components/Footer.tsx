@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { 
   Film, Phone, Mail, MapPin, Clock, ArrowUpRight, ChevronDown 
 } from 'lucide-react';
@@ -22,6 +23,7 @@ const WhatsAppIcon = (props: any) => (
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const pathname = usePathname();
   const [quickLinksOpen, setQuickLinksOpen] = useState(false);
   const [servicesLinksOpen, setServicesLinksOpen] = useState(false);
 
@@ -46,6 +48,13 @@ export default function Footer() {
     { label: 'Corporate Events', href: '/services' },
     { label: 'Road Shows', href: '/services' },
   ];
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (pathname === href) {
+      e.preventDefault();
+      window.location.href = href;
+    }
+  };
 
   return (
     <footer className="relative z-20 bg-[#020202] border-t border-white/5 pt-20 pb-10 px-6 md:px-12">
@@ -101,6 +110,7 @@ export default function Footer() {
               <li key={link.label}>
                 <Link 
                   href={link.href}
+                  onClick={(e) => handleLinkClick(e, link.href)}
                   className="text-xs text-zinc-550 hover:text-white transition-colors flex items-center gap-1 group"
                 >
                   {link.label}
@@ -125,6 +135,7 @@ export default function Footer() {
               <li key={link.label}>
                 <Link 
                   href={link.href}
+                  onClick={(e) => handleLinkClick(e, link.href)}
                   className="text-xs text-zinc-550 hover:text-white transition-colors"
                 >
                   {link.label}
@@ -159,7 +170,7 @@ export default function Footer() {
                 rel="noopener noreferrer" 
                 className="hover:text-white transition-colors"
               >
-                Gujarat, India
+                Gaurav Path Road, Palanpur, Surat, Gujarat
               </a>
             </li>
             <li className="flex gap-3 text-zinc-400">

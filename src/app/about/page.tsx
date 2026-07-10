@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Award, ShieldCheck, Heart, Sparkles, Flame 
@@ -38,6 +39,27 @@ const teamMembers = [
 ];
 
 export default function AboutPage() {
+  const crewSliderRef = useRef<HTMLDivElement>(null);
+
+  // Autoplay relative scroll for Crew Slider (slides right every 3s)
+  useEffect(() => {
+    const slider = crewSliderRef.current;
+    if (!slider) return;
+    const interval = setInterval(() => {
+      const maxScroll = slider.scrollWidth - slider.clientWidth;
+      if (slider.scrollLeft >= maxScroll - 10) {
+        slider.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        const cardWidth = slider.children[0]?.clientWidth || 300;
+        slider.scrollTo({
+          left: slider.scrollLeft + cardWidth + 32, // card width + gap (gap-8)
+          behavior: 'smooth'
+        });
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <CursorFollower />
@@ -179,15 +201,19 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto justify-items-center">
-            {teamMembers.map((member, idx) => (
-              <motion.div
-                key={member.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 w-full max-w-[280px] sm:max-w-[300px]"
+          <div className="relative max-w-2xl mx-auto overflow-hidden">
+            <div 
+              ref={crewSliderRef}
+              className="flex gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full"
+            >
+              {teamMembers.map((member, idx) => (
+                <motion.div
+                  key={member.name}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="min-w-[80vw] sm:min-w-[280px] snap-center flex-shrink-0 group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 w-full"
               >
                 <div className="relative w-full aspect-[3/4] overflow-hidden">
                   <img 
@@ -221,6 +247,7 @@ export default function AboutPage() {
                 </div>
               </motion.div>
             ))}
+            </div>
           </div>
         </section>
 
