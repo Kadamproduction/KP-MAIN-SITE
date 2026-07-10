@@ -164,7 +164,27 @@ const servicesData = [
 export default function ServicesPage() {
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const servicesSliderRef = useRef<HTMLDivElement>(null);
 
+  // Autoplay relative scroll for Services Slider (slides right every 3s)
+  useEffect(() => {
+    const slider = servicesSliderRef.current;
+    if (!slider) return;
+    const interval = setInterval(() => {
+      const maxScroll = slider.scrollWidth - slider.clientWidth;
+      if (slider.scrollLeft >= maxScroll - 10) {
+        slider.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        const firstCard = slider.children[0] as HTMLElement;
+        const cardWidth = firstCard?.clientWidth || 380;
+        slider.scrollTo({
+          left: slider.scrollLeft + cardWidth + 24, // card width + gap
+          behavior: 'smooth'
+        });
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Render organic sound wave flowing animation on canvas for premium visual effect
   useEffect(() => {
@@ -250,10 +270,13 @@ export default function ServicesPage() {
         </section>
 
         {/* SERVICES GRID SECTION */}
-        <section className="py-10 md:py-16 px-6 md:px-12 max-w-7xl mx-auto relative">
+        <section className="py-10 md:py-16 px-6 md:px-12 max-w-7xl mx-auto relative overflow-hidden">
           
-          {/* Universal Responsive Grid (Stacks vertically on mobile, 3 columns on desktop) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+          {/* Universal Autoplay Responsive Carousel */}
+          <div 
+            ref={servicesSliderRef}
+            className="flex gap-6 pt-2 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full"
+          >
             {servicesData.map((service, idx) => {
               const Icon = service.icon;
               return (
@@ -263,7 +286,7 @@ export default function ServicesPage() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true, margin: '-50px' }}
                   transition={{ delay: idx * 0.05, duration: 0.5 }}
-                  className="w-full group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 flex flex-col justify-between"
+                  className="w-[88vw] sm:w-[360px] md:w-[380px] lg:w-[400px] snap-center flex-shrink-0 group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 flex flex-col justify-between"
                   style={{
                     boxShadow: '0 0 30px rgba(255,255,255,0.02), inset 0 0 30px rgba(255,255,255,0.01)'
                   }}
