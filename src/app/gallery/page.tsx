@@ -245,7 +245,7 @@ export default function GalleryPage() {
           </motion.div>
 
           {/* PC Manual Navigation Buttons */}
-          <div className="hidden md:flex justify-center items-center gap-4 mt-6">
+          <div className="hidden md:flex justify-center items-center gap-4 mt-6 mb-12 md:mb-16">
             <button 
               onClick={() => {
                 const slider = gallerySliderRef.current;
