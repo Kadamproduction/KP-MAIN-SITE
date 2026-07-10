@@ -4,6 +4,7 @@
   --font-lora: var(--font-lora);
   --font-courier: var(--font-courier-prime);
   --font-gloock: var(--font-gloock);
+  --font-space-grotesk: var(--font-space-grotesk);
 }
 
 :root {
@@ -12,16 +13,17 @@
 }
 
 body {
-  font-family: var(--font-gloock), serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   background-color: #000000;
   color: #ffffff;
   overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
-/* Universal Gloock Font weight override to enforce regular light styling */
-h1, h2, h3, h4, h5, h6, .hero-heading, [style*="gloock"] {
-  font-weight: 400 !important;
+/* Universal Heading Font weight override to enforce semibold styling */
+h1, h2, h3, h4, h5, h6, .hero-heading {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 600 !important;
 }
 
 /* Custom Scrollbar */

@@ -42,18 +42,6 @@ const projectsData: ProjectItem[] = [
       col2_img: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417394/Untitled-design-15_bdfxt9.png'
     },
     link: 'https://github.com'
-  },
-  {
-    id: 'concert-productions',
-    number: '03',
-    name: 'Live Concerts',
-    category: 'Stadium Production',
-    images: {
-      col1_img1: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417386/Untitled-design-14_ogyqmd.png',
-      col1_img2: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417856/Untitled-design-32_atcfrs.png',
-      col2_img: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417448/Untitled-design-25_f2t475.png'
-    },
-    link: 'https://github.com'
   }
 ];
 
@@ -67,7 +55,7 @@ export default function ProjectsSection() {
   return (
     <section 
       ref={containerRef}
-      className="relative bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-25 pt-12 pb-[32vh] md:pb-28 px-6 md:px-12 flex flex-col items-center"
+      className="relative bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-25 pt-12 pb-16 md:pb-20 px-6 md:px-12 flex flex-col items-center"
     >
       <div className="text-center max-w-2xl space-y-4 mb-6 md:mb-24 relative z-20">
         <h2 
@@ -126,7 +114,7 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
       ref={cardRef} 
       className="sticky h-[50vh] md:h-[90vh] w-full flex items-center justify-center"
       style={{ 
-        top: isMobile ? (index === 0 ? '64px' : index === 1 ? '138px' : '232px') : `${64 + index * 28}px`,
+        top: isMobile ? '64px' : '80px', // Stacks directly on top of each other to hide Card 1 completely
         perspective: 1000
       }}
     >
