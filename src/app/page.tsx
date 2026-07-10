@@ -311,10 +311,11 @@ export default function HomePage() {
             {/* Right Side: Circular metallic logo Lottie player (First on mobile via order class) */}
             <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[360px] xs:max-w-[400px] sm:max-w-[440px] lg:max-w-[560px] mx-auto">
               <div 
+                style={{ transform: 'translate3d(0,0,0)', backfaceVisibility: 'hidden', willChange: 'transform' }}
                 dangerouslySetInnerHTML={{
-                  __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
+                  __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%; transform: translate3d(0,0,0); backface-visibility: hidden;" loop autoplay renderer="canvas"></lottie-player>`
                 }}
-                className="w-full h-full flex items-center justify-center"
+                className="w-full h-full flex items-center justify-center transform-gpu"
               />
             </div>
 
