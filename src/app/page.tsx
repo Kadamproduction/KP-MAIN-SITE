@@ -205,19 +205,7 @@ export default function HomePage() {
     }
   };
 
-  useEffect(() => {
-    if (!isReady) return;
-    cylinderStats.forEach((_, idx) => {
-      const video = document.getElementById(`stage-video-${idx}`) as HTMLVideoElement;
-      if (video) {
-        if (idx === activeStageIdx) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      }
-    });
-  }, [activeStageIdx, videoLoaded, minTimeElapsed]);
+
 
   // Autoplay slider interval for Stages Section
   useEffect(() => {
@@ -530,7 +518,7 @@ export default function HomePage() {
                     <video 
                       id={`stage-video-${idx}`}
                       src={videoSources[idx]} 
-                      autoPlay={isActive}
+                      autoPlay
                       muted 
                       playsInline 
                       loop

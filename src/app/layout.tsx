@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Space_Grotesk, Lora, Courier_Prime, Gloock } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
@@ -35,6 +35,13 @@ const gloock = Gloock({
   display: 'swap',
 });
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export const metadata: Metadata = {
   title: 'Kadam Production | Premium DJ & Event Services',
   description: 'Creating unforgettable atmospheres with premium DJ performances, sound systems, and lighting for weddings, festivals, and corporate events.',
@@ -66,6 +73,27 @@ export default function RootLayout({
           src="https://unpkg.com/@lottiefiles/lottie-player@2.0.4/dist/lottie-player.js" 
           strategy="afterInteractive" 
         />
+        {/* Prevent mobile pinch zoom and double-tap zoom */}
+        <Script id="disable-zoom" strategy="afterInteractive">
+          {`
+            document.addEventListener('gesturestart', function (e) {
+              e.preventDefault();
+            });
+            document.addEventListener('touchstart', function (e) {
+              if (e.touches.length > 1) {
+                e.preventDefault();
+              }
+            }, { passive: false });
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function (e) {
+              const now = (new Date()).getTime();
+              if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+              }
+              lastTouchEnd = now;
+            }, false);
+          `}
+        </Script>
       </body>
     </html>
   );
