@@ -154,7 +154,7 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
             </div>
           </div>
           
-          <LiveProjectButton href={project.link} />
+          <LiveProjectButton />
         </div>
 
         {/* Bottom Row Layout: 2-Column Grid */}
