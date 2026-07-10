@@ -25,8 +25,29 @@ const categories = ['All Events', 'Weddings', 'Festivals', 'Concerts', 'Corporat
 
 export default function GalleryPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const gallerySliderRef = useRef<HTMLDivElement>(null);
   const [selectedCategory, setSelectedCategory] = useState('All Events');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  // Autoplay relative scroll for Gallery Slider (slides right every 3s)
+  useEffect(() => {
+    const slider = gallerySliderRef.current;
+    if (!slider) return;
+    const interval = setInterval(() => {
+      const maxScroll = slider.scrollWidth - slider.clientWidth;
+      if (slider.scrollLeft >= maxScroll - 10) {
+        slider.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        const firstCard = slider.children[0] as HTMLElement;
+        const cardWidth = firstCard?.clientWidth || 380;
+        slider.scrollTo({
+          left: slider.scrollLeft + cardWidth + 24, // card width + gap
+          behavior: 'smooth'
+        });
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [selectedCategory]); // Restart timer if filter changes
 
   // Render organic sound wave flowing animation on canvas for premium visual effect
   useEffect(() => {
@@ -166,10 +187,11 @@ export default function GalleryPage() {
         </section>
 
         {/* MASONRY PORTFOLIO GRID */}
-        <section className="max-w-7xl mx-auto px-6">
+        <section className="max-w-7xl mx-auto px-6 overflow-hidden">
           <motion.div 
             layout 
-            className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6"
+            ref={gallerySliderRef}
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full"
           >
             {filteredImages.map((image, idx) => (
               <motion.div
@@ -179,13 +201,13 @@ export default function GalleryPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4 }}
-                className="relative group rounded-2xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 break-inside-avoid shadow-lg bg-zinc-900/30 cursor-pointer"
+                className="h-[300px] sm:h-[400px] md:h-[450px] relative group rounded-2xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 shadow-lg bg-zinc-900/30 cursor-pointer snap-center flex-shrink-0"
                 onClick={() => setLightboxIndex(idx)}
               >
                 <img 
                   src={image.src} 
                   alt={image.title}
-                  className="w-full h-auto object-cover"
+                  className="h-full w-auto object-cover"
                 />
                 
                 {/* Subtle visual hover mask with a centralized max icon */}
