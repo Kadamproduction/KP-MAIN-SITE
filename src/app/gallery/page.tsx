@@ -231,6 +231,7 @@ export default function GalleryPage() {
                 <img 
                   src={image.src} 
                   alt={image.title}
+                  loading="lazy"
                   className="h-full w-auto object-cover"
                 />
                 

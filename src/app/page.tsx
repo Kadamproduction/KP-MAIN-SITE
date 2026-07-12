@@ -126,6 +126,7 @@ export default function HomePage() {
   const [minTimeElapsed, setMinTimeElapsed] = useState(false);
   const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
   const [sectionVideoIdx, setSectionVideoIdx] = useState(0);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   const isReady = videoLoaded && minTimeElapsed;
 
@@ -256,6 +257,10 @@ export default function HomePage() {
   }, [isReady, activeVibrantIdx, vibrantsItems.length]);
 
   useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+
     // Minimum display time for page loader logo
     const minTimer = setTimeout(() => {
       setMinTimeElapsed(true);
@@ -267,6 +272,7 @@ export default function HomePage() {
     }, 6000);
 
     return () => {
+      window.removeEventListener('resize', handleResize);
       clearTimeout(minTimer);
       clearTimeout(fallbackTimer);
     };
@@ -486,11 +492,12 @@ export default function HomePage() {
               >
                 {/* Tall Video component */}
                 <video 
-                  src={videoSources[idx]} 
-                  autoPlay 
+                  src={isMobile === false ? videoSources[idx] : undefined} 
+                  autoPlay={isMobile === false} 
                   muted 
                   loop 
                   playsInline 
+                  preload={isMobile === false ? "auto" : "none"}
                   className="w-full aspect-[9/16] object-cover rounded-[1.8rem] md:rounded-[2.2rem]"
                 />
                 
@@ -539,11 +546,12 @@ export default function HomePage() {
                     {/* Tall Video component */}
                     <video 
                       id={`stage-video-${idx}`}
-                      src={videoSources[idx]} 
-                      autoPlay
+                      src={(isMobile === true && isActive) ? videoSources[idx] : undefined} 
+                      autoPlay={isMobile === true && isActive}
                       muted 
                       playsInline 
                       loop
+                      preload={(isMobile === true && isActive) ? "auto" : "none"}
                       className="w-full aspect-[9/16] object-cover rounded-[1.8rem]"
                     />
                     

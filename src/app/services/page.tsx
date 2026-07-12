@@ -320,6 +320,7 @@ export default function ServicesPage() {
                     <img 
                       src={service.image} 
                       alt={service.title}
+                      loading="lazy"
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
