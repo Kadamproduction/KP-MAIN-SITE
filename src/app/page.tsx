@@ -47,15 +47,15 @@ const WhatsAppIcon = (props: any) => (
 
 // 3 portrait Cloudinary videos (Task 1 vertical 9:16 layout) repeated to fill 9 grid cells
 const videoSources = [
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783012632/Trim-6.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783012629/Trim-3-1.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783012627/Trim-1.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783418612/Untitled_design_2_pbfqf3.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783418673/download_2_sispkn.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783418682/Untitled_design_3_lw9eld.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783012632/Trim-6.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783012629/Trim-3-1.mp4',
-  'https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto/v1783012627/Trim-1.mp4'
+  '/assets/Trim-6.mp4',
+  '/assets/Trim-3-1.mp4',
+  '/assets/Trim-1.mp4',
+  '/assets/Untitled_design_2_pbfqf3.mp4',
+  '/assets/download_2_sispkn.mp4',
+  '/assets/Untitled_design_3_lw9eld.mp4',
+  '/assets/Trim-6.mp4',
+  '/assets/Trim-3-1.mp4',
+  '/assets/Trim-1.mp4'
 ];
 
 const marqueeUpperText = [
@@ -175,11 +175,11 @@ export default function HomePage() {
   };
 
   const [vibrantsItems, setVibrantsItems] = useState([
-    { title: 'FESTIVALS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417440/Untitled-design-20_sm7myc.png' },
-    { title: 'CONCERT', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417386/Untitled-design-14_ogyqmd.png' },
-    { title: 'WEDDING', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783012636/Untitled-design-13.png' },
-    { title: 'ROAD SHOWS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417856/Untitled-design-32_atcfrs.png' },
-    { title: 'UNIQUE EVENTS', image: 'https://res.cloudinary.com/zr9jqpwb/image/upload/v1783417448/Untitled-design-25_f2t475.png' }
+    { title: 'FESTIVALS', image: '/assets/Untitled-design-20_sm7myc.png' },
+    { title: 'CONCERT', image: '/assets/Untitled-design-14_ogyqmd.png' },
+    { title: 'WEDDING', image: '/assets/Untitled-design-13.png' },
+    { title: 'ROAD SHOWS', image: '/assets/Untitled-design-32_atcfrs.png' },
+    { title: 'UNIQUE EVENTS', image: '/assets/Untitled-design-25_f2t475.png' }
   ]);
 
   const scrollVibrantsLeft = () => {
@@ -293,7 +293,7 @@ export default function HomePage() {
           {/* Layer 1: Optimized Full Screen Background Video (Cloudinary vertical source) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
             <video 
-              src="https://res.cloudinary.com/zr9jqpwb/video/upload/f_auto,q_auto,w_1080/v1783417456/upscaled-video_v3jizt.mp4"
+              src="/assets/upscaled-video_v3jizt.mp4"
               autoPlay 
               muted 
               loop 
@@ -334,7 +334,7 @@ export default function HomePage() {
             <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[360px] xs:max-w-[400px] sm:max-w-[440px] lg:max-w-[560px] mx-auto">
               <div 
                 dangerouslySetInnerHTML={{
-                  __html: `<lottie-player src="https://res.cloudinary.com/zr9jqpwb/raw/upload/v1783414012/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
+                  __html: `<lottie-player src="/assets/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
                 }}
                 className="w-full h-full flex items-center justify-center"
               />
