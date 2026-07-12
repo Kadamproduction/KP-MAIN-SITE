@@ -34,8 +34,8 @@ const milestones = [
 ];
 
 const teamMembers = [
-  { name: 'ROHAN', role: 'Managing Director', bio: 'Directing creative operations, production strategies, and high-end light & sound installations.', src: '/assets/WhatsApp-Image-2026-01-10-at-8.52.25-PM-3_vohntj.png' },
-  { name: 'DISHANT', role: 'Managing Director', bio: 'Overseeing event execution, client coordination, and technical system setups.', src: '/assets/WhatsApp-Image-2026-01-10-at-8.52.25-PM-2_ug0sl5.png' },
+  { name: 'ROHAN', role: 'Managing Director', bio: 'Directing creative operations, production strategies, and high-end light & sound installations.', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/WhatsApp-Image-2026-01-10-at-8.52.25-PM-3_vohntj.png' },
+  { name: 'DISHANT', role: 'Managing Director', bio: 'Overseeing event execution, client coordination, and technical system setups.', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/WhatsApp-Image-2026-01-10-at-8.52.25-PM-2_ug0sl5.png' },
 ];
 
 export default function AboutPage() {
@@ -95,7 +95,7 @@ export default function AboutPage() {
               className="relative aspect-[4/3] w-full max-w-md mx-auto rounded-3xl overflow-hidden border border-white/10 bg-[#080808]"
             >
               <img 
-                src="/assets/Untitled-design-13.png" 
+                src="https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-13.png" 
                 alt="Kadam Production Stage Setup" 
                 className="w-full h-full object-cover"
               />
@@ -121,7 +121,7 @@ export default function AboutPage() {
             <div className="grid grid-cols-3 gap-4 pt-6 border-t border-white/5">
               <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-3">
                 <img 
-                  src="/assets/spotlight_aetwmd.png" 
+                  src="https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/spotlight_aetwmd.png" 
                   alt="Light Icon" 
                   className="w-14 h-14 object-contain filter invert brightness-200"
                 />
@@ -129,7 +129,7 @@ export default function AboutPage() {
               </div>
               <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-3">
                 <img 
-                  src="/assets/wave-sound_ux5uhf.png" 
+                  src="https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/wave-sound_ux5uhf.png" 
                   alt="Sound Icon" 
                   className="w-14 h-14 object-contain filter invert brightness-200"
                 />
@@ -137,7 +137,7 @@ export default function AboutPage() {
               </div>
               <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-3">
                 <img 
-                  src="/assets/sound-control_cv7kzt.png" 
+                  src="https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/sound-control_cv7kzt.png" 
                   alt="Quality Icon" 
                   className="w-14 h-14 object-contain filter invert brightness-200"
                 />

@@ -47,15 +47,15 @@ const WhatsAppIcon = (props: any) => (
 
 // 3 portrait Cloudinary videos (Task 1 vertical 9:16 layout) repeated to fill 9 grid cells
 const videoSources = [
-  '/assets/Trim-6.mp4',
-  '/assets/Trim-3-1.mp4',
-  '/assets/Trim-1.mp4',
-  '/assets/Untitled_design_2_pbfqf3.mp4',
-  '/assets/download_2_sispkn.mp4',
-  '/assets/Untitled_design_3_lw9eld.mp4',
-  '/assets/Trim-6.mp4',
-  '/assets/Trim-3-1.mp4',
-  '/assets/Trim-1.mp4'
+  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-6.mp4',
+  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-3-1.mp4',
+  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-1.mp4',
+  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled_design_2_pbfqf3.mp4',
+  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/download_2_sispkn.mp4',
+  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled_design_3_lw9eld.mp4',
+  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-6.mp4',
+  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-3-1.mp4',
+  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-1.mp4'
 ];
 
 const marqueeUpperText = [
@@ -175,11 +175,11 @@ export default function HomePage() {
   };
 
   const [vibrantsItems, setVibrantsItems] = useState([
-    { title: 'FESTIVALS', image: '/assets/Untitled-design-20_sm7myc.png' },
-    { title: 'CONCERT', image: '/assets/Untitled-design-14_ogyqmd.png' },
-    { title: 'WEDDING', image: '/assets/Untitled-design-13.png' },
-    { title: 'ROAD SHOWS', image: '/assets/Untitled-design-32_atcfrs.png' },
-    { title: 'UNIQUE EVENTS', image: '/assets/Untitled-design-25_f2t475.png' }
+    { title: 'FESTIVALS', image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-20_sm7myc.png' },
+    { title: 'CONCERT', image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-14_ogyqmd.png' },
+    { title: 'WEDDING', image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-13.png' },
+    { title: 'ROAD SHOWS', image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-32_atcfrs.png' },
+    { title: 'UNIQUE EVENTS', image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-25_f2t475.png' }
   ]);
 
   const scrollVibrantsLeft = () => {
@@ -293,7 +293,7 @@ export default function HomePage() {
           {/* Layer 1: Optimized Full Screen Background Video (Cloudinary vertical source) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
             <video 
-              src="/assets/upscaled-video_v3jizt.mp4"
+              src="https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/upscaled-video_v3jizt.mp4"
               autoPlay 
               muted 
               loop 
@@ -334,7 +334,7 @@ export default function HomePage() {
             <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[360px] xs:max-w-[400px] sm:max-w-[440px] lg:max-w-[560px] mx-auto">
               <div 
                 dangerouslySetInnerHTML={{
-                  __html: `<lottie-player src="/assets/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
+                  __html: `<lottie-player src="https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
                 }}
                 className="w-full h-full flex items-center justify-center"
               />

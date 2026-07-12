@@ -25,9 +25,9 @@ const projectsData: ProjectItem[] = [
     name: 'Royal Weddings',
     category: 'Wedding Production',
     images: {
-      col1_img1: '/assets/Untitled-design-13.png',
-      col1_img2: '/assets/Untitled-design-18_tdjp2b.png',
-      col2_img: '/assets/Untitled-design-21_atubxz.png'
+      col1_img1: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-13.png',
+      col1_img2: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-18_tdjp2b.png',
+      col2_img: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-21_atubxz.png'
     },
     link: 'https://github.com'
   },
@@ -37,9 +37,9 @@ const projectsData: ProjectItem[] = [
     name: 'Cultural Festivals',
     category: 'Arena Production',
     images: {
-      col1_img1: '/assets/Untitled-design-20_sm7myc.png',
-      col1_img2: '/assets/Untitled-design-17_ubz6ho.png',
-      col2_img: '/assets/Untitled-design-15_bdfxt9.png'
+      col1_img1: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-20_sm7myc.png',
+      col1_img2: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-17_ubz6ho.png',
+      col2_img: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-15_bdfxt9.png'
     },
     link: 'https://github.com'
   },
@@ -49,9 +49,9 @@ const projectsData: ProjectItem[] = [
     name: 'Live Concerts',
     category: 'Stadium Production',
     images: {
-      col1_img1: '/assets/Untitled-design-14_ogyqmd.png',
-      col1_img2: '/assets/Untitled-design-32_atcfrs.png',
-      col2_img: '/assets/Untitled-design-25_f2t475.png'
+      col1_img1: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-14_ogyqmd.png',
+      col1_img2: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-32_atcfrs.png',
+      col2_img: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-25_f2t475.png'
     },
     link: 'https://github.com'
   }

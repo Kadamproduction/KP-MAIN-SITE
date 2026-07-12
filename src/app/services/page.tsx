@@ -29,7 +29,7 @@ const servicesData = [
       'SFX Sparklers & Dry-Ice Low Fog',
       'Experienced DJ & MC hosts'
     ],
-    image: '/assets/Untitled-design-15_bdfxt9.png',
+    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-15_bdfxt9.png',
   },
   {
     id: 2,
@@ -45,7 +45,7 @@ const servicesData = [
       'Heavy Duty Truss frames',
       'On-site sound technicians'
     ],
-    image: '/assets/Untitled-design-20_sm7myc.png',
+    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-20_sm7myc.png',
   },
   {
     id: 3,
@@ -61,7 +61,7 @@ const servicesData = [
       'High voltage generator backups',
       'Crowd barrier controls support'
     ],
-    image: '/assets/Untitled-design-32_atcfrs.png',
+    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-32_atcfrs.png',
   },
   {
     id: 4,
@@ -77,7 +77,7 @@ const servicesData = [
       'Corporate Podium & Stage layout',
       'Keynote presentation systems'
     ],
-    image: '/assets/Untitled-design-17_ubz6ho.png',
+    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-17_ubz6ho.png',
   },
   {
     id: 5,
@@ -93,7 +93,7 @@ const servicesData = [
       'Mobile power generators fleet',
       'Dynamic rally visual design'
     ],
-    image: '/assets/Untitled-design-13.png',
+    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-13.png',
   },
   {
     id: 6,
@@ -109,7 +109,7 @@ const servicesData = [
       'Fog, Bubble & Smoke effects',
       'Premium wireless mic support'
     ],
-    image: '/assets/ChatGPT_Image_Jul_8_2026_02_29_02_PM_dfrv2l.png',
+    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/ChatGPT_Image_Jul_8_2026_02_29_02_PM_dfrv2l.png',
   },
   {
     id: 7,
@@ -125,7 +125,7 @@ const servicesData = [
       'Confetti blast launchers',
       'Licensed crew operations'
     ],
-    image: '/assets/ChatGPT_Image_Jul_8_2026_02_56_39_PM_nux2y0.png',
+    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/ChatGPT_Image_Jul_8_2026_02_56_39_PM_nux2y0.png',
   },
   {
     id: 8,
@@ -141,7 +141,7 @@ const servicesData = [
       'Weight certified safety rigging',
       'LED panel scaffolding borders'
     ],
-    image: '/assets/ChatGPT_Image_Jul_8_2026_02_34_55_PM_nbkkog.png',
+    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/ChatGPT_Image_Jul_8_2026_02_34_55_PM_nbkkog.png',
   },
   {
     id: 9,
@@ -157,7 +157,7 @@ const servicesData = [
       'Logistics & transit coordination',
       'Rigging safety inspections'
     ],
-    image: '/assets/Untitled-design-17.png',
+    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-17.png',
   }
 ];
 

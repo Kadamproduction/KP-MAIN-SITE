@@ -10,15 +10,15 @@ import Footer from '@/components/Footer';
 
 // 9 high-quality Cloudinary event production images
 const galleryImages = [
-  { id: 1, category: 'Weddings', title: 'Premium Varmala Stage', event: 'Wedding Ceremony', src: '/assets/Untitled-design-13.png' },
-  { id: 2, category: 'Festivals', title: 'Cultural Garba Arena', event: 'Navratri Dandiya', src: '/assets/Untitled-design-18_tdjp2b.png' },
-  { id: 3, category: 'Concerts', title: 'Live Rock concert audio', event: 'Sunburn Arena', src: '/assets/Untitled-design-21_atubxz.png' },
-  { id: 4, category: 'Corporate', title: 'Interactive Truss rig', event: 'Launch Production', src: '/assets/Untitled-design-20_sm7myc.png' },
-  { id: 5, category: 'Road Shows', title: 'Mobile LED Truss', event: 'Gujarat Promotion', src: '/assets/Untitled-design-17_ubz6ho.png' },
-  { id: 6, category: 'Weddings', title: 'Royal Reception Stage', event: 'Elite reception setup', src: '/assets/Untitled-design-15_bdfxt9.png' },
-  { id: 7, category: 'Festivals', title: 'Neon Laser EDM show', event: 'Music Festival live', src: '/assets/Untitled-design-14_ogyqmd.png' },
-  { id: 8, category: 'Concerts', title: 'Mainstage LED wall', event: 'Ahmedabad Concert Live', src: '/assets/Untitled-design-32_atcfrs.png' },
-  { id: 9, category: 'Corporate', title: 'High-end lighting design', event: 'VIP Corporate Meet', src: '/assets/Untitled-design-25_f2t475.png' }
+  { id: 1, category: 'Weddings', title: 'Premium Varmala Stage', event: 'Wedding Ceremony', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-13.png' },
+  { id: 2, category: 'Festivals', title: 'Cultural Garba Arena', event: 'Navratri Dandiya', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-18_tdjp2b.png' },
+  { id: 3, category: 'Concerts', title: 'Live Rock concert audio', event: 'Sunburn Arena', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-21_atubxz.png' },
+  { id: 4, category: 'Corporate', title: 'Interactive Truss rig', event: 'Launch Production', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-20_sm7myc.png' },
+  { id: 5, category: 'Road Shows', title: 'Mobile LED Truss', event: 'Gujarat Promotion', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-17_ubz6ho.png' },
+  { id: 6, category: 'Weddings', title: 'Royal Reception Stage', event: 'Elite reception setup', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-15_bdfxt9.png' },
+  { id: 7, category: 'Festivals', title: 'Neon Laser EDM show', event: 'Music Festival live', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-14_ogyqmd.png' },
+  { id: 8, category: 'Concerts', title: 'Mainstage LED wall', event: 'Ahmedabad Concert Live', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-32_atcfrs.png' },
+  { id: 9, category: 'Corporate', title: 'High-end lighting design', event: 'VIP Corporate Meet', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-25_f2t475.png' }
 ];
 
 const categories = ['All Events', 'Weddings', 'Festivals', 'Concerts', 'Corporate', 'Road Shows'];
