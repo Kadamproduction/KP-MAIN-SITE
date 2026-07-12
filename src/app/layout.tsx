@@ -59,6 +59,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { AuthProvider } from '@/context/AuthContext';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -67,7 +69,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${lora.variable} ${courierPrime.variable} ${gloock.variable} dark h-full antialiased`}>
       <body className="min-h-full bg-black text-white flex flex-col font-space-grotesk select-none overflow-x-hidden">
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
         {/* Load Lottie player for premium vector animations */}
         <Script 
           src="https://unpkg.com/@lottiefiles/lottie-player@2.0.4/dist/lottie-player.js" 

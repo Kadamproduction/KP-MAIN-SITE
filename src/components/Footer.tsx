@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { 
   Film, Phone, Mail, MapPin, Clock, ArrowUpRight, ChevronDown 
 } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 const InstagramIcon = (props: any) => (
   <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -26,11 +27,14 @@ export default function Footer() {
   const pathname = usePathname();
   const [quickLinksOpen, setQuickLinksOpen] = useState(false);
   const [servicesLinksOpen, setServicesLinksOpen] = useState(false);
+  const { siteSettings } = useAuth();
+
+  const whatsappUrl = `https://wa.me/91${siteSettings.phone_1}`;
 
   const socialLinks = [
     { name: 'Instagram', icon: InstagramIcon, href: 'https://www.instagram.com/kadamproduction?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
-    { name: 'Email', icon: Mail, href: 'mailto:kadamproduction123@gmail.com?body=Hi%20kadam%20Production%20' },
-    { name: 'WhatsApp', icon: WhatsAppIcon, href: 'https://wa.link/7dtu1l' },
+    { name: 'Email', icon: Mail, href: `mailto:${siteSettings.email}?body=Hi%20kadam%20Production%20` },
+    { name: 'WhatsApp', icon: WhatsAppIcon, href: whatsappUrl },
   ];
 
   const quickLinks = [
@@ -150,14 +154,14 @@ export default function Footer() {
             <li className="flex gap-3 text-zinc-400">
               <Phone className="w-4 h-4 text-white flex-shrink-0" />
               <div>
-                <a href="tel:+919537330003" className="hover:text-white transition-all block font-semibold">+91 9537330003</a>
-                <a href="tel:+918866655651" className="hover:text-white transition-all block text-zinc-500 mt-1">+91 8866655651</a>
+                <a href={`tel:+91${siteSettings.phone_1}`} className="hover:text-white transition-all block font-semibold">+91 {siteSettings.phone_1}</a>
+                <a href={`tel:+91${siteSettings.phone_2}`} className="hover:text-white transition-all block text-zinc-500 mt-1">+91 {siteSettings.phone_2}</a>
               </div>
             </li>
             <li className="flex gap-3 text-zinc-400">
               <Mail className="w-4 h-4 text-white flex-shrink-0" />
-              <a href="mailto:kadamproduction123@gmail.com" className="hover:text-white transition-all block">
-                kadamproduction123@gmail.com
+              <a href={`mailto:${siteSettings.email}`} className="hover:text-white transition-all block">
+                {siteSettings.email}
               </a>
             </li>
             <li className="flex gap-3 text-zinc-400">

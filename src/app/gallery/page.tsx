@@ -8,8 +8,10 @@ import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
 
+import { supabase } from '@/utils/supabase';
+
 // 9 high-quality Cloudinary event production images
-const galleryImages = [
+const defaultGalleryImages = [
   { id: 1, category: 'Weddings', title: 'Premium Varmala Stage', event: 'Wedding Ceremony', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-13.png' },
   { id: 2, category: 'Festivals', title: 'Cultural Garba Arena', event: 'Navratri Dandiya', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-18_tdjp2b.png' },
   { id: 3, category: 'Concerts', title: 'Live Rock concert audio', event: 'Sunburn Arena', src: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-21_atubxz.png' },
@@ -24,6 +26,7 @@ const galleryImages = [
 const categories = ['All Events', 'Weddings', 'Festivals', 'Concerts', 'Corporate', 'Road Shows'];
 
 export default function GalleryPage() {
+  const [galleryImages, setGalleryImages] = useState<any[]>(defaultGalleryImages);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gallerySliderRef = useRef<HTMLDivElement>(null);
   const [selectedCategory, setSelectedCategory] = useState('All Events');
@@ -125,6 +128,28 @@ export default function GalleryPage() {
       window.removeEventListener('resize', resize);
       cancelAnimationFrame(animationId);
     };
+  }, []);
+
+  // Fetch gallery images from Supabase Storage dynamically on mount
+  useEffect(() => {
+    async function loadSupabaseImages() {
+      try {
+        const data = await supabase.from('gallery_images').select('order_index', 'asc');
+        if (data && data.length > 0) {
+          const mapped = data.map((item, idx) => ({
+            id: item.id || idx,
+            category: item.category,
+            title: item.category === 'Weddings' ? 'Premium Varmala Stage' : item.category === 'Festivals' ? 'Cultural Garba Arena' : item.category === 'Concerts' ? 'Live Rock concert audio' : item.category === 'Corporate' ? 'Interactive Truss rig' : 'Mobile LED Truss',
+            event: item.category === 'Weddings' ? 'Wedding Ceremony' : item.category === 'Festivals' ? 'Navratri Dandiya' : item.category === 'Concerts' ? 'Sunburn Arena' : item.category === 'Corporate' ? 'Launch Production' : 'Gujarat Promotion',
+            src: item.image_url
+          }));
+          setGalleryImages(mapped);
+        }
+      } catch (err) {
+        console.error('Failed to load gallery images from Supabase:', err);
+      }
+    }
+    loadSupabaseImages();
   }, []);
 
   // Keyboard navigation support for Lightbox modal

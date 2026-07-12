@@ -16,6 +16,8 @@ import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
 import ProjectsSection from '@/components/ProjectsSection';
+import { supabase } from '@/utils/supabase';
+import { useAuth } from '@/context/AuthContext';
 
 // Local social media SVG icons for task 4
 const InstagramIcon = (props: any) => (
@@ -46,7 +48,7 @@ const WhatsAppIcon = (props: any) => (
 );
 
 // 3 portrait Cloudinary videos (Task 1 vertical 9:16 layout) repeated to fill 9 grid cells
-const videoSources = [
+const defaultVideoSources = [
   'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-6.mp4',
   'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-3-1.mp4',
   'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-1.mp4',
@@ -123,6 +125,9 @@ export default function HomePage() {
   const router = useRouter();
   const [loadingComplete, setLoadingComplete] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoSources, setVideoSources] = useState<string[]>(defaultVideoSources);
+  const { siteSettings } = useAuth();
+  const whatsappUrl = `https://wa.me/91${siteSettings.phone_1}`;
   const [minTimeElapsed, setMinTimeElapsed] = useState(false);
   const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
   const [sectionVideoIdx, setSectionVideoIdx] = useState(0);
@@ -256,6 +261,25 @@ export default function HomePage() {
     return () => clearInterval(timer);
   }, [isReady, activeVibrantIdx, vibrantsItems.length]);
 
+  // Fetch stage videos from Supabase Storage on mount
+  useEffect(() => {
+    async function loadSupabaseVideos() {
+      try {
+        const data = await supabase.from('stage_videos').select('order_index', 'asc');
+        if (data && data.length > 0) {
+          const urls = data.map(item => item.video_url);
+          while (urls.length < 3) {
+            urls.push(defaultVideoSources[urls.length % defaultVideoSources.length]);
+          }
+          setVideoSources(urls);
+        }
+      } catch (err) {
+        console.error('Failed to load stage videos from Supabase:', err);
+      }
+    }
+    loadSupabaseVideos();
+  }, []);
+
   useEffect(() => {
     setIsMobile(window.innerWidth < 768);
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -315,8 +339,8 @@ export default function HomePage() {
           <div className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 flex-col gap-6 z-30">
             {[
               { name: 'Instagram', icon: InstagramIcon, href: 'https://www.instagram.com/kadamproduction?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
-              { name: 'WhatsApp', icon: WhatsAppIcon, href: 'https://wa.link/7dtu1l' },
-              { name: 'Email', icon: Mail, href: 'mailto:kadamprodution123@gmail.com?body=Hi%20kadam%20Production%20' }
+              { name: 'WhatsApp', icon: WhatsAppIcon, href: whatsappUrl },
+              { name: 'Email', icon: Mail, href: `mailto:${siteSettings.email}?body=Hi%20kadam%20Production%20` }
             ].map((social) => {
               const Icon = social.icon;
               return (
@@ -737,7 +761,7 @@ export default function HomePage() {
               className="block w-fit mx-auto"
             >
               <a
-                href="https://wa.link/7dtu1l"
+                href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-4 md:px-10 md:py-5 bg-[#9E1C9E] hover:bg-[#831683] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase cursor-pointer transition-all flex items-center gap-3 shadow-2xl shadow-purple-500/25 border border-white/10 duration-300"

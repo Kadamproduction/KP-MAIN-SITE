@@ -13,6 +13,7 @@ import FlipText from '@/components/FlipText';
 import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
+import { useAuth } from '@/context/AuthContext';
 
 const servicesData = [
   {
@@ -165,6 +166,8 @@ export default function ServicesPage() {
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const servicesSliderRef = useRef<HTMLDivElement>(null);
+  const { siteSettings } = useAuth();
+  const whatsappUrl = `https://wa.me/91${siteSettings.phone_1}`;
 
   // Autoplay relative scroll for Services Slider (slides right every 3s) & touch wrap-around
   useEffect(() => {
@@ -356,7 +359,7 @@ export default function ServicesPage() {
                     {/* Book Now Button */}
                     <div className="pt-8">
                       <a 
-                        href="https://wa.link/7dtu1l"
+                        href={whatsappUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-full py-3.5 bg-white text-black hover:bg-zinc-200 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 border border-transparent text-center shadow-md"

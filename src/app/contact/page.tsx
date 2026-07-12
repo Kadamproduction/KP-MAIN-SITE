@@ -8,6 +8,7 @@ import {
 import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
+import { useAuth } from '@/context/AuthContext';
 
 const InstagramIcon = (props: any) => (
   <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -18,6 +19,7 @@ const InstagramIcon = (props: any) => (
 );
 
 export default function ContactPage() {
+  const { siteSettings } = useAuth();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Render organic sound wave flowing animation on canvas for premium visual effect
@@ -117,11 +119,11 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-zinc-550 uppercase tracking-widest mb-1">Call Us</h4>
-                  <a href="tel:+919537330003" className="text-lg font-bold text-white hover:text-zinc-300 block transition-colors">
-                    +91 9537330003
+                  <a href={`tel:+91${siteSettings.phone_1}`} className="text-lg font-bold text-white hover:text-zinc-300 block transition-colors">
+                    +91 {siteSettings.phone_1}
                   </a>
-                  <a href="tel:+918866655651" className="text-sm font-semibold text-zinc-500 hover:text-white block mt-1 transition-colors">
-                    +91 8866655651
+                  <a href={`tel:+91${siteSettings.phone_2}`} className="text-sm font-semibold text-zinc-500 hover:text-white block mt-1 transition-colors">
+                    +91 {siteSettings.phone_2}
                   </a>
                 </div>
               </div>
@@ -155,8 +157,8 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-zinc-550 uppercase tracking-widest mb-1">Email Enquiries</h4>
-                  <a href="mailto:kadamproduction123@gmail.com" className="text-[13px] sm:text-sm font-bold text-white hover:text-zinc-300 block break-all transition-colors">
-                    kadamproduction123@gmail.com
+                  <a href={`mailto:${siteSettings.email}`} className="text-[13px] sm:text-sm font-bold text-white hover:text-zinc-300 block break-all transition-colors">
+                    {siteSettings.email}
                   </a>
                 </div>
               </div>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Calendar, Zap, Home, Image, Users, Mail } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 interface NavItem {
   label: string;
@@ -23,6 +24,8 @@ const navItems: NavItem[] = [
 export default function SpotlightNavbar() {
   const pathname = usePathname();
   const router = useRouter();
+  const { siteSettings } = useAuth();
+  const whatsappUrl = `https://wa.me/91${siteSettings.phone_1}`;
   const navbarRef = useRef<HTMLDivElement>(null);
   
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -111,7 +114,7 @@ export default function SpotlightNavbar() {
                 className="pt-6 border-t border-white/5"
               >
                 <a
-                  href="https://wa.link/7dtu1l"
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileOpen(false)}
