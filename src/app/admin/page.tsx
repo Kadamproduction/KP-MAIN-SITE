@@ -50,6 +50,14 @@ interface SiteSettings {
   phone_2: string;
 }
 
+interface DBServiceImage {
+  id: number;
+  service_title: string;
+  image_url: string;
+  isLocal?: boolean;
+  localFile?: File;
+}
+
 const CATEGORIES = ['Weddings', 'Festivals', 'Concerts', 'Road Shows'];
 
 export default function AdminPage() {
@@ -57,17 +65,19 @@ export default function AdminPage() {
   const { user, token, loading: authLoading, logout } = useAuth();
 
   // Navigation tabs state
-  const [activeTab, setActiveTab] = useState<'gallery' | 'videos' | 'settings'>('gallery');
+  const [activeTab, setActiveTab] = useState<'gallery' | 'videos' | 'services' | 'settings'>('gallery');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Core Data States
   const [images, setImages] = useState<DBImage[]>([]);
   const [videos, setVideos] = useState<DBVideo[]>([]);
+  const [serviceImages, setServiceImages] = useState<DBServiceImage[]>([]);
   const [settings, setSettings] = useState<SiteSettings>({ email: '', phone_1: '', phone_2: '' });
   
   // Unsaved changes tracking states
   const [initialImages, setInitialImages] = useState<string>('');
   const [initialVideos, setInitialVideos] = useState<string>('');
+  const [initialServiceImages, setInitialServiceImages] = useState<string>('');
   const [initialSettings, setInitialSettings] = useState<string>('');
 
   // Items marked for deletion (to be removed from Supabase Storage and DB on save)
@@ -89,6 +99,8 @@ export default function AdminPage() {
   // File upload input refs
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
+  const serviceInputRef = useRef<HTMLInputElement>(null);
+  const [activeServiceIdToChange, setActiveServiceIdToChange] = useState<number | null>(null);
 
   // Verify auth on mount
   useEffect(() => {
@@ -126,6 +138,11 @@ export default function AdminPage() {
         setSettings(loadedSettings);
         setInitialSettings(JSON.stringify(loadedSettings));
       }
+
+      // 4. Fetch service images
+      const dbServiceImages = await supabase.from('service_images').select('id', 'asc');
+      setServiceImages(dbServiceImages);
+      setInitialServiceImages(JSON.stringify(dbServiceImages));
 
       // Reset deletions tracking queues
       setDeletedImageUrls([]);
@@ -171,6 +188,17 @@ export default function AdminPage() {
       order_index: vid.order_index
     })));
     if (currentVideosSerialized !== cleanInitialVideos) return true;
+
+    // Check service images difference
+    const currentServiceImagesSerialized = JSON.stringify(serviceImages.map(s => ({
+      id: s.id,
+      image_url: s.image_url
+    })));
+    const cleanInitialServiceImages = JSON.stringify(JSON.parse(initialServiceImages || '[]').map((s: any) => ({
+      id: s.id,
+      image_url: s.image_url
+    })));
+    if (currentServiceImagesSerialized !== cleanInitialServiceImages) return true;
 
     return false;
   };
@@ -279,6 +307,30 @@ export default function AdminPage() {
     }
   };
 
+  const triggerServiceImageChange = (serviceId: number) => {
+    setActiveServiceIdToChange(serviceId);
+    serviceInputRef.current?.click();
+  };
+
+  const handleServiceImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0 || activeServiceIdToChange === null) return;
+    const file = files[0];
+    
+    const localUrl = URL.createObjectURL(file);
+    setServiceImages(prev => prev.map(s => {
+      if (s.id === activeServiceIdToChange) {
+        return {
+          ...s,
+          image_url: localUrl,
+          isLocal: true,
+          localFile: file
+        };
+      }
+      return s;
+    }));
+  };
+
   // Database and Storage save logic orchestrator
   const handleSaveAllChanges = async () => {
     if (!token) return;
@@ -350,7 +402,34 @@ export default function AdminPage() {
         }
       }
 
-      // 4. Save Site settings (row id = 1)
+      // 4. Upload and update service images
+      for (const s of serviceImages) {
+        if (s.isLocal && s.localFile) {
+          const timestamp = Date.now();
+          const cleanName = `${timestamp}_${s.localFile.name}`;
+          const publicUrl = await supabase.storage.from('assets').upload(cleanName, s.localFile, token);
+
+          // Delete old file from storage to save space
+          try {
+            const oldItem = JSON.parse(initialServiceImages).find((item: any) => item.id === s.id);
+            if (oldItem && oldItem.image_url) {
+              const oldFilename = oldItem.image_url.split('/').pop() || '';
+              if (oldFilename && !oldFilename.startsWith('Untitled') && !oldFilename.startsWith('ChatGPT')) {
+                await supabase.storage.from('assets').remove([oldFilename], token);
+              }
+            }
+          } catch (e) {
+            console.warn('Could not remove old service image file:', e);
+          }
+
+          // Update DB row
+          await supabase.from('service_images').update({
+            image_url: publicUrl
+          }, 'id', s.id, token);
+        }
+      }
+
+      // 5. Save Site settings (row id = 1)
       await supabase.from('site_settings').update(settings, 'id', 1, token);
 
       // Refresh page data and update initial references
@@ -508,6 +587,22 @@ export default function AdminPage() {
               <SettingsIcon className="w-4 h-4" />
               Site Settings
             </button>
+
+            <button
+              onClick={() => {
+                setActiveTab('services');
+                setSidebarOpen(false);
+              }}
+              className={`w-full h-12 px-4 rounded-xl flex items-center gap-3 text-sm font-bold tracking-wide transition duration-200 cursor-pointer
+                ${activeTab === 'services' 
+                  ? 'bg-[#8B5CF6]/10 border border-[#8B5CF6]/30 text-white' 
+                  : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent'
+                }
+              `}
+            >
+              <FileImage className="w-4 h-4" />
+              Services Images
+            </button>
           </nav>
         </div>
 
@@ -545,11 +640,13 @@ export default function AdminPage() {
             <h1 className="text-2xl font-bold tracking-wide text-white uppercase">
               {activeTab === 'gallery' && 'Gallery Management'}
               {activeTab === 'videos' && 'Videos Showcase'}
+              {activeTab === 'services' && 'Services Images'}
               {activeTab === 'settings' && 'Site Information'}
             </h1>
             <p className="text-xs text-zinc-500 tracking-wider mt-1 uppercase">
               {activeTab === 'gallery' && 'Organize display images and categorize weddings, concerts, and more'}
               {activeTab === 'videos' && 'Manage high-resolution MP4 looping videos for home display'}
+              {activeTab === 'services' && 'Customize background cover photos for all 9 services page items'}
               {activeTab === 'settings' && 'Update contact email, primary/secondary phone numbers, and WhatsApp redirection link'}
             </p>
           </div>
@@ -860,6 +957,56 @@ export default function AdminPage() {
                 />
               </div>
             </div>
+          </div>
+        )}
+
+        {/* -------------------- SERVICES TAB CONTENT -------------------- */}
+        {activeTab === 'services' && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {serviceImages.map((service) => (
+                <div 
+                  key={service.id}
+                  className="rounded-3xl border border-white/10 bg-zinc-950/40 p-4 flex flex-col hover:border-[#8B5CF6]/30 transition duration-300"
+                >
+                  <div className="relative w-full aspect-[16/11] rounded-2xl overflow-hidden bg-black mb-4">
+                    <img 
+                      src={service.image_url} 
+                      alt={service.service_title} 
+                      className="w-full h-full object-cover" 
+                    />
+                    {service.isLocal && (
+                      <div className="absolute top-3 right-3 px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[10px] font-bold text-amber-500 tracking-wider flex items-center gap-1.5 backdrop-blur-md">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                        Staged
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 flex flex-col justify-between">
+                    <div>
+                      <h4 className="font-bold text-sm tracking-wide text-white uppercase mb-1">
+                        {service.service_title}
+                      </h4>
+                      <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Service Cover image</p>
+                    </div>
+                    <button
+                      onClick={() => triggerServiceImageChange(service.id)}
+                      className="mt-6 w-full h-11 rounded-xl border border-white/10 hover:bg-white/5 hover:border-white/20 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition"
+                    >
+                      Replace Image
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <input 
+              type="file"
+              ref={serviceInputRef}
+              onChange={handleServiceImageChange}
+              accept="image/*"
+              className="hidden"
+            />
           </div>
         )}
 

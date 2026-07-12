@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
@@ -14,6 +14,7 @@ import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/context/AuthContext';
+import { supabase } from '@/utils/supabase';
 
 const servicesData = [
   {
@@ -169,6 +170,36 @@ export default function ServicesPage() {
   const { siteSettings } = useAuth();
   const whatsappUrl = `https://wa.me/91${siteSettings.phone_1}`;
 
+  const [images, setImages] = useState<Record<number, string>>({
+    1: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-15_bdfxt9.png',
+    2: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-20_sm7myc.png',
+    3: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-32_atcfrs.png',
+    4: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-17_ubz6ho.png',
+    5: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-13.png',
+    6: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/ChatGPT_Image_Jul_8_2026_02_29_02_PM_dfrv2l.png',
+    7: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/ChatGPT_Image_Jul_8_2026_02_56_39_PM_nux2y0.png',
+    8: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/ChatGPT_Image_Jul_8_2026_02_34_55_PM_nbkkog.png',
+    9: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-17.png'
+  });
+
+  useEffect(() => {
+    async function loadServiceImages() {
+      try {
+        const data = await supabase.from('service_images').select('id, image_url');
+        if (data && data.length > 0) {
+          const mapped: Record<number, string> = {};
+          data.forEach((item: any) => {
+            mapped[item.id] = item.image_url;
+          });
+          setImages(prev => ({ ...prev, ...mapped }));
+        }
+      } catch (err) {
+        console.error('Failed to load service cover images:', err);
+      }
+    }
+    loadServiceImages();
+  }, []);
+
   // Autoplay relative scroll for Services Slider (slides right every 3s) & touch wrap-around
   useEffect(() => {
     const slider = servicesSliderRef.current;
@@ -321,7 +352,7 @@ export default function ServicesPage() {
                   {/* Thumbnail area (aspect 4:5 Instagram Portrait size) */}
                   <div className="relative w-full aspect-[16/11] overflow-hidden">
                     <img 
-                      src={service.image} 
+                      src={images[service.id] || service.image} 
                       alt={service.title}
                       loading="lazy"
                       className="w-full h-full object-cover"
