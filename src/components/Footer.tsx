@@ -73,9 +73,7 @@ export default function Footer() {
             </div>
           </Link>
           
-          <p className="text-xs text-zinc-550 leading-relaxed max-w-sm">
-            Creating unforgettable atmospheres, not just events. Premium sound, lighting design, lasers, and professional DJ production since 2014.
-          </p>
+
 
           {/* Social Links */}
           <div className="flex gap-4">

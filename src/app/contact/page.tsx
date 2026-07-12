@@ -163,18 +163,23 @@ export default function ContactPage() {
             </div>
 
             {/* CARD 4: LOCATION */}
-            <div className="bg-zinc-900/40 border border-white/5 p-5 rounded-2xl shadow-lg flex flex-col justify-between hover:border-white/20 hover:bg-white/3 transition-all duration-300 group">
+            <a 
+              href="https://maps.google.com/?q=Kadam%20Production,%205QVF%2BQ8M,%20Gaurav%20Path%20Road,%20Palanpur,%20Surat,%20Gujarat%20394510" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="bg-zinc-900/40 border border-white/5 p-5 rounded-2xl shadow-lg flex flex-col justify-between hover:border-white/20 hover:bg-white/3 transition-all duration-300 group cursor-pointer"
+            >
               <div className="space-y-4">
                 <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/20 text-white flex items-center justify-center">
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-zinc-550 uppercase tracking-widest mb-1">Corporate HQ</h4>
-                  <p className="text-lg font-bold text-white uppercase">Surat, Gujarat</p>
+                  <p className="text-sm font-bold text-white leading-normal hover:text-zinc-300 transition-colors">Gaurav Path Road, Palanpur, Surat, Gujarat</p>
                   <p className="text-zinc-500 text-xs font-semibold mt-1">Service Area: All India</p>
                 </div>
               </div>
-            </div>
+            </a>
 
           </div>
 
@@ -188,7 +193,7 @@ export default function ContactPage() {
               allowFullScreen={true}
               loading="lazy" 
               referrerPolicy="no-referrer-when-downgrade"
-              className="w-full h-[300px] md:h-[400px] grayscale invert opacity-80"
+              className="w-full h-[300px] md:h-[400px] grayscale opacity-90"
             />
           </div>
 
