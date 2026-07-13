@@ -87,9 +87,9 @@ export default function AdminLoginPage() {
         
         {/* Logo and brand name */}
         <div className="flex flex-col items-center text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#8B5CF6] to-[#EC4899] p-0.5 shadow-lg shadow-[#8B5CF6]/20 mb-4 flex items-center justify-center">
-            <div className="w-full h-full bg-black rounded-2xl flex items-center justify-center">
-              <ShieldAlert className="w-7 h-7 text-[#8B5CF6]" />
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#8B5CF6] to-[#EC4899] p-0.5 shadow-lg shadow-[#8B5CF6]/20 mb-4 flex items-center justify-center overflow-hidden">
+            <div className="w-full h-full bg-black rounded-2xl flex items-center justify-center overflow-hidden">
+              <img src="/logo.png" alt="Kadam Production Logo" className="w-12 h-12 object-contain" />
             </div>
           </div>
           <h1 className="text-2xl font-bold tracking-wider text-white">

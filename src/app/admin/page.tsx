@@ -1118,36 +1118,6 @@ export default function AdminPage() {
                   className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
                 />
               </div>
-
-              {/* ADMIN ACCOUNT SECURITY SECTION */}
-              <div className="border-t border-white/10 pt-8 mt-8 space-y-6">
-                <h3 className="font-bold text-md text-white uppercase tracking-wider">Admin Account Security</h3>
-                <div className="rounded-2xl border border-white/5 bg-black/20 p-5 space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                      <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-1">Registered Admin Email</h4>
-                      <p className="text-sm font-bold text-white">kadamproductionweb@gmail.com</p>
-                      <span className="text-[10px] text-zinc-500 leading-normal block mt-1">
-                        Resets used this month: <strong className="text-zinc-300">{resetCount} / 3</strong>
-                      </span>
-                    </div>
-                    <button
-                      onClick={handleSendResetRequest}
-                      disabled={sendingReset || resetCount >= 3}
-                      className="h-11 px-5 rounded-xl bg-white/5 border border-white/10 hover:border-[#8B5CF6]/30 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/10 transition disabled:opacity-40 disabled:hover:border-white/10 disabled:hover:bg-white/5 cursor-pointer flex items-center justify-center gap-2"
-                    >
-                      {sendingReset ? (
-                        <>
-                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          Sending...
-                        </>
-                      ) : (
-                        'Generate New Credentials'
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         )}
