@@ -58,7 +58,7 @@ interface DBServiceImage {
   localFile?: File;
 }
 
-const CATEGORIES = ['Weddings', 'Festivals', 'Concerts', 'Road Shows'];
+const CATEGORIES = ['All Events', 'Weddings', 'Festivals', 'Concerts', 'Road Shows'];
 
 export default function AdminPage() {
   const router = useRouter();
@@ -94,7 +94,8 @@ export default function AdminPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Category selection for gallery view
-  const [selectedGalleryCat, setSelectedGalleryCat] = useState<string>('Weddings');
+  const [selectedGalleryCat, setSelectedGalleryCat] = useState<string>('All Events');
+  const [editingImageId, setEditingImageId] = useState<string | null>(null);
 
   // File upload input refs
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -205,17 +206,26 @@ export default function AdminPage() {
 
   // Drag and Drop reordering logic helpers
   const reorderImages = (startIndex: number, endIndex: number) => {
-    const categoryImages = images.filter(img => img.category === selectedGalleryCat);
-    const nonCategoryImages = images.filter(img => img.category !== selectedGalleryCat);
+    if (selectedGalleryCat === 'All Events') {
+      const reordered = Array.from(images);
+      const [removed] = reordered.splice(startIndex, 1);
+      reordered.splice(endIndex, 0, removed);
+      
+      const updated = reordered.map((img, idx) => ({ ...img, order_index: idx }));
+      setImages(updated);
+    } else {
+      const categoryImages = images.filter(img => img.category === selectedGalleryCat);
+      const nonCategoryImages = images.filter(img => img.category !== selectedGalleryCat);
 
-    const reorderedCat = Array.from(categoryImages);
-    const [removed] = reorderedCat.splice(startIndex, 1);
-    reorderedCat.splice(endIndex, 0, removed);
+      const reorderedCat = Array.from(categoryImages);
+      const [removed] = reorderedCat.splice(startIndex, 1);
+      reorderedCat.splice(endIndex, 0, removed);
 
-    // Re-index category images order
-    const updatedCat = reorderedCat.map((img, idx) => ({ ...img, order_index: idx }));
+      // Re-index category images order
+      const updatedCat = reorderedCat.map((img, idx) => ({ ...img, order_index: idx }));
 
-    setImages([...nonCategoryImages, ...updatedCat]);
+      setImages([...nonCategoryImages, ...updatedCat]);
+    }
   };
 
   const reorderVideos = (startIndex: number, endIndex: number) => {
@@ -233,6 +243,12 @@ export default function AdminPage() {
     if (!files || files.length === 0) return;
 
     const file = files[0];
+    
+    if (selectedGalleryCat === 'All Events') {
+      alert('Please select a specific category (e.g. Weddings, Festivals) to upload images.');
+      return;
+    }
+
     const catImages = images.filter(img => img.category === selectedGalleryCat);
 
     if (catImages.length >= 5) {
@@ -305,6 +321,31 @@ export default function AdminPage() {
                                     .map((vid, idx) => ({ ...vid, order_index: idx }));
       setVideos(remainingVideos);
     }
+  };
+
+  const handleCategoryChange = (imageToEdit: DBImage, newCategory: string) => {
+    // Check if the target category already has 5 images
+    const targetCount = images.filter(img => img.category === newCategory).length;
+    if (targetCount >= 5) {
+      alert(`Cannot change category: the target category "${newCategory}" already has the maximum limit of 5 images.`);
+      return;
+    }
+
+    // Change category
+    setImages(prev => prev.map(img => {
+      if (img.id === imageToEdit.id) {
+        const targetCatImages = prev.filter(i => i.category === newCategory);
+        return {
+          ...img,
+          category: newCategory,
+          order_index: targetCatImages.length
+        };
+      }
+      return img;
+    }));
+
+    // Close editing mode
+    setEditingImageId(null);
   };
 
   const triggerServiceImageChange = (serviceId: number) => {
@@ -454,7 +495,9 @@ export default function AdminPage() {
     );
   }
 
-  const categoryImages = images.filter(img => img.category === selectedGalleryCat);
+  const categoryImages = selectedGalleryCat === 'All Events' 
+    ? [...images].sort((a, b) => a.order_index - b.order_index)
+    : images.filter(img => img.category === selectedGalleryCat).sort((a, b) => a.order_index - b.order_index);
 
   return (
     <div className="min-h-screen bg-black text-white font-space-grotesk flex flex-col md:flex-row select-none">
@@ -528,11 +571,11 @@ export default function AdminPage() {
       `}>
         <div className="space-y-8">
           <div className="hidden md:flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#8B5CF6] to-[#EC4899] p-0.5 shadow-md shadow-[#8B5CF6]/10 flex items-center justify-center">
-              <div className="w-full h-full bg-black rounded-xl flex items-center justify-center">
-                <FileText className="w-5 h-5 text-[#8B5CF6]" />
-              </div>
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="Kadam Production Logo" 
+              className="w-10 h-10 rounded-full border border-white/10 object-cover flex-shrink-0"
+            />
             <div>
               <h2 className="font-bold text-sm tracking-wide text-white leading-none">ADMIN PANEL</h2>
               <span className="text-[10px] text-[#8B5CF6] font-bold tracking-widest uppercase mt-1 block">Kadam Production</span>
@@ -569,23 +612,7 @@ export default function AdminPage() {
               `}
             >
               <VideoIcon className="w-4 h-4" />
-              Stage Videos
-            </button>
-
-            <button
-              onClick={() => {
-                setActiveTab('settings');
-                setSidebarOpen(false);
-              }}
-              className={`w-full h-12 px-4 rounded-xl flex items-center gap-3 text-sm font-bold tracking-wide transition duration-200 cursor-pointer
-                ${activeTab === 'settings' 
-                  ? 'bg-[#8B5CF6]/10 border border-[#8B5CF6]/30 text-white' 
-                  : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent'
-                }
-              `}
-            >
-              <SettingsIcon className="w-4 h-4" />
-              Site Settings
+              Simple Videos
             </button>
 
             <button
@@ -602,6 +629,22 @@ export default function AdminPage() {
             >
               <FileImage className="w-4 h-4" />
               Services Images
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab('settings');
+                setSidebarOpen(false);
+              }}
+              className={`w-full h-12 px-4 rounded-xl flex items-center gap-3 text-sm font-bold tracking-wide transition duration-200 cursor-pointer
+                ${activeTab === 'settings' 
+                  ? 'bg-[#8B5CF6]/10 border border-[#8B5CF6]/30 text-white' 
+                  : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent'
+                }
+              `}
+            >
+              <SettingsIcon className="w-4 h-4" />
+              Site Settings
             </button>
           </nav>
         </div>
@@ -632,20 +675,20 @@ export default function AdminPage() {
       </aside>
 
       {/* MAIN CONTENT DASHBOARD AREA */}
-      <main className="flex-1 p-6 md:p-10 max-w-5xl overflow-y-auto md:h-screen">
+      <main className="flex-1 p-6 md:p-10 max-w-none w-full overflow-y-auto md:h-screen">
         
         {/* HEADER TOOLBAR BLOCK */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-white/10 pb-6">
           <div>
             <h1 className="text-2xl font-bold tracking-wide text-white uppercase">
               {activeTab === 'gallery' && 'Gallery Management'}
-              {activeTab === 'videos' && 'Videos Showcase'}
+              {activeTab === 'videos' && 'Simple Videos'}
               {activeTab === 'services' && 'Services Images'}
               {activeTab === 'settings' && 'Site Information'}
             </h1>
             <p className="text-xs text-zinc-500 tracking-wider mt-1 uppercase">
               {activeTab === 'gallery' && 'Organize display images and categorize weddings, concerts, and more'}
-              {activeTab === 'videos' && 'Manage high-resolution MP4 looping videos for home display'}
+              {activeTab === 'videos' && 'Manage looping background videos for home display. Note: Videos should be under 25 seconds and must be in a 9:16 aspect ratio (Instagram Reel/vertical format).'}
               {activeTab === 'services' && 'Customize background cover photos for all 9 services page items'}
               {activeTab === 'settings' && 'Update contact email, primary/secondary phone numbers, and WhatsApp redirection link'}
             </p>
@@ -694,7 +737,7 @@ export default function AdminPage() {
                     }
                   `}
                 >
-                  {cat} ({images.filter(img => img.category === cat).length}/5)
+                  {cat === 'All Events' ? `All Events (${images.length})` : `${cat} (${images.filter(img => img.category === cat).length}/5)`}
                 </button>
               ))}
             </div>
@@ -714,8 +757,10 @@ export default function AdminPage() {
                       alt="Gallery Asset" 
                       className="w-full h-full object-cover brightness-[0.75]" 
                     />
-                    <div className="absolute top-3 left-3 px-3 py-1 rounded-xl bg-black/60 border border-white/10 text-[10px] font-bold text-zinc-400 tracking-wider">
-                      Index: {idx}
+                    <div className="absolute top-3 left-3 px-3 py-1 rounded-xl bg-black/60 border border-white/10 text-[10px] font-bold text-zinc-400 tracking-wider flex items-center gap-1.5 backdrop-blur-md">
+                      <span className="text-[#8B5CF6] font-extrabold uppercase">{image.category}</span>
+                      <span className="w-1 h-1 rounded-full bg-zinc-600" />
+                      <span>Idx: {idx}</span>
                     </div>
 
                     {/* Local upload indicator badge */}
@@ -727,15 +772,43 @@ export default function AdminPage() {
                     )}
                   </div>
 
-                  {/* Image footer actions */}
                   <div className="flex items-center justify-between mt-4 px-1">
-                    <button
-                      onClick={() => deleteImageItem(image)}
-                      className="w-10 h-10 rounded-xl border border-white/5 hover:border-red-500/20 hover:bg-red-500/10 flex items-center justify-center text-zinc-550 hover:text-red-400 transition cursor-pointer"
-                      title="Remove image"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => deleteImageItem(image)}
+                        className="w-10 h-10 rounded-xl border border-white/5 hover:border-red-500/20 hover:bg-red-500/10 flex items-center justify-center text-zinc-550 hover:text-red-400 transition cursor-pointer"
+                        title="Remove image"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+
+                      {editingImageId === image.id ? (
+                        <div className="flex items-center gap-1 relative z-10">
+                          <select
+                            value={image.category}
+                            onChange={(e) => handleCategoryChange(image, e.target.value)}
+                            className="h-10 px-2 rounded-xl border border-[#8B5CF6] bg-black text-[10px] font-bold text-white focus:outline-none cursor-pointer"
+                          >
+                            {CATEGORIES.filter(c => c !== 'All Events').map(c => (
+                              <option key={c} value={c} className="bg-zinc-950 text-white">{c}</option>
+                            ))}
+                          </select>
+                          <button
+                            onClick={() => setEditingImageId(null)}
+                            className="w-10 h-10 rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white cursor-pointer"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setEditingImageId(image.id)}
+                          className="px-3 h-10 rounded-xl bg-white/5 border border-white/10 text-[10px] font-bold text-zinc-400 hover:text-white transition duration-200 cursor-pointer"
+                        >
+                          Edit Category
+                        </button>
+                      )}
+                    </div>
 
                     {/* Reordering Controls (Desktop/Mobile compliant) */}
                     <div className="flex gap-2">
@@ -761,7 +834,7 @@ export default function AdminPage() {
               ))}
 
               {/* Upload Card Trigger */}
-              {categoryImages.length < 5 ? (
+              {selectedGalleryCat !== 'All Events' && categoryImages.length < 5 && (
                 <div 
                   onClick={() => fileInputRef.current?.click()}
                   className="rounded-3xl border border-dashed border-white/10 bg-zinc-950/20 hover:bg-zinc-950/40 hover:border-[#8B5CF6]/30 flex flex-col items-center justify-center gap-3 p-8 text-center transition duration-300 min-h-[220px] cursor-pointer group"
@@ -770,21 +843,24 @@ export default function AdminPage() {
                     <Plus className="w-5 h-5 text-zinc-400 group-hover:text-white" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-zinc-300 tracking-wider uppercase mb-1">Add Category Photo</h4>
-                    <p className="text-[10px] text-zinc-550 max-w-[200px] leading-relaxed mx-auto">
-                      Supports formats (PNG, JPG, WEBP). Max limit 5 files per category.
-                    </p>
+                    <span className="text-xs font-bold text-zinc-300 block mb-1">ADD CATEGORY PHOTO</span>
+                    <p className="text-[10px] text-zinc-550 leading-relaxed uppercase">Supports formats (PNG, JPG, WEBP). Max limit 5 files per category.</p>
                   </div>
-                  <input 
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleImageFileChange}
-                    accept="image/*"
-                    className="hidden"
-                  />
                 </div>
-              ) : (
-                /* Limit hit banner block */
+              )}
+
+              {/* All Events Warning Banner */}
+              {selectedGalleryCat === 'All Events' && (
+                <div className="rounded-3xl border border-dashed border-white/10 bg-zinc-950/5 flex flex-col items-center justify-center p-8 text-center min-h-[220px]">
+                  <p className="text-xs text-zinc-500 leading-relaxed uppercase font-bold">
+                    You are viewing "All Events". <br/>
+                    Please switch to a specific category tab (e.g. Weddings) to upload a new image.
+                  </p>
+                </div>
+              )}
+
+              {/* Limit Hit Banner */}
+              {selectedGalleryCat !== 'All Events' && categoryImages.length >= 5 && (
                 <div className="rounded-3xl border border-white/5 bg-zinc-950/20 flex flex-col items-center justify-center gap-3 p-8 text-center min-h-[220px] opacity-40">
                   <div className="w-12 h-12 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center text-zinc-650">
                     <FileImage className="w-5 h-5" />
@@ -796,6 +872,14 @@ export default function AdminPage() {
                 </div>
               )}
 
+              <input 
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageFileChange}
+                accept="image/*"
+                className="hidden"
+              />
+
             </div>
           </div>
         )}
@@ -803,11 +887,18 @@ export default function AdminPage() {
         {/* -------------------- VIDEOS TAB CONTENT -------------------- */}
         {activeTab === 'videos' && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-4">
+            <div className="flex items-start gap-3 rounded-2xl border border-[#8B5CF6]/20 bg-[#8B5CF6]/5 p-4 text-xs text-zinc-300 leading-normal">
+              <AlertCircle className="w-4 h-4 text-[#8B5CF6] mt-0.5 flex-shrink-0" />
+              <span>
+                <strong>Disclaimer:</strong> Videos uploaded to this section should be under <strong>25 seconds</strong> and must have a <strong>9:16 aspect ratio</strong> (Instagram Reel / vertical format) for optimal display on mobile devices.
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between border-b border-white/5 pb-4">
               <span className="text-sm font-bold text-zinc-400">
                 Videos Counter: <span className="text-white">{videos.length}/6</span>
               </span>
-              <span className="text-[11px] text-zinc-500 italic">Looping background display stage videos</span>
+              <span className="text-[11px] text-zinc-500 italic">Looping background display simple videos</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
