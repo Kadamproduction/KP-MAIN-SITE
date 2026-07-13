@@ -49,15 +49,15 @@ const WhatsAppIcon = (props: any) => (
 
 // 3 portrait Cloudinary videos (Task 1 vertical 9:16 layout) repeated to fill 9 grid cells
 const defaultVideoSources = [
-  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-6.mp4',
-  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-3-1.mp4',
-  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-1.mp4',
-  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled_design_2_pbfqf3.mp4',
-  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/download_2_sispkn.mp4',
-  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled_design_3_lw9eld.mp4',
-  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-6.mp4',
-  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-3-1.mp4',
-  'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Trim-1.mp4'
+  '/videos/Trim-6.mp4',
+  '/videos/Trim-3-1.mp4',
+  '/videos/Trim-1.mp4',
+  '/videos/Untitled_design_2_pbfqf3.mp4',
+  '/videos/download_2_sispkn.mp4',
+  '/videos/Untitled_design_3_lw9eld.mp4',
+  '/videos/Trim-6.mp4',
+  '/videos/Trim-3-1.mp4',
+  '/videos/Trim-1.mp4'
 ];
 
 const marqueeUpperText = [
