@@ -250,14 +250,14 @@ export default function GalleryPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4 }}
-                className="h-[300px] sm:h-[400px] md:h-[450px] relative group rounded-2xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 shadow-lg bg-zinc-900/30 cursor-pointer snap-center flex-shrink-0"
+                className="h-[300px] sm:h-[400px] md:h-[450px] aspect-[4/3] relative group rounded-2xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 shadow-lg bg-zinc-900/30 cursor-pointer snap-center flex-shrink-0"
                 onClick={() => setLightboxIndex(idx)}
               >
                 <img 
                   src={image.src} 
                   alt={image.title}
                   loading="lazy"
-                  className="h-full w-auto object-cover"
+                  className="w-full h-full object-cover"
                 />
                 
                 {/* Subtle visual hover mask with a centralized max icon */}

@@ -135,6 +135,13 @@ export default function HomePage() {
 
   const isReady = videoLoaded && minTimeElapsed;
 
+  // Intercept recovery tokens on client mount and redirect
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash && window.location.hash.includes('type=recovery')) {
+      router.push(`/admin/reset-password${window.location.hash}`);
+    }
+  }, [router]);
+
   const stagesSliderRef = useRef<HTMLDivElement>(null);
   const [activeStageIdx, setActiveStageIdx] = useState(0);
 

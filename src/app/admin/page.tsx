@@ -79,6 +79,11 @@ export default function AdminPage() {
   const [initialVideos, setInitialVideos] = useState<string>('');
   const [initialServiceImages, setInitialServiceImages] = useState<string>('');
   const [initialSettings, setInitialSettings] = useState<string>('');
+  
+  // Auth security reset rate limiting states
+  const [resetCount, setResetCount] = useState(0);
+  const [lastResetMonth, setLastResetMonth] = useState('');
+  const [sendingReset, setSendingReset] = useState(false);
 
   // Items marked for deletion (to be removed from Supabase Storage and DB on save)
   const [deletedImageUrls, setDeletedImageUrls] = useState<string[]>([]);
@@ -144,6 +149,19 @@ export default function AdminPage() {
       const dbServiceImages = await supabase.from('service_images').select('id', 'asc');
       setServiceImages(dbServiceImages);
       setInitialServiceImages(JSON.stringify(dbServiceImages));
+
+      // 5. Fetch auth reset tracking (3 resets limit per month)
+      const dbTrackingList = await supabase.from('auth_reset_tracking').select('id', 'asc');
+      if (dbTrackingList && dbTrackingList.length > 0) {
+        const currentMonth = new Date().toISOString().slice(0, 7);
+        const tracking = dbTrackingList[0];
+        if (tracking.last_reset_month === currentMonth) {
+          setResetCount(tracking.reset_count);
+        } else {
+          setResetCount(0);
+        }
+        setLastResetMonth(tracking.last_reset_month);
+      }
 
       // Reset deletions tracking queues
       setDeletedImageUrls([]);
@@ -351,6 +369,60 @@ export default function AdminPage() {
   const triggerServiceImageChange = (serviceId: number) => {
     setActiveServiceIdToChange(serviceId);
     serviceInputRef.current?.click();
+  };
+
+  const handleSendResetRequest = async () => {
+    if (!token) return;
+    const confirmSend = window.confirm("Are you sure you want to send a credential reset request link to kadamproductionweb@gmail.com? Clicking the link in the email will allow you to update your admin username and password.");
+    if (!confirmSend) return;
+
+    setSendingReset(true);
+    setErrorMsg(null);
+    try {
+      // 1. Fetch tracking count to double-check client-side
+      const currentMonth = new Date().toISOString().slice(0, 7);
+      const dbTrackingList = await supabase.from('auth_reset_tracking').select('id', 'asc');
+      let count = 0;
+      if (dbTrackingList && dbTrackingList.length > 0) {
+        const tracking = dbTrackingList[0];
+        if (tracking.last_reset_month === currentMonth) {
+          count = tracking.reset_count;
+        }
+      }
+
+      if (count >= 3) {
+        throw new Error("Reset limit reached: You can only reset admin credentials a maximum of 3 times per calendar month.");
+      }
+
+      // 2. Call Supabase Auth recover link generator API
+      const response = await fetch('https://vrwhhajqjsrkripwalfp.supabase.co/auth/v1/recover', {
+        method: 'POST',
+        headers: {
+          'apikey': 'sb_publishable_Hm8_WV0IqLb1BBVjE-jYpQ_Ij8vnBDI',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: 'kadamproductionweb@gmail.com' })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.msg || errorData.error_description || 'Failed to send recovery email link.');
+      }
+
+      // 3. Update database counter
+      await supabase.from('auth_reset_tracking').update({
+        reset_count: count + 1,
+        last_reset_month: currentMonth
+      }, 'id', 1, token);
+
+      setResetCount(count + 1);
+      alert("Verification email link successfully sent to kadamproductionweb@gmail.com! Please check your email inbox to set your new username and password.");
+    } catch (err: any) {
+      alert(err.message || 'An error occurred while sending reset email.');
+      setErrorMsg(err.message || 'An error occurred while sending reset email.');
+    } finally {
+      setSendingReset(false);
+    }
   };
 
   const handleServiceImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1046,6 +1118,36 @@ export default function AdminPage() {
                   onChange={(e) => setSettings({ ...settings, phone_2: e.target.value })}
                   className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
                 />
+              </div>
+
+              {/* ADMIN ACCOUNT SECURITY SECTION */}
+              <div className="border-t border-white/10 pt-8 mt-8 space-y-6">
+                <h3 className="font-bold text-md text-white uppercase tracking-wider">Admin Account Security</h3>
+                <div className="rounded-2xl border border-white/5 bg-black/20 p-5 space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-1">Registered Admin Email</h4>
+                      <p className="text-sm font-bold text-white">kadamproductionweb@gmail.com</p>
+                      <span className="text-[10px] text-zinc-500 leading-normal block mt-1">
+                        Resets used this month: <strong className="text-zinc-300">{resetCount} / 3</strong>
+                      </span>
+                    </div>
+                    <button
+                      onClick={handleSendResetRequest}
+                      disabled={sendingReset || resetCount >= 3}
+                      className="h-11 px-5 rounded-xl bg-white/5 border border-white/10 hover:border-[#8B5CF6]/30 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/10 transition disabled:opacity-40 disabled:hover:border-white/10 disabled:hover:bg-white/5 cursor-pointer flex items-center justify-center gap-2"
+                    >
+                      {sendingReset ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        'Generate New Credentials'
+                      )}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
