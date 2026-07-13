@@ -394,11 +394,10 @@ export default function AdminPage() {
         throw new Error("Reset limit reached: You can only reset admin credentials a maximum of 3 times per calendar month.");
       }
 
-      // 2. Call Supabase Auth recover link generator API
-      const response = await fetch('https://vrwhhajqjsrkripwalfp.supabase.co/auth/v1/recover', {
+      // 2. Call local backend REST API which uses Brevo HTTP client directly
+      const response = await fetch('/api/send-reset-email', {
         method: 'POST',
         headers: {
-          'apikey': 'sb_publishable_Hm8_WV0IqLb1BBVjE-jYpQ_Ij8vnBDI',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email: 'kadamproductionweb@gmail.com' })
@@ -406,7 +405,7 @@ export default function AdminPage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.msg || errorData.error_description || 'Failed to send recovery email link.');
+        throw new Error(errorData.error || 'Failed to send recovery email link.');
       }
 
       // 3. Update database counter
