@@ -250,7 +250,7 @@ export default function GalleryPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4 }}
-                className="h-[300px] sm:h-[400px] md:h-[450px] aspect-[4/3] relative group rounded-2xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 shadow-lg bg-zinc-900/30 cursor-pointer snap-center flex-shrink-0"
+                className="h-[300px] sm:h-[400px] md:h-[450px] w-[300px] sm:w-[380px] md:w-[calc(50%-12px)] relative group rounded-2xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 shadow-lg bg-zinc-900/30 cursor-pointer snap-center flex-shrink-0"
                 onClick={() => setLightboxIndex(idx)}
               >
                 <img 
@@ -276,7 +276,9 @@ export default function GalleryPage() {
               onClick={() => {
                 const slider = gallerySliderRef.current;
                 if (!slider) return;
-                slider.scrollBy({ left: -450, behavior: 'smooth' });
+                const firstCard = slider.children[0] as HTMLElement;
+                const cardWidth = firstCard?.clientWidth || 450;
+                slider.scrollBy({ left: -(cardWidth + 24), behavior: 'smooth' });
               }}
               className="w-12 h-12 rounded-full border border-white/20 hover:border-white/50 bg-zinc-900/50 hover:bg-zinc-800 text-white flex items-center justify-center transition-all duration-300 cursor-pointer shadow-lg"
               aria-label="Previous image"
@@ -287,7 +289,9 @@ export default function GalleryPage() {
               onClick={() => {
                 const slider = gallerySliderRef.current;
                 if (!slider) return;
-                slider.scrollBy({ left: 450, behavior: 'smooth' });
+                const firstCard = slider.children[0] as HTMLElement;
+                const cardWidth = firstCard?.clientWidth || 450;
+                slider.scrollBy({ left: cardWidth + 24, behavior: 'smooth' });
               }}
               className="w-12 h-12 rounded-full border border-white/20 hover:border-white/50 bg-zinc-900/50 hover:bg-zinc-800 text-white flex items-center justify-center transition-all duration-300 cursor-pointer shadow-lg"
               aria-label="Next image"
