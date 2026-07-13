@@ -1,7 +1,6 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase, SupabaseUser } from '@/utils/supabase';
 
 interface SiteSettings {
   email: string;
@@ -9,11 +8,16 @@ interface SiteSettings {
   phone_2: string;
 }
 
+interface CustomUser {
+  id: string;
+  email: string;
+}
+
 interface AuthContextType {
-  user: SupabaseUser | null;
+  user: CustomUser | null;
   token: string | null;
   loading: boolean;
-  login: (token: string, user: SupabaseUser) => void;
+  login: (token: string, user: CustomUser) => void;
   logout: () => void;
   siteSettings: SiteSettings;
 }
@@ -21,7 +25,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [user, setUser] = useState<CustomUser | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   
@@ -34,13 +38,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     async function checkSession() {
       try {
-        const data = await supabase.from('site_settings').select('id', 'asc');
-        if (data && data.length > 0) {
-          setSiteSettings({
-            email: data[0].email,
-            phone_1: data[0].phone_1,
-            phone_2: data[0].phone_2
-          });
+        const res = await fetch('/api/public/data');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.settings) {
+            setSiteSettings(data.settings);
+          }
         }
       } catch (err) {
         console.error('Failed to load site settings:', err);
@@ -52,12 +55,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (tokenCookie) {
           const val = tokenCookie.split('=')[1];
           if (val) {
-            const verifiedUser = await supabase.auth.getUser(val);
-            if (verifiedUser) {
+            // Client-side decode of custom Base64 token payload
+            const payload = JSON.parse(atob(val));
+            if (Date.now() < payload.exp) {
               setToken(val);
-              setUser(verifiedUser);
+              setUser({ id: 'admin-id-1', email: 'kadamproductionweb@gmail.com' });
             } else {
-              // Delete expired cookie
+              // Clear expired cookie
               document.cookie = 'admin_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             }
           }
@@ -71,7 +75,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkSession();
   }, []);
 
-  const login = (newToken: string, newUser: SupabaseUser) => {
+  const login = (newToken: string, newUser: CustomUser) => {
     setToken(newToken);
     setUser(newUser);
     document.cookie = `admin_token=${newToken}; path=/; SameSite=Strict; Secure`;

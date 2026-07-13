@@ -14,7 +14,7 @@ import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/context/AuthContext';
-import { supabase } from '@/utils/supabase';
+
 
 const servicesData = [
   {
@@ -31,7 +31,7 @@ const servicesData = [
       'SFX Sparklers & Dry-Ice Low Fog',
       'Experienced DJ & MC hosts'
     ],
-    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-15_bdfxt9.png',
+    image: '/images/Untitled-design-15_bdfxt9.png',
   },
   {
     id: 2,
@@ -47,7 +47,7 @@ const servicesData = [
       'Heavy Duty Truss frames',
       'On-site sound technicians'
     ],
-    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-20_sm7myc.png',
+    image: '/images/Untitled-design-20_sm7myc.png',
   },
   {
     id: 3,
@@ -63,7 +63,7 @@ const servicesData = [
       'High voltage generator backups',
       'Crowd barrier controls support'
     ],
-    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-32_atcfrs.png',
+    image: '/images/Untitled-design-32_atcfrs.png',
   },
   {
     id: 4,
@@ -79,7 +79,7 @@ const servicesData = [
       'Corporate Podium & Stage layout',
       'Keynote presentation systems'
     ],
-    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-17_ubz6ho.png',
+    image: '/images/Untitled-design-17_ubz6ho.png',
   },
   {
     id: 5,
@@ -95,7 +95,7 @@ const servicesData = [
       'Mobile power generators fleet',
       'Dynamic rally visual design'
     ],
-    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-13.png',
+    image: '/images/Untitled-design-13.png',
   },
   {
     id: 6,
@@ -111,7 +111,7 @@ const servicesData = [
       'Fog, Bubble & Smoke effects',
       'Premium wireless mic support'
     ],
-    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/ChatGPT_Image_Jul_8_2026_02_29_02_PM_dfrv2l.png',
+    image: '/images/ChatGPT_Image_Jul_8_2026_02_29_02_PM_dfrv2l.png',
   },
   {
     id: 7,
@@ -127,7 +127,7 @@ const servicesData = [
       'Confetti blast launchers',
       'Licensed crew operations'
     ],
-    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/ChatGPT_Image_Jul_8_2026_02_56_39_PM_nux2y0.png',
+    image: '/images/ChatGPT_Image_Jul_8_2026_02_56_39_PM_nux2y0.png',
   },
   {
     id: 8,
@@ -143,7 +143,7 @@ const servicesData = [
       'Weight certified safety rigging',
       'LED panel scaffolding borders'
     ],
-    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/ChatGPT_Image_Jul_8_2026_02_34_55_PM_nbkkog.png',
+    image: '/images/ChatGPT_Image_Jul_8_2026_02_34_55_PM_nbkkog.png',
   },
   {
     id: 9,
@@ -159,7 +159,7 @@ const servicesData = [
       'Logistics & transit coordination',
       'Rigging safety inspections'
     ],
-    image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-17.png',
+    image: '/images/Untitled-design-17.png',
   }
 ];
 
@@ -171,33 +171,35 @@ export default function ServicesPage() {
   const whatsappUrl = `https://wa.me/91${siteSettings.phone_1}`;
 
   const [images, setImages] = useState<Record<number, string>>({
-    1: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-15_bdfxt9.png',
-    2: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-20_sm7myc.png',
-    3: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-32_atcfrs.png',
-    4: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-17_ubz6ho.png',
-    5: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-13.png',
-    6: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/ChatGPT_Image_Jul_8_2026_02_29_02_PM_dfrv2l.png',
-    7: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/ChatGPT_Image_Jul_8_2026_02_56_39_PM_nux2y0.png',
-    8: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/ChatGPT_Image_Jul_8_2026_02_34_55_PM_nbkkog.png',
-    9: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-17.png'
+    1: '/images/Untitled-design-15_bdfxt9.png',
+    2: '/images/Untitled-design-20_sm7myc.png',
+    3: '/images/Untitled-design-32_atcfrs.png',
+    4: '/images/Untitled-design-17_ubz6ho.png',
+    5: '/images/Untitled-design-13.png',
+    6: '/images/ChatGPT_Image_Jul_8_2026_02_29_02_PM_dfrv2l.png',
+    7: '/images/ChatGPT_Image_Jul_8_2026_02_56_39_PM_nux2y0.png',
+    8: '/images/ChatGPT_Image_Jul_8_2026_02_34_55_PM_nbkkog.png',
+    9: '/images/Untitled-design-17.png'
   });
 
   useEffect(() => {
-    async function loadServiceImages() {
+    async function loadKVServiceImages() {
       try {
-        const data = await supabase.from('service_images').select('id, image_url');
-        if (data && data.length > 0) {
+        const res = await fetch('/api/public/data');
+        if (!res.ok) throw new Error('API request failed');
+        const data = await res.json();
+        if (data.services && data.services.length > 0) {
           const mapped: Record<number, string> = {};
-          data.forEach((item: any) => {
+          data.services.forEach((item: any) => {
             mapped[item.id] = item.image_url;
           });
           setImages(prev => ({ ...prev, ...mapped }));
         }
       } catch (err) {
-        console.error('Failed to load service cover images:', err);
+        console.error('Failed to load service cover images from KV:', err);
       }
     }
-    loadServiceImages();
+    loadKVServiceImages();
   }, []);
 
   // Autoplay relative scroll for Services Slider (slides right every 3s) & touch wrap-around

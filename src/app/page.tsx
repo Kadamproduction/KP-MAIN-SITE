@@ -16,7 +16,7 @@ import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
 import ProjectsSection from '@/components/ProjectsSection';
-import { supabase } from '@/utils/supabase';
+
 import { useAuth } from '@/context/AuthContext';
 
 // Local social media SVG icons for task 4
@@ -188,11 +188,11 @@ export default function HomePage() {
   };
 
   const [vibrantsItems, setVibrantsItems] = useState([
-    { title: 'FESTIVALS', image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-20_sm7myc.png' },
-    { title: 'CONCERT', image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-14_ogyqmd.png' },
-    { title: 'WEDDING', image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-13.png' },
-    { title: 'ROAD SHOWS', image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-32_atcfrs.png' },
-    { title: 'UNIQUE EVENTS', image: 'https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Untitled-design-25_f2t475.png' }
+    { title: 'FESTIVALS', image: '/images/Untitled-design-20_sm7myc.png' },
+    { title: 'CONCERT', image: '/images/Untitled-design-14_ogyqmd.png' },
+    { title: 'WEDDING', image: '/images/Untitled-design-13.png' },
+    { title: 'ROAD SHOWS', image: '/images/Untitled-design-32_atcfrs.png' },
+    { title: 'UNIQUE EVENTS', image: '/images/Untitled-design-25_f2t475.png' }
   ]);
 
   const scrollVibrantsLeft = () => {
@@ -268,23 +268,25 @@ export default function HomePage() {
     return () => clearInterval(timer);
   }, [isReady, activeVibrantIdx, vibrantsItems.length]);
 
-  // Fetch stage videos from Supabase Storage on mount
+  // Fetch stage videos from Vercel KV public endpoint on mount
   useEffect(() => {
-    async function loadSupabaseVideos() {
+    async function loadKVVideos() {
       try {
-        const data = await supabase.from('stage_videos').select('order_index', 'asc');
-        if (data && data.length > 0) {
-          const urls = data.map(item => item.video_url);
+        const res = await fetch('/api/public/data');
+        if (!res.ok) throw new Error('API request failed');
+        const data = await res.json();
+        if (data.videos && data.videos.length > 0) {
+          const urls = data.videos.map((item: any) => item.video_url);
           while (urls.length < 3) {
             urls.push(defaultVideoSources[urls.length % defaultVideoSources.length]);
           }
           setVideoSources(urls);
         }
       } catch (err) {
-        console.error('Failed to load stage videos from Supabase:', err);
+        console.error('Failed to load stage videos from KV:', err);
       }
     }
-    loadSupabaseVideos();
+    loadKVVideos();
   }, []);
 
   useEffect(() => {
@@ -330,7 +332,7 @@ export default function HomePage() {
           {/* Layer 1: Optimized Full Screen Background Video (Cloudinary vertical source) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
             <video 
-              src="https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/upscaled-video_v3jizt.mp4"
+              src="/videos/upscaled-video_v3jizt.mp4"
               autoPlay 
               muted 
               loop 
@@ -371,7 +373,7 @@ export default function HomePage() {
             <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[360px] xs:max-w-[400px] sm:max-w-[440px] lg:max-w-[560px] mx-auto">
               <div 
                 dangerouslySetInnerHTML={{
-                  __html: `<lottie-player src="https://vrwhhajqjsrkripwalfp.supabase.co/storage/v1/object/public/assets/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
+                  __html: `<lottie-player src="/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
                 }}
                 className="w-full h-full flex items-center justify-center"
               />

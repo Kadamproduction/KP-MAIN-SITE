@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { supabase } from '@/utils/supabase';
+
 import { 
   Image as ImageIcon, 
   Video as VideoIcon, 
@@ -38,6 +38,7 @@ interface DBImage {
 
 interface DBVideo {
   id: string;
+  title: string;
   video_url: string;
   order_index: number;
   isLocal?: boolean;
@@ -80,12 +81,7 @@ export default function AdminPage() {
   const [initialServiceImages, setInitialServiceImages] = useState<string>('');
   const [initialSettings, setInitialSettings] = useState<string>('');
   
-  // Auth security reset rate limiting states
-  const [resetCount, setResetCount] = useState(0);
-  const [lastResetMonth, setLastResetMonth] = useState('');
-  const [sendingReset, setSendingReset] = useState(false);
-
-  // Items marked for deletion (to be removed from Supabase Storage and DB on save)
+  // Items marked for deletion (to be removed from Vercel Blob on save)
   const [deletedImageUrls, setDeletedImageUrls] = useState<string[]>([]);
   const [deletedImageIds, setDeletedImageIds] = useState<string[]>([]);
   const [deletedVideoUrls, setDeletedVideoUrls] = useState<string[]>([]);
@@ -126,42 +122,26 @@ export default function AdminPage() {
     setLoading(true);
     setErrorMsg(null);
     try {
-      // 1. Fetch images
-      const dbImages = await supabase.from('gallery_images').select('order_index', 'asc');
-      setImages(dbImages);
-      setInitialImages(JSON.stringify(dbImages));
+      const res = await fetch('/api/public/data');
+      if (!res.ok) throw new Error('Failed to load database.');
+      const data = await res.json();
 
-      // 2. Fetch videos
-      const dbVideos = await supabase.from('stage_videos').select('order_index', 'asc');
-      setVideos(dbVideos);
-      setInitialVideos(JSON.stringify(dbVideos));
+      const loadedImages = data.images || [];
+      setImages(loadedImages);
+      setInitialImages(JSON.stringify(loadedImages));
 
-      // 3. Fetch site settings
-      const dbSettingsList = await supabase.from('site_settings').select('id', 'asc');
-      if (dbSettingsList.length > 0) {
-        const item = dbSettingsList[0];
-        const loadedSettings = { email: item.email, phone_1: item.phone_1, phone_2: item.phone_2 };
-        setSettings(loadedSettings);
-        setInitialSettings(JSON.stringify(loadedSettings));
+      const loadedVideos = data.videos || [];
+      setVideos(loadedVideos);
+      setInitialVideos(JSON.stringify(loadedVideos));
+
+      if (data.settings) {
+        setSettings(data.settings);
+        setInitialSettings(JSON.stringify(data.settings));
       }
 
-      // 4. Fetch service images
-      const dbServiceImages = await supabase.from('service_images').select('id', 'asc');
-      setServiceImages(dbServiceImages);
-      setInitialServiceImages(JSON.stringify(dbServiceImages));
-
-      // 5. Fetch auth reset tracking (3 resets limit per month)
-      const dbTrackingList = await supabase.from('auth_reset_tracking').select('id', 'asc');
-      if (dbTrackingList && dbTrackingList.length > 0) {
-        const currentMonth = new Date().toISOString().slice(0, 7);
-        const tracking = dbTrackingList[0];
-        if (tracking.last_reset_month === currentMonth) {
-          setResetCount(tracking.reset_count);
-        } else {
-          setResetCount(0);
-        }
-        setLastResetMonth(tracking.last_reset_month);
-      }
+      const loadedServices = data.services || [];
+      setServiceImages(loadedServices);
+      setInitialServiceImages(JSON.stringify(loadedServices));
 
       // Reset deletions tracking queues
       setDeletedImageUrls([]);
@@ -169,7 +149,7 @@ export default function AdminPage() {
       setDeletedVideoUrls([]);
       setDeletedVideoIds([]);
     } catch (err: any) {
-      setErrorMsg(err.message || 'Failed to load dashboard data.');
+      setErrorMsg(err.message || 'Failed to fetch settings data.');
     } finally {
       setLoading(false);
     }
@@ -319,6 +299,7 @@ export default function AdminPage() {
     const localUrl = URL.createObjectURL(file);
     const newVideo: DBVideo = {
       id: Math.random().toString(36).substring(7), // Temp ID
+      title: file.name,
       video_url: localUrl,
       order_index: videos.length,
       isLocal: true,
@@ -371,58 +352,7 @@ export default function AdminPage() {
     serviceInputRef.current?.click();
   };
 
-  const handleSendResetRequest = async () => {
-    if (!token) return;
-    const confirmSend = window.confirm("Are you sure you want to send a credential reset request link to kadamproductionweb@gmail.com? Clicking the link in the email will allow you to update your admin username and password.");
-    if (!confirmSend) return;
 
-    setSendingReset(true);
-    setErrorMsg(null);
-    try {
-      // 1. Fetch tracking count to double-check client-side
-      const currentMonth = new Date().toISOString().slice(0, 7);
-      const dbTrackingList = await supabase.from('auth_reset_tracking').select('id', 'asc');
-      let count = 0;
-      if (dbTrackingList && dbTrackingList.length > 0) {
-        const tracking = dbTrackingList[0];
-        if (tracking.last_reset_month === currentMonth) {
-          count = tracking.reset_count;
-        }
-      }
-
-      if (count >= 3) {
-        throw new Error("Reset limit reached: You can only reset admin credentials a maximum of 3 times per calendar month.");
-      }
-
-      // 2. Call local backend REST API which uses Brevo HTTP client directly
-      const response = await fetch('/api/send-reset-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email: 'kadamproductionweb@gmail.com' })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to send recovery email link.');
-      }
-
-      // 3. Update database counter
-      await supabase.from('auth_reset_tracking').update({
-        reset_count: count + 1,
-        last_reset_month: currentMonth
-      }, 'id', 1, token);
-
-      setResetCount(count + 1);
-      alert("Verification email link successfully sent to kadamproductionweb@gmail.com! Please check your email inbox to set your new username and password.");
-    } catch (err: any) {
-      alert(err.message || 'An error occurred while sending reset email.');
-      setErrorMsg(err.message || 'An error occurred while sending reset email.');
-    } finally {
-      setSendingReset(false);
-    }
-  };
 
   const handleServiceImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -444,6 +374,22 @@ export default function AdminPage() {
   };
 
   // Database and Storage save logic orchestrator
+  // Helper to upload files to Vercel Blob via local API route
+  const uploadToBlob = async (file: File): Promise<string> => {
+    const cleanFilename = encodeURIComponent(file.name.replace(/\s+/g, '_'));
+    const response = await fetch(`/api/upload?filename=${cleanFilename}`, {
+      method: 'POST',
+      body: file
+    });
+    if (!response.ok) {
+      const errData = await response.json();
+      throw new Error(errData.error || 'Vercel Blob upload failed.');
+    }
+    const data = await response.json();
+    return data.url;
+  };
+
+  // Database and Storage save logic orchestrator
   const handleSaveAllChanges = async () => {
     if (!token) return;
     setShowConfirmModal(false);
@@ -451,98 +397,93 @@ export default function AdminPage() {
     setErrorMsg(null);
 
     try {
-      // 1. Storage Operations: Delete removed images from Supabase Storage
-      if (deletedImageUrls.length > 0) {
-        const filenames = deletedImageUrls.map(url => url.split('/').pop() || '').filter(name => name !== '');
-        if (filenames.length > 0) {
-          await supabase.storage.from('assets').remove(filenames, token);
-        }
-        // Delete rows from DB
-        for (const id of deletedImageIds) {
-          await supabase.from('gallery_images').delete('id', id, token);
-        }
-      }
-
-      // Delete removed videos from Supabase Storage
-      if (deletedVideoUrls.length > 0) {
-        const filenames = deletedVideoUrls.map(url => url.split('/').pop() || '').filter(name => name !== '');
-        if (filenames.length > 0) {
-          await supabase.storage.from('assets').remove(filenames, token);
-        }
-        // Delete rows from DB
-        for (const id of deletedVideoIds) {
-          await supabase.from('stage_videos').delete('id', id, token);
-        }
-      }
-
-      // 2. Upload and insert newly added images
+      // 1. Process local image file uploads
+      const processedImages = [];
       for (const img of images) {
         if (img.isLocal && img.localFile) {
-          const timestamp = Date.now();
-          const cleanName = `${timestamp}_${img.localFile.name}`;
-          // Upload to storage bucket
-          const publicUrl = await supabase.storage.from('assets').upload(cleanName, img.localFile, token);
-          // Insert row in DB
-          await supabase.from('gallery_images').insert({
+          const publicUrl = await uploadToBlob(img.localFile);
+          processedImages.push({
+            id: img.id,
             category: img.category,
             image_url: publicUrl,
             order_index: img.order_index
-          }, token);
+          });
         } else {
-          // Update order index of existing images
-          await supabase.from('gallery_images').update({
+          processedImages.push({
+            id: img.id,
+            category: img.category,
+            image_url: img.image_url,
             order_index: img.order_index
-          }, 'id', img.id, token);
+          });
         }
       }
 
-      // 3. Upload and insert newly added videos
+      // 2. Process local video file uploads
+      const processedVideos = [];
       for (const vid of videos) {
         if (vid.isLocal && vid.localFile) {
-          const timestamp = Date.now();
-          const cleanName = `${timestamp}_${vid.localFile.name}`;
-          const publicUrl = await supabase.storage.from('assets').upload(cleanName, vid.localFile, token);
-          await supabase.from('stage_videos').insert({
+          const publicUrl = await uploadToBlob(vid.localFile);
+          processedVideos.push({
+            id: vid.id,
+            title: vid.title,
             video_url: publicUrl,
             order_index: vid.order_index
-          }, token);
+          });
         } else {
-          // Update order index of existing videos
-          await supabase.from('stage_videos').update({
+          processedVideos.push({
+            id: vid.id,
+            title: vid.title,
+            video_url: vid.video_url,
             order_index: vid.order_index
-          }, 'id', vid.id, token);
+          });
         }
       }
 
-      // 4. Upload and update service images
+      // 3. Process local service image file uploads
+      const processedServices = [];
       for (const s of serviceImages) {
         if (s.isLocal && s.localFile) {
-          const timestamp = Date.now();
-          const cleanName = `${timestamp}_${s.localFile.name}`;
-          const publicUrl = await supabase.storage.from('assets').upload(cleanName, s.localFile, token);
-
-          // Delete old file from storage to save space
-          try {
-            const oldItem = JSON.parse(initialServiceImages).find((item: any) => item.id === s.id);
-            if (oldItem && oldItem.image_url) {
-              const oldFilename = oldItem.image_url.split('/').pop() || '';
-              if (oldFilename && !oldFilename.startsWith('Untitled') && !oldFilename.startsWith('ChatGPT')) {
-                await supabase.storage.from('assets').remove([oldFilename], token);
-              }
-            }
-          } catch (e) {
-            console.warn('Could not remove old service image file:', e);
-          }
-
-          // Update DB row
-          await supabase.from('service_images').update({
+          const publicUrl = await uploadToBlob(s.localFile);
+          processedServices.push({
+            id: s.id,
+            service_title: s.service_title,
             image_url: publicUrl
-          }, 'id', s.id, token);
+          });
+          // Add old service image to deleted list to free storage space
+          const oldItem = JSON.parse(initialServiceImages).find((item: any) => item.id === s.id);
+          if (oldItem && oldItem.image_url) {
+            setDeletedImageUrls(prev => [...prev, oldItem.image_url]);
+          }
+        } else {
+          processedServices.push({
+            id: s.id,
+            service_title: s.service_title,
+            image_url: s.image_url
+          });
         }
       }
 
-      // 5. Save Site settings (row id = 1)
-      await supabase.from('site_settings').update(settings, 'id', 1, token);
+      // 4. Submit all updates in a single API call to save to Vercel KV
+      const deletedUrls = [...deletedImageUrls, ...deletedVideoUrls];
+      const saveResponse = await fetch('/api/admin/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          token,
+          settings,
+          images: processedImages.map((img, idx) => ({ ...img, order_index: idx })),
+          videos: processedVideos.map((vid, idx) => ({ ...vid, order_index: idx })),
+          serviceImages: processedServices,
+          deletedUrls
+        })
+      });
+
+      if (!saveResponse.ok) {
+        const errorData = await saveResponse.json();
+        throw new Error(errorData.error || 'Failed to save admin configurations.');
+      }
 
       // Refresh page data and update initial references
       await fetchData();
