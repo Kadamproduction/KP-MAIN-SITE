@@ -1,4 +1,5 @@
-import { kv } from '@vercel/kv';
+import { GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
+import { s3 } from './s3';
 
 export interface SiteSettings {
   email: string;
@@ -28,7 +29,7 @@ export interface DBServiceImage {
 
 export interface AdminCredentials {
   username: string;
-  passwordHash: string; // Plain password for simple project, or bcrypt hash. We will use simple plain text matching for ease of maintenance.
+  passwordHash: string;
 }
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -42,74 +43,100 @@ const DEFAULT_CREDENTIALS: AdminCredentials = {
   passwordHash: 'TemporaryPassword123!'
 };
 
+// Helper to read database.json from R2
+async function getFullDb(): Promise<any> {
+  try {
+    const command = new GetObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: 'database.json',
+    });
+    const response = await s3.send(command);
+    const dataStr = await response.Body?.transformToString();
+    return dataStr ? JSON.parse(dataStr) : {};
+  } catch (err: any) {
+    if (err.name === 'NoSuchKey' || err.code === 'NoSuchKey') {
+      // If db does not exist, initialize with empty structure
+      return {
+        settings: DEFAULT_SETTINGS,
+        images: [],
+        videos: [],
+        services: [],
+        credentials: DEFAULT_CREDENTIALS
+      };
+    }
+    console.error('R2 read database error:', err);
+    return {};
+  }
+}
+
+// Helper to write database.json back to R2
+async function saveFullDb(data: any): Promise<void> {
+  try {
+    const command = new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: 'database.json',
+      Body: JSON.stringify(data, null, 2),
+      ContentType: 'application/json',
+    });
+    await s3.send(command);
+  } catch (err) {
+    console.error('R2 save database error:', err);
+  }
+}
+
 export const vercelDb = {
   async getSettings(): Promise<SiteSettings> {
-    try {
-      const data = await kv.get<SiteSettings>('site:settings');
-      return data || DEFAULT_SETTINGS;
-    } catch (err) {
-      console.warn('Vercel KV read warning (settings):', err);
-      return DEFAULT_SETTINGS;
-    }
+    const db = await getFullDb();
+    return db.settings || DEFAULT_SETTINGS;
   },
 
   async setSettings(settings: SiteSettings): Promise<void> {
-    await kv.set('site:settings', settings);
+    const db = await getFullDb();
+    db.settings = settings;
+    await saveFullDb(db);
   },
 
   async getImages(): Promise<DBImage[]> {
-    try {
-      const data = await kv.get<DBImage[]>('gallery:images');
-      return data || [];
-    } catch (err) {
-      console.warn('Vercel KV read warning (images):', err);
-      return [];
-    }
+    const db = await getFullDb();
+    return db.images || [];
   },
 
   async setImages(images: DBImage[]): Promise<void> {
-    await kv.set('gallery:images', images);
+    const db = await getFullDb();
+    db.images = images;
+    await saveFullDb(db);
   },
 
   async getVideos(): Promise<DBVideo[]> {
-    try {
-      const data = await kv.get<DBVideo[]>('stage:videos');
-      return data || [];
-    } catch (err) {
-      console.warn('Vercel KV read warning (videos):', err);
-      return [];
-    }
+    const db = await getFullDb();
+    return db.videos || [];
   },
 
   async setVideos(videos: DBVideo[]): Promise<void> {
-    await kv.set('stage:videos', videos);
+    const db = await getFullDb();
+    db.videos = videos;
+    await saveFullDb(db);
   },
 
   async getServices(): Promise<DBServiceImage[]> {
-    try {
-      const data = await kv.get<DBServiceImage[]>('service:images');
-      return data || [];
-    } catch (err) {
-      console.warn('Vercel KV read warning (services):', err);
-      return [];
-    }
+    const db = await getFullDb();
+    return db.services || [];
   },
 
   async setServices(services: DBServiceImage[]): Promise<void> {
-    await kv.set('service:images', services);
+    const db = await getFullDb();
+    db.services = services;
+    await saveFullDb(db);
   },
 
   async getCredentials(): Promise<AdminCredentials> {
-    try {
-      const data = await kv.get<AdminCredentials>('admin:credentials');
-      return data || DEFAULT_CREDENTIALS;
-    } catch (err) {
-      console.warn('Vercel KV read warning (credentials):', err);
-      return DEFAULT_CREDENTIALS;
-    }
+    const db = await getFullDb();
+    return db.credentials || DEFAULT_CREDENTIALS;
   },
 
   async setCredentials(credentials: AdminCredentials): Promise<void> {
-    await kv.set('admin:credentials', credentials);
+    const db = await getFullDb();
+    db.credentials = credentials;
+    await saveFullDb(db);
   }
 };

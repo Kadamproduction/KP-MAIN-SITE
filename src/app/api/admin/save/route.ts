@@ -1,6 +1,24 @@
 import { NextResponse } from 'next/server';
 import { vercelDb } from '@/utils/vercelDb';
-import { del } from '@vercel/blob';
+import { DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { s3 } from '@/utils/s3';
+
+async function deleteFromR2(url: string) {
+  try {
+    const publicUrlPrefix = process.env.R2_PUBLIC_URL || '';
+    if (url.startsWith(publicUrlPrefix)) {
+      const key = url.replace(`${publicUrlPrefix}/`, '');
+      const command = new DeleteObjectCommand({
+        Bucket: process.env.R2_BUCKET_NAME,
+        Key: key,
+      });
+      await s3.send(command);
+      console.log('Successfully deleted key from R2:', key);
+    }
+  } catch (err) {
+    console.warn('R2 delete warning for URL:', url, err);
+  }
+}
 
 export async function POST(request: Request) {
   try {
@@ -27,7 +45,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid authentication token.' }, { status: 401 });
     }
 
-    // 2. Perform updates to Vercel KV
+    // 2. Perform updates to R2 DB (saved as database.json in R2)
     if (settings) {
       await vercelDb.setSettings(settings);
     }
@@ -44,17 +62,11 @@ export async function POST(request: Request) {
       await vercelDb.setCredentials(adminCredentials);
     }
 
-    // 3. Clean up deleted files from Vercel Blob if urls are provided
+    // 3. Clean up deleted files from R2
     if (deletedUrls && Array.isArray(deletedUrls) && deletedUrls.length > 0) {
-      console.log('Cleaning up deleted files from Vercel Blob:', deletedUrls);
+      console.log('Cleaning up deleted files from Cloudflare R2:', deletedUrls);
       for (const url of deletedUrls) {
-        try {
-          if (url.includes('public.blob.vercel-storage.com') || url.includes('vercel-storage.com')) {
-            await del(url);
-          }
-        } catch (err) {
-          console.warn('Vercel Blob delete warning for:', url, err);
-        }
+        await deleteFromR2(url);
       }
     }
 
