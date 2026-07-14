@@ -346,7 +346,7 @@ export default function ServicesPage() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true, margin: '-50px' }}
                   transition={{ delay: idx * 0.05, duration: 0.5 }}
-                  className="w-[88vw] sm:w-[360px] md:w-[380px] lg:w-[400px] snap-center flex-shrink-0 group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 flex flex-col justify-between"
+                  className="w-[88vw] sm:w-[360px] md:w-[380px] lg:w-[400px] snap-start flex-shrink-0 group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 flex flex-col justify-between"
                   style={{
                     boxShadow: '0 0 30px rgba(255,255,255,0.02), inset 0 0 30px rgba(255,255,255,0.01)'
                   }}
@@ -413,6 +413,7 @@ export default function ServicesPage() {
                 </motion.div>
               );
             })}
+            <div className="w-6 flex-shrink-0" />
           </div>
 
           {/* PC Manual Navigation Buttons */}

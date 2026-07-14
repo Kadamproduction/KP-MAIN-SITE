@@ -73,7 +73,6 @@ export default function Footer() {
             />
             <div>
               <h4 className="text-md font-black tracking-tight text-white">KADAM PRODUCTION</h4>
-              <span className="text-[8px] text-[#A1A1AA] font-bold tracking-[0.2em] uppercase">Atmosphere & Lights</span>
             </div>
           </Link>
           
