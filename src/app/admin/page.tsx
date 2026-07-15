@@ -1415,22 +1415,6 @@ export default function AdminPage() {
                     className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
                   />
                 </div>
-
-                <div>
-                  <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">
-                    Master Recovery Key
-                  </label>
-                  <input 
-                    type="text"
-                    value={adminRecoveryKey}
-                    onChange={(e) => setAdminRecoveryKey(e.target.value)}
-                    placeholder="KP-777-RESET"
-                    className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
-                  />
-                  <span className="text-[10px] text-zinc-550 leading-normal block mt-2">
-                    * If you ever get locked out, enter this Master Recovery Key on the login page to instantly reset your password. Keep it simple and memorable (e.g. KP-777-RESET).
-                  </span>
-                </div>
               </div>
             </div>
           </div>
