@@ -83,6 +83,14 @@ export default function AdminPage() {
   const [vibrants, setVibrants] = useState<DBVibrant[]>([]);
   const [settings, setSettings] = useState<SiteSettings>({ email: '', phone_1: '', phone_2: '' });
   
+  // Admin credentials states
+  const [adminUsername, setAdminUsername] = useState('admin');
+  const [adminPassword, setAdminPassword] = useState('');
+  const [initialAdminUsername, setInitialAdminUsername] = useState('admin');
+  const [initialAdminPassword, setInitialAdminPassword] = useState('');
+  const [resetCount, setResetCount] = useState(0);
+  const [showPass, setShowPass] = useState(false);
+  
   // Unsaved changes tracking states
   const [initialImages, setInitialImages] = useState<string>('');
   const [initialVideos, setInitialVideos] = useState<string>('');
@@ -148,6 +156,21 @@ export default function AdminPage() {
         setSettingsSnapshot(JSON.stringify(data.settings));
       }
 
+      // Securely fetch admin credentials
+      const credRes = await fetch('/api/admin/credentials', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token })
+      });
+      if (credRes.ok) {
+        const credData = await credRes.json();
+        setAdminUsername(credData.username);
+        setAdminPassword(credData.password);
+        setInitialAdminUsername(credData.username);
+        setInitialAdminPassword(credData.password);
+        setResetCount(credData.resetCount || 0);
+      }
+
       const loadedServices = data.services || [];
       setServiceImages(loadedServices);
       setInitialServiceImages(JSON.stringify(loadedServices));
@@ -168,6 +191,7 @@ export default function AdminPage() {
   // Helper to determine if unsaved changes exist
   const hasChanges = () => {
     if (JSON.stringify(settings) !== settingsSnapshot) return true;
+    if (adminUsername !== initialAdminUsername || adminPassword !== initialAdminPassword) return true;
     
     const currentImagesSerialized = JSON.stringify(images.map(img => ({
       id: img.id,
@@ -557,6 +581,11 @@ export default function AdminPage() {
           videos: processedVideos.map((vid, idx) => ({ ...vid, order_index: idx })),
           serviceImages: processedServices,
           vibrants: processedVibrants.map((v, idx) => ({ ...v, order_index: idx })),
+          adminCredentials: {
+            username: adminUsername,
+            passwordHash: adminPassword,
+            resetCount: resetCount
+          },
           deletedUrls
         })
       });
@@ -567,6 +596,8 @@ export default function AdminPage() {
       }
 
       await fetchData();
+      setInitialAdminUsername(adminUsername);
+      setInitialAdminPassword(adminPassword);
       setShowSuccessToast(true);
       setTimeout(() => setShowSuccessToast(false), 5000);
     } catch (err: any) {
@@ -1297,6 +1328,60 @@ export default function AdminPage() {
                   onChange={(e) => setSettings({ ...settings, phone_2: e.target.value })}
                   className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
                 />
+              </div>
+
+              {/* ADMIN CREDENTIALS SECTION */}
+              <div className="pt-6 border-t border-white/10 space-y-6">
+                <h4 className="font-bold text-sm text-white uppercase tracking-wider">Console Security Credentials</h4>
+                
+                <div>
+                  <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">
+                    Admin Console Username
+                  </label>
+                  <input 
+                    type="text"
+                    value={adminUsername}
+                    onChange={(e) => setAdminUsername(e.target.value)}
+                    className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase">
+                      Admin Console Password
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setShowPass(!showPass)}
+                      className="text-[10px] font-bold text-zinc-550 hover:text-white transition duration-200 uppercase tracking-widest"
+                    >
+                      {showPass ? 'Hide Password' : 'Show Password'}
+                    </button>
+                  </div>
+                  <input 
+                    type={showPass ? 'text' : 'password'}
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                    className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between rounded-2xl border border-white/5 bg-black/20 p-4">
+                  <div>
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block">Forgot Password Limit</span>
+                    <span className="text-xs text-zinc-350 mt-1 block">Reset dispatches sent via email: <strong>{resetCount}/3</strong></span>
+                  </div>
+                  {resetCount > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setResetCount(0)}
+                      className="h-9 px-4 rounded-xl border border-zinc-800 hover:border-white/20 bg-zinc-900/50 text-[10px] font-bold text-white hover:bg-zinc-800 transition duration-200"
+                    >
+                      Clear Limit Counter
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>

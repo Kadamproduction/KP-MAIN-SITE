@@ -37,6 +37,9 @@ export interface DBVibrant {
 export interface AdminCredentials {
   username: string;
   passwordHash: string;
+  resetToken?: string | null;
+  resetTokenExpiry?: number | null;
+  resetCount?: number;
 }
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -47,7 +50,10 @@ const DEFAULT_SETTINGS: SiteSettings = {
 
 const DEFAULT_CREDENTIALS: AdminCredentials = {
   username: 'admin',
-  passwordHash: 'TemporaryPassword123!'
+  passwordHash: 'TemporaryPassword123!',
+  resetToken: null,
+  resetTokenExpiry: null,
+  resetCount: 0
 };
 
 const DEFAULT_IMAGES: DBImage[] = [
