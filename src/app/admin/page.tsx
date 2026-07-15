@@ -734,7 +734,7 @@ export default function AdminPage() {
               `}
             >
               <Sparkles className="w-4 h-4" />
-              Vibrants Carousel
+              Home Carousel
             </button>
 
             <button
@@ -790,7 +790,7 @@ export default function AdminPage() {
               {activeTab === 'gallery' && 'Gallery Management'}
               {activeTab === 'videos' && 'Simple Videos'}
               {activeTab === 'services' && 'Services Images'}
-              {activeTab === 'vibrants' && 'Vibrants Carousel'}
+              {activeTab === 'vibrants' && 'Home Carousel'}
               {activeTab === 'settings' && 'Site Information'}
             </h1>
             <p className="text-xs text-zinc-500 tracking-wider mt-1 uppercase">

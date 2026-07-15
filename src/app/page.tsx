@@ -339,7 +339,7 @@ export default function HomePage() {
           {/* Layer 1: Optimized Full Screen Background Video (Cloudinary vertical source) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
             <video 
-              src="/videos/upscaled-video_v3jizt.mp4"
+              src="/videos/download_2_sispkn.mp4"
               autoPlay 
               muted 
               loop 
@@ -726,12 +726,12 @@ export default function HomePage() {
 
               {/* Desktop Slider Container (Shows multiple cards side-by-side) */}
               <div className="hidden md:flex gap-6 overflow-hidden pb-6">
-                {vibrantsItems.map((item, idx) => (
+                {vibrantsItems.slice(0, 2).map((item, idx) => (
                   <motion.div 
                     key={item.title}
                     layout
                     transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-                    className="w-[260px] sm:w-[300px] aspect-[3/4] flex-shrink-0 rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group transition-all duration-500 hover:border-purple-500/20"
+                    className="w-[calc(50%-12px)] aspect-[3/4] flex-shrink-0 rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group transition-all duration-500 hover:border-purple-500/20"
                   >
                     <img 
                       src={item.image} 
