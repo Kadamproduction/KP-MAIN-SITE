@@ -166,7 +166,7 @@ export default function ContactPage() {
 
             {/* CARD 4: LOCATION */}
             <a 
-              href="https://maps.google.com/?q=Kadam%20Production,%205QVF%2BQ8M,%20Gaurav%20Path%20Road,%20Palanpur,%20Surat,%20Gujarat%20394510" 
+              href={`https://maps.google.com/?q=${encodeURIComponent(siteSettings.address || '')}`} 
               target="_blank" 
               rel="noopener noreferrer" 
               className="bg-zinc-900/40 border border-white/5 p-5 rounded-2xl shadow-lg flex flex-col justify-between hover:border-white/20 hover:bg-white/3 transition-all duration-300 group cursor-pointer"
@@ -177,7 +177,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-zinc-550 uppercase tracking-widest mb-1">Corporate HQ</h4>
-                  <p className="text-sm font-bold text-white leading-normal hover:text-zinc-300 transition-colors">Gaurav Path Road, Palanpur, Surat, Gujarat</p>
+                  <p className="text-sm font-bold text-white leading-normal hover:text-zinc-300 transition-colors">{siteSettings.address || 'Gaurav Path Road, Palanpur, Surat, Gujarat'}</p>
                   <p className="text-zinc-500 text-xs font-semibold mt-1">Service Area: All India</p>
                 </div>
               </div>
@@ -188,7 +188,7 @@ export default function ContactPage() {
           {/* FULL-WIDTH EMBEDDED GOOGLE MAP */}
           <div className="w-full relative rounded-3xl overflow-hidden border-2 border-white/10 shadow-2xl">
             <iframe 
-              src="https://maps.google.com/maps?q=Kadam%20Production,%205QVF%2BQ8M,%20Gaurav%20Path%20Road,%20Palanpur,%20Surat,%20Gujarat%20394510&t=&z=16&ie=UTF8&iwloc=&output=embed"
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(siteSettings.address || 'Kadam Production, Gaurav Path Road, Surat')}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
               width="100%" 
               height="400" 
               style={{ border: 0 }} 

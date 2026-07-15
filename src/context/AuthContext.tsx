@@ -6,6 +6,7 @@ interface SiteSettings {
   email: string;
   phone_1: string;
   phone_2: string;
+  address: string;
 }
 
 interface CustomUser {
@@ -32,7 +33,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [siteSettings, setSiteSettings] = useState<SiteSettings>({
     email: 'kadamproduction123@gmail.com',
     phone_1: '9537330003',
-    phone_2: '8866655651'
+    phone_2: '8866655651',
+    address: 'Gaurav Path Road, Palanpur, Surat, Gujarat'
   });
 
   useEffect(() => {

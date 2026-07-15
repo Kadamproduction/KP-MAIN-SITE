@@ -64,6 +64,7 @@ interface SiteSettings {
   email: string;
   phone_1: string;
   phone_2: string;
+  address: string;
 }
 
 const CATEGORIES = ['All Events', 'Weddings', 'Festivals', 'Concerts', 'Road Shows'];
@@ -81,7 +82,7 @@ export default function AdminPage() {
   const [videos, setVideos] = useState<DBVideo[]>([]);
   const [serviceImages, setServiceImages] = useState<DBServiceImage[]>([]);
   const [vibrants, setVibrants] = useState<DBVibrant[]>([]);
-  const [settings, setSettings] = useState<SiteSettings>({ email: '', phone_1: '', phone_2: '' });
+  const [settings, setSettings] = useState<SiteSettings>({ email: '', phone_1: '', phone_2: '', address: '' });
   
   // Admin credentials states
   const [adminUsername, setAdminUsername] = useState('admin');
@@ -107,6 +108,7 @@ export default function AdminPage() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [resetEmailSending, setResetEmailSending] = useState(false);
 
   // Category selection for gallery view
   const [selectedGalleryCat, setSelectedGalleryCat] = useState<string>('All Events');
@@ -607,6 +609,33 @@ export default function AdminPage() {
     }
   };
 
+  const handleResetViaEmail = async () => {
+    if (!settings.email) {
+      alert('Please specify a contact email address first before requesting a reset email.');
+      return;
+    }
+    if (!window.confirm('Send a password recovery reset link to ' + settings.email + '?')) return;
+    setResetEmailSending(true);
+    setErrorMsg(null);
+    try {
+      const res = await fetch('/api/auth/reset-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: settings.email })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to trigger reset link.');
+      }
+      alert('Success! Recovery reset link has been dispatched to ' + settings.email);
+      await fetchData();
+    } catch (err: any) {
+      setErrorMsg(err.message);
+    } finally {
+      setResetEmailSending(false);
+    }
+  };
+
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-4">
@@ -815,25 +844,25 @@ export default function AdminPage() {
       <main className="flex-1 p-6 md:p-10 max-w-none w-full overflow-y-auto md:h-screen">
         
         {/* HEADER TOOLBAR BLOCK */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-white/10 pb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 border-b border-white/10 pb-6 text-center md:text-left">
           <div>
-            <h1 className="text-2xl font-bold tracking-wide text-white uppercase">
-              {activeTab === 'gallery' && 'Gallery Management'}
-              {activeTab === 'videos' && 'Simple Videos'}
-              {activeTab === 'services' && 'Services Images'}
+            <h1 className="text-xl md:text-2xl font-bold tracking-wide text-white uppercase">
+              {activeTab === 'gallery' && 'Gallery'}
+              {activeTab === 'videos' && 'Videos'}
+              {activeTab === 'services' && 'Services'}
               {activeTab === 'vibrants' && 'Home Carousel'}
-              {activeTab === 'settings' && 'Site Information'}
+              {activeTab === 'settings' && 'Settings'}
             </h1>
-            <p className="text-xs text-zinc-500 tracking-wider mt-1 uppercase">
-              {activeTab === 'gallery' && 'Organize display images and categorize weddings, concerts, and more'}
-              {activeTab === 'videos' && 'Manage looping background videos for home display (9:16 vertical MP4 format)'}
-              {activeTab === 'services' && 'Customize background cover photos for all 9 services page items'}
-              {activeTab === 'vibrants' && 'Manage slides inside the "Choose Our Vibrants" carousel slider on home page'}
-              {activeTab === 'settings' && 'Update contact email, primary/secondary phone numbers, and WhatsApp links'}
+            <p className="text-[10px] md:text-xs text-zinc-550 tracking-wider mt-1 uppercase">
+              {activeTab === 'gallery' && 'Organize portfolio grid photos'}
+              {activeTab === 'videos' && 'Manage stage video loop reels'}
+              {activeTab === 'services' && 'Customize service cover images'}
+              {activeTab === 'vibrants' && 'Manage vibrations slider'}
+              {activeTab === 'settings' && 'Update contact profiles & credentials'}
             </p>
           </div>
 
-          <div>
+          <div className="flex justify-center md:justify-start">
             <button
               onClick={() => setShowConfirmModal(true)}
               disabled={!hasChanges()}
@@ -1284,13 +1313,13 @@ export default function AdminPage() {
 
         {/* -------------------- SITE SETTINGS TAB CONTENT -------------------- */}
         {activeTab === 'settings' && (
-          <div className="max-w-[600px] rounded-3xl border border-white/10 bg-zinc-950/40 p-8 shadow-xl">
+          <div className="max-w-[600px] rounded-3xl border border-white/10 bg-zinc-950/40 p-6 md:p-8 shadow-xl">
             <h3 className="font-bold text-md text-white mb-6 uppercase tracking-wider">Contact & Profile Settings</h3>
             
             <div className="space-y-6">
               <div>
                 <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">
-                  Primary Contact Email
+                  Email
                 </label>
                 <input 
                   type="email"
@@ -1303,7 +1332,7 @@ export default function AdminPage() {
 
               <div>
                 <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">
-                  Contact Number 1 (Primary - WhatsApp redirection link generator)
+                  WhatsApp Number
                 </label>
                 <input 
                   type="text"
@@ -1313,13 +1342,13 @@ export default function AdminPage() {
                   className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
                 />
                 <span className="text-[10px] text-zinc-500 leading-normal block mt-2">
-                  * Important: Do NOT include country code or special characters (e.g. spaces/hyphens). The website will automatically use this value to construct your WhatsApp URL: <strong>https://wa.me/91[Number]</strong>
+                  * Constructed link: <strong>https://wa.me/91[Number]</strong>. Do not write country code +91.
                 </span>
               </div>
 
               <div>
                 <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">
-                  Contact Number 2 (Secondary support line)
+                  Secondary Number
                 </label>
                 <input 
                   type="text"
@@ -1330,13 +1359,26 @@ export default function AdminPage() {
                 />
               </div>
 
+              <div>
+                <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">
+                  Address
+                </label>
+                <textarea 
+                  rows={3}
+                  placeholder="Gaurav Path Road, Palanpur, Surat, Gujarat"
+                  value={settings.address || ''}
+                  onChange={(e) => setSettings({ ...settings, address: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200 resize-none"
+                />
+              </div>
+
               {/* ADMIN CREDENTIALS SECTION */}
               <div className="pt-6 border-t border-white/10 space-y-6">
-                <h4 className="font-bold text-sm text-white uppercase tracking-wider">Console Security Credentials</h4>
+                <h4 className="font-bold text-sm text-white uppercase tracking-wider">Credentials</h4>
                 
                 <div>
                   <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">
-                    Admin Console Username
+                    Username
                   </label>
                   <input 
                     type="text"
@@ -1349,7 +1391,7 @@ export default function AdminPage() {
                 <div>
                   <div className="flex justify-between items-center mb-2">
                     <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase">
-                      Admin Console Password
+                      Password
                     </label>
                     <button
                       type="button"
@@ -1367,20 +1409,30 @@ export default function AdminPage() {
                   />
                 </div>
 
-                <div className="flex items-center justify-between rounded-2xl border border-white/5 bg-black/20 p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-white/5 bg-black/20 p-4">
                   <div>
-                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block">Forgot Password Limit</span>
-                    <span className="text-xs text-zinc-350 mt-1 block">Reset dispatches sent via email: <strong>{resetCount}/3</strong></span>
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block">Limits & Quick Reset</span>
+                    <span className="text-xs text-zinc-350 mt-1 block">Attempts: <strong>{resetCount}/3</strong></span>
                   </div>
-                  {resetCount > 0 && (
+                  <div className="flex gap-2.5">
+                    {resetCount > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setResetCount(0)}
+                        className="h-9 px-4 rounded-xl border border-zinc-800 hover:border-white/20 bg-zinc-900/50 text-[10px] font-bold text-white hover:bg-zinc-800 transition duration-200"
+                      >
+                        Clear Limit
+                      </button>
+                    )}
                     <button
                       type="button"
-                      onClick={() => setResetCount(0)}
-                      className="h-9 px-4 rounded-xl border border-zinc-800 hover:border-white/20 bg-zinc-900/50 text-[10px] font-bold text-white hover:bg-zinc-800 transition duration-200"
+                      disabled={resetEmailSending}
+                      onClick={handleResetViaEmail}
+                      className="h-9 px-4 rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/30 text-[10px] font-bold text-[#8B5CF6] hover:bg-[#8B5CF6]/20 transition duration-200 disabled:opacity-40"
                     >
-                      Clear Limit Counter
+                      {resetEmailSending ? 'Sending...' : 'Reset via Email'}
                     </button>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>

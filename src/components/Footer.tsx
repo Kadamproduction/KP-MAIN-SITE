@@ -166,12 +166,12 @@ export default function Footer() {
             <li className="flex gap-3 text-zinc-400">
               <MapPin className="w-4 h-4 text-white flex-shrink-0" />
               <a 
-                href="https://maps.google.com/?q=Kadam%20Production,%205QVF%2BQ8M,%20Gaurav%20Path%20Road,%20Palanpur,%20Surat,%20Gujarat%20394510" 
+                href={`https://maps.google.com/?q=${encodeURIComponent(siteSettings.address || '')}`} 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="hover:text-white transition-colors"
               >
-                Gaurav Path Road, Palanpur, Surat, Gujarat
+                {siteSettings.address || 'Gaurav Path Road, Palanpur, Surat, Gujarat'}
               </a>
             </li>
             <li className="flex gap-3 text-zinc-400">
