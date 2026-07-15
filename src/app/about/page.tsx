@@ -9,6 +9,7 @@ import FlipText from '@/components/FlipText';
 import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 const InstagramIcon = (props: any) => (
   <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -94,10 +95,12 @@ export default function AboutPage() {
               transition={{ duration: 0.8 }}
               className="relative aspect-[4/3] w-full max-w-md mx-auto rounded-3xl overflow-hidden border border-white/10 bg-[#080808]"
             >
-              <img 
+              <Image 
                 src="/images/Untitled-design-13.png" 
                 alt="Kadam Production Stage Setup" 
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 450px"
+                className="object-cover"
               />
             </motion.div>
           </div>
@@ -120,26 +123,32 @@ export default function AboutPage() {
             {/* Values stats row */}
             <div className="grid grid-cols-3 gap-4 pt-6 border-t border-white/5">
               <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-3">
-                <img 
+                <Image 
                   src="/images/spotlight_aetwmd.png" 
                   alt="Light Icon" 
-                  className="w-14 h-14 object-contain filter invert brightness-200"
+                  width={56}
+                  height={56}
+                  className="object-contain filter invert brightness-200"
                 />
                 <div className="text-xs font-bold text-white uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Light</div>
               </div>
               <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-3">
-                <img 
+                <Image 
                   src="/images/wave-sound_ux5uhf.png" 
                   alt="Sound Icon" 
-                  className="w-14 h-14 object-contain filter invert brightness-200"
+                  width={56}
+                  height={56}
+                  className="object-contain filter invert brightness-200"
                 />
                 <div className="text-xs font-bold text-white uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Sounds</div>
               </div>
               <div className="text-center p-4 bg-[#080808] border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-3">
-                <img 
+                <Image 
                   src="/images/sound-control_cv7kzt.png" 
                   alt="Quality Icon" 
-                  className="w-14 h-14 object-contain filter invert brightness-200"
+                  width={56}
+                  height={56}
+                  className="object-contain filter invert brightness-200"
                 />
                 <div className="text-xs font-bold text-white uppercase tracking-wider" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Quality</div>
               </div>
@@ -217,10 +226,12 @@ export default function AboutPage() {
                   className="min-w-[80vw] sm:min-w-[280px] md:min-w-0 snap-center flex-shrink-0 group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 w-full md:flex-shrink"
               >
                 <div className="relative w-full aspect-[3/4] overflow-hidden">
-                  <img 
+                  <Image 
                     src={member.src} 
                     alt={member.name} 
-                    className="w-full h-full object-cover object-top"
+                    fill
+                    sizes="(max-width: 640px) 80vw, (max-width: 768px) 280px, 300px"
+                    className="object-cover object-top"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
                   

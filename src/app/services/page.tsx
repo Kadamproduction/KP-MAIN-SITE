@@ -13,6 +13,7 @@ import FlipText from '@/components/FlipText';
 import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 
 
@@ -353,11 +354,12 @@ export default function ServicesPage() {
                 >
                   {/* Thumbnail area (aspect 4:5 Instagram Portrait size) */}
                   <div className="relative w-full aspect-[16/11] overflow-hidden">
-                    <img 
+                    <Image 
                       src={images[service.id] || service.image} 
                       alt={service.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="(max-width: 640px) 88vw, (max-width: 768px) 360px, 400px"
+                      className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
                   </div>

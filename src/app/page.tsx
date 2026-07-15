@@ -16,6 +16,7 @@ import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
 import ProjectsSection from '@/components/ProjectsSection';
+import Image from 'next/image';
 
 import { useAuth } from '@/context/AuthContext';
 
@@ -691,11 +692,15 @@ export default function HomePage() {
                       key={item.title}
                       className="min-w-full snap-center rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group"
                     >
-                      <img 
-                        src={item.image} 
-                        alt={item.title} 
-                        className="w-full aspect-[3/4] object-cover filter brightness-[0.7]"
-                      />
+                      <div className="relative w-full aspect-[3/4]">
+                        <Image 
+                          src={item.image} 
+                          alt={item.title} 
+                          fill
+                          sizes="(max-width: 640px) 100vw, 320px"
+                          className="object-cover filter brightness-[0.7]"
+                        />
+                      </div>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                       <span 
                         className="absolute bottom-6 left-6 text-white font-normal tracking-widest text-sm uppercase" 
@@ -733,10 +738,12 @@ export default function HomePage() {
                     transition={{ type: 'spring', stiffness: 100, damping: 20 }}
                     className="w-[calc(50%-12px)] aspect-[3/4] flex-shrink-0 rounded-3xl overflow-hidden relative border border-white/5 bg-zinc-950/40 shadow-lg group transition-all duration-500 hover:border-purple-500/20"
                   >
-                    <img 
+                    <Image 
                       src={item.image} 
                       alt={item.title} 
-                      className="w-full h-full object-cover filter brightness-[0.7]"
+                      fill
+                      sizes="(max-width: 768px) 50vw, 320px"
+                      className="object-cover filter brightness-[0.7]"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                     <span 

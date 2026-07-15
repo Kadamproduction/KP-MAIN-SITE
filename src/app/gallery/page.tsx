@@ -7,6 +7,7 @@ import FlipText from '@/components/FlipText';
 import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 
 
@@ -255,11 +256,12 @@ export default function GalleryPage() {
                 className="h-[300px] sm:h-[400px] md:h-[450px] w-[300px] sm:w-[380px] md:w-[calc(50%-12px)] relative group rounded-2xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 shadow-lg bg-zinc-900/30 cursor-pointer snap-start flex-shrink-0"
                 onClick={() => setLightboxIndex(idx)}
               >
-                <img 
+                <Image 
                   src={image.src} 
                   alt={image.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 640px) 300px, (max-width: 768px) 380px, 50vw"
+                  className="object-cover"
                 />
                 
                 {/* Subtle visual hover mask with a centralized max icon */}

@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import LiveProjectButton from './LiveProjectButton';
 import FadeIn from './FadeIn';
+import Image from 'next/image';
 
 interface ProjectItem {
   id: string;
@@ -162,28 +163,34 @@ function CardWrapper({ project, index, totalCards, globalProgress }: CardWrapper
           {/* Left Column (40% width): 2 stacked images (Desktop only to prevent mobile cutoff) */}
           <div className="hidden md:flex md:col-span-4 flex-col gap-4 justify-between">
             <div className="relative w-full rounded-[20px] sm:rounded-[30px] overflow-hidden border border-white/5 shadow-md h-[140px] lg:h-[190px]">
-              <img 
+              <Image 
                 src={project.images.col1_img1} 
                 alt={`${project.name} preview 1`}
-                className="w-full h-full object-cover filter brightness-[0.8]"
+                fill
+                sizes="(max-width: 768px) 100vw, 400px"
+                className="object-cover filter brightness-[0.8]"
               />
             </div>
             
             <div className="relative w-full rounded-[20px] sm:rounded-[30px] overflow-hidden border border-white/5 shadow-md h-[180px] lg:h-[250px]">
-              <img 
+              <Image 
                 src={project.images.col1_img2} 
                 alt={`${project.name} preview 2`}
-                className="w-full h-full object-cover filter brightness-[0.8]"
+                fill
+                sizes="(max-width: 768px) 100vw, 400px"
+                className="object-cover filter brightness-[0.8]"
               />
             </div>
           </div>
 
           {/* Right Column (60% width on desktop, 100% on mobile): 1 tall image */}
           <div className="col-span-1 md:col-span-6 relative rounded-[20px] sm:rounded-[30px] overflow-hidden border border-white/5 shadow-md min-h-[180px] sm:min-h-[220px] md:min-h-0 aspect-[16/10] md:aspect-auto">
-            <img 
+            <Image 
               src={project.images.col2_img} 
               alt={`${project.name} main cover`}
-              className="md:absolute md:inset-0 w-full h-full object-cover filter brightness-[0.8]"
+              fill
+              sizes="(max-width: 768px) 100vw, 600px"
+              className="object-cover filter brightness-[0.8]"
             />
           </div>
         </div>

@@ -1,6 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'pub-fae002ea80ad4682b9a9920a6ba1bcd3.r2.dev',
+      },
+    ],
+    minimumCacheTTL: 31536000,
+    formats: ['image/webp', 'image/avif'],
+  },
   async rewrites() {
     return [
       {
