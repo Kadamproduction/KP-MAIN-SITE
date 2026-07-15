@@ -12,8 +12,12 @@ export async function POST(request: Request) {
     const settings = await vercelDb.getSettings();
     const credentials = await vercelDb.getCredentials();
 
-    // Verify if email matches admin contact email or admin username (in case username is set as email)
-    const isEmailMatch = email.toLowerCase() === settings.email.toLowerCase() || email.toLowerCase() === credentials.username.toLowerCase();
+    // Verify if email matches admin contact email, admin username, or the official admin gmail
+    const isEmailMatch = 
+      email.toLowerCase() === settings.email.toLowerCase() || 
+      email.toLowerCase() === credentials.username.toLowerCase() ||
+      email.toLowerCase() === 'kadamproductionweb@gmail.com' ||
+      email.toLowerCase() === 'kadamproduction123@gmail.com';
 
     if (!isEmailMatch) {
       return NextResponse.json({ error: 'No admin account found with that email address.' }, { status: 404 });
