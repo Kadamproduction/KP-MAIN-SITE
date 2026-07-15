@@ -268,7 +268,7 @@ export default function HomePage() {
     return () => clearInterval(timer);
   }, [isReady, activeVibrantIdx, vibrantsItems.length]);
 
-  // Fetch stage videos from Vercel KV public endpoint on mount
+  // Fetch stage videos and vibrants from Vercel KV public endpoint on mount
   useEffect(() => {
     async function loadKVVideos() {
       try {
@@ -282,8 +282,15 @@ export default function HomePage() {
           }
           setVideoSources(urls);
         }
+        if (data.vibrants && data.vibrants.length > 0) {
+          const mapped = data.vibrants.map((item: any) => ({
+            title: item.title,
+            image: item.image_url
+          }));
+          setVibrantsItems(mapped);
+        }
       } catch (err) {
-        console.error('Failed to load stage videos from KV:', err);
+        console.error('Failed to load stage videos/vibrants from R2:', err);
       }
     }
     loadKVVideos();

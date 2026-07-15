@@ -17,21 +17,19 @@ import {
   AlertCircle, 
   Loader2, 
   CheckCircle, 
-  FileText, 
+  FileImage, 
+  FileVideo, 
   Menu, 
   X,
-  FileImage,
-  FileVideo,
+  Sparkles,
   ExternalLink
 } from 'lucide-react';
 
-// Interfaces for our state elements
 interface DBImage {
   id: string;
   category: string;
   image_url: string;
   order_index: number;
-  // Local flags
   isLocal?: boolean;
   localFile?: File;
 }
@@ -45,18 +43,27 @@ interface DBVideo {
   localFile?: File;
 }
 
-interface SiteSettings {
-  email: string;
-  phone_1: string;
-  phone_2: string;
-}
-
 interface DBServiceImage {
   id: number;
   service_title: string;
   image_url: string;
   isLocal?: boolean;
   localFile?: File;
+}
+
+interface DBVibrant {
+  id: string;
+  title: string;
+  image_url: string;
+  order_index: number;
+  isLocal?: boolean;
+  localFile?: File;
+}
+
+interface SiteSettings {
+  email: string;
+  phone_1: string;
+  phone_2: string;
 }
 
 const CATEGORIES = ['All Events', 'Weddings', 'Festivals', 'Concerts', 'Road Shows'];
@@ -66,26 +73,25 @@ export default function AdminPage() {
   const { user, token, loading: authLoading, logout } = useAuth();
 
   // Navigation tabs state
-  const [activeTab, setActiveTab] = useState<'gallery' | 'videos' | 'services' | 'settings'>('gallery');
+  const [activeTab, setActiveTab] = useState<'gallery' | 'videos' | 'services' | 'vibrants' | 'settings'>('gallery');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Core Data States
   const [images, setImages] = useState<DBImage[]>([]);
   const [videos, setVideos] = useState<DBVideo[]>([]);
   const [serviceImages, setServiceImages] = useState<DBServiceImage[]>([]);
+  const [vibrants, setVibrants] = useState<DBVibrant[]>([]);
   const [settings, setSettings] = useState<SiteSettings>({ email: '', phone_1: '', phone_2: '' });
   
   // Unsaved changes tracking states
   const [initialImages, setInitialImages] = useState<string>('');
   const [initialVideos, setInitialVideos] = useState<string>('');
   const [initialServiceImages, setInitialServiceImages] = useState<string>('');
-  const [initialSettings, setInitialSettings] = useState<string>('');
+  const [initialVibrants, setInitialVibrants] = useState<string>('');
+  const [settingsSnapshot, setSettingsSnapshot] = useState<string>('');
   
-  // Items marked for deletion (to be removed from Vercel Blob on save)
-  const [deletedImageUrls, setDeletedImageUrls] = useState<string[]>([]);
-  const [deletedImageIds, setDeletedImageIds] = useState<string[]>([]);
-  const [deletedVideoUrls, setDeletedVideoUrls] = useState<string[]>([]);
-  const [deletedVideoIds, setDeletedVideoIds] = useState<string[]>([]);
+  // Items marked for deletion (to be removed from R2 on save)
+  const [deletedUrls, setDeletedUrls] = useState<string[]>([]);
 
   // UI state overlays
   const [loading, setLoading] = useState(true);
@@ -102,7 +108,10 @@ export default function AdminPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const serviceInputRef = useRef<HTMLInputElement>(null);
+  const vibrantInputRef = useRef<HTMLInputElement>(null);
+  
   const [activeServiceIdToChange, setActiveServiceIdToChange] = useState<number | null>(null);
+  const [activeVibrantIdToChange, setActiveVibrantIdToChange] = useState<string | null>(null);
 
   // Verify auth on mount
   useEffect(() => {
@@ -136,18 +145,19 @@ export default function AdminPage() {
 
       if (data.settings) {
         setSettings(data.settings);
-        setInitialSettings(JSON.stringify(data.settings));
+        setSettingsSnapshot(JSON.stringify(data.settings));
       }
 
       const loadedServices = data.services || [];
       setServiceImages(loadedServices);
       setInitialServiceImages(JSON.stringify(loadedServices));
 
-      // Reset deletions tracking queues
-      setDeletedImageUrls([]);
-      setDeletedImageIds([]);
-      setDeletedVideoUrls([]);
-      setDeletedVideoIds([]);
+      const loadedVibrants = data.vibrants || [];
+      setVibrants(loadedVibrants);
+      setInitialVibrants(JSON.stringify(loadedVibrants));
+
+      // Reset deletions tracking queue
+      setDeletedUrls([]);
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to fetch settings data.');
     } finally {
@@ -157,10 +167,8 @@ export default function AdminPage() {
 
   // Helper to determine if unsaved changes exist
   const hasChanges = () => {
-    // Check settings difference
-    if (JSON.stringify(settings) !== initialSettings) return true;
+    if (JSON.stringify(settings) !== settingsSnapshot) return true;
     
-    // Check images difference (including count, order, category, or local staging additions)
     const currentImagesSerialized = JSON.stringify(images.map(img => ({
       id: img.id,
       category: img.category,
@@ -175,7 +183,6 @@ export default function AdminPage() {
     })));
     if (currentImagesSerialized !== cleanInitialImages) return true;
 
-    // Check videos difference
     const currentVideosSerialized = JSON.stringify(videos.map(vid => ({
       id: vid.id,
       video_url: vid.video_url,
@@ -188,7 +195,6 @@ export default function AdminPage() {
     })));
     if (currentVideosSerialized !== cleanInitialVideos) return true;
 
-    // Check service images difference
     const currentServiceImagesSerialized = JSON.stringify(serviceImages.map(s => ({
       id: s.id,
       image_url: s.image_url
@@ -199,6 +205,20 @@ export default function AdminPage() {
     })));
     if (currentServiceImagesSerialized !== cleanInitialServiceImages) return true;
 
+    const currentVibrantsSerialized = JSON.stringify(vibrants.map(v => ({
+      id: v.id,
+      title: v.title,
+      image_url: v.image_url,
+      order_index: v.order_index
+    })));
+    const cleanInitialVibrants = JSON.stringify(JSON.parse(initialVibrants || '[]').map((v: any) => ({
+      id: v.id,
+      title: v.title,
+      image_url: v.image_url,
+      order_index: v.order_index
+    })));
+    if (currentVibrantsSerialized !== cleanInitialVibrants) return true;
+
     return false;
   };
 
@@ -208,7 +228,6 @@ export default function AdminPage() {
       const reordered = Array.from(images);
       const [removed] = reordered.splice(startIndex, 1);
       reordered.splice(endIndex, 0, removed);
-      
       const updated = reordered.map((img, idx) => ({ ...img, order_index: idx }));
       setImages(updated);
     } else {
@@ -219,9 +238,7 @@ export default function AdminPage() {
       const [removed] = reorderedCat.splice(startIndex, 1);
       reorderedCat.splice(endIndex, 0, removed);
 
-      // Re-index category images order
       const updatedCat = reorderedCat.map((img, idx) => ({ ...img, order_index: idx }));
-
       setImages([...nonCategoryImages, ...updatedCat]);
     }
   };
@@ -230,33 +247,38 @@ export default function AdminPage() {
     const reordered = Array.from(videos);
     const [removed] = reordered.splice(startIndex, 1);
     reordered.splice(endIndex, 0, removed);
-
     const updated = reordered.map((vid, idx) => ({ ...vid, order_index: idx }));
     setVideos(updated);
+  };
+
+  const reorderVibrants = (startIndex: number, endIndex: number) => {
+    const reordered = Array.from(vibrants);
+    const [removed] = reordered.splice(startIndex, 1);
+    reordered.splice(endIndex, 0, removed);
+    const updated = reordered.map((v, idx) => ({ ...v, order_index: idx }));
+    setVibrants(updated);
   };
 
   // Image category upload helpers
   const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
-
     const file = files[0];
     
     if (selectedGalleryCat === 'All Events') {
-      alert('Please select a specific category (e.g. Weddings, Festivals) to upload images.');
+      alert('Please select a specific category (e.g. Weddings) to upload images.');
       return;
     }
 
     const catImages = images.filter(img => img.category === selectedGalleryCat);
-
     if (catImages.length >= 5) {
-      alert(`Upload limit reached! You can only have a maximum of 5 images in the ${selectedGalleryCat} category.`);
+      alert(`Limit reached! Max 5 images in "${selectedGalleryCat}" category.`);
       return;
     }
 
     const localUrl = URL.createObjectURL(file);
     const newImage: DBImage = {
-      id: Math.random().toString(36).substring(7), // Temp ID
+      id: Math.random().toString(36).substring(7),
       category: selectedGalleryCat,
       image_url: localUrl,
       order_index: catImages.length,
@@ -270,17 +292,12 @@ export default function AdminPage() {
   const deleteImageItem = (imgToDelete: DBImage) => {
     if (window.confirm('Are you sure you want to remove this image?')) {
       if (!imgToDelete.isLocal) {
-        // Add to deletion queues
-        setDeletedImageIds([...deletedImageIds, imgToDelete.id]);
-        setDeletedImageUrls([...deletedImageUrls, imgToDelete.image_url]);
+        setDeletedUrls(prev => [...prev, imgToDelete.image_url]);
       }
-      
-      const remainingImages = images.filter(img => img.id !== imgToDelete.id);
-      // Re-index remaining images within this category
-      const nonCat = remainingImages.filter(img => img.category !== imgToDelete.category);
-      const cat = remainingImages.filter(img => img.category === imgToDelete.category)
-                                   .map((img, idx) => ({ ...img, order_index: idx }));
-      
+      const remaining = images.filter(img => img.id !== imgToDelete.id);
+      const nonCat = remaining.filter(img => img.category !== imgToDelete.category);
+      const cat = remaining.filter(img => img.category === imgToDelete.category)
+                           .map((img, idx) => ({ ...img, order_index: idx }));
       setImages([...nonCat, ...cat]);
     }
   };
@@ -289,16 +306,16 @@ export default function AdminPage() {
   const handleVideoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
-
     const file = files[0];
+
     if (videos.length >= 6) {
-      alert('Upload limit reached! You can only have a maximum of 6 stage videos total.');
+      alert('Upload limit reached! You can only have a maximum of 6 stage videos.');
       return;
     }
 
     const localUrl = URL.createObjectURL(file);
     const newVideo: DBVideo = {
-      id: Math.random().toString(36).substring(7), // Temp ID
+      id: Math.random().toString(36).substring(7),
       title: file.name,
       video_url: localUrl,
       order_index: videos.length,
@@ -312,25 +329,21 @@ export default function AdminPage() {
   const deleteVideoItem = (vidToDelete: DBVideo) => {
     if (window.confirm('Are you sure you want to remove this video?')) {
       if (!vidToDelete.isLocal) {
-        setDeletedVideoIds([...deletedVideoIds, vidToDelete.id]);
-        setDeletedVideoUrls([...deletedVideoUrls, vidToDelete.video_url]);
+        setDeletedUrls(prev => [...prev, vidToDelete.video_url]);
       }
-
-      const remainingVideos = videos.filter(vid => vid.id !== vidToDelete.id)
-                                    .map((vid, idx) => ({ ...vid, order_index: idx }));
-      setVideos(remainingVideos);
+      const remaining = videos.filter(vid => vid.id !== vidToDelete.id)
+                            .map((vid, idx) => ({ ...vid, order_index: idx }));
+      setVideos(remaining);
     }
   };
 
   const handleCategoryChange = (imageToEdit: DBImage, newCategory: string) => {
-    // Check if the target category already has 5 images
     const targetCount = images.filter(img => img.category === newCategory).length;
     if (targetCount >= 5) {
-      alert(`Cannot change category: the target category "${newCategory}" already has the maximum limit of 5 images.`);
+      alert(`Cannot change category: "${newCategory}" already has 5 images.`);
       return;
     }
 
-    // Change category
     setImages(prev => prev.map(img => {
       if (img.id === imageToEdit.id) {
         const targetCatImages = prev.filter(i => i.category === newCategory);
@@ -342,17 +355,14 @@ export default function AdminPage() {
       }
       return img;
     }));
-
-    // Close editing mode
     setEditingImageId(null);
   };
 
+  // Service Image Replacer
   const triggerServiceImageChange = (serviceId: number) => {
     setActiveServiceIdToChange(serviceId);
     serviceInputRef.current?.click();
   };
-
-
 
   const handleServiceImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -362,19 +372,68 @@ export default function AdminPage() {
     const localUrl = URL.createObjectURL(file);
     setServiceImages(prev => prev.map(s => {
       if (s.id === activeServiceIdToChange) {
-        return {
-          ...s,
-          image_url: localUrl,
-          isLocal: true,
-          localFile: file
-        };
+        return { ...s, image_url: localUrl, isLocal: true, localFile: file };
       }
       return s;
     }));
   };
 
-  // Database and Storage save logic orchestrator
-  // Helper to upload files to Vercel Blob via local API route
+  // Vibrants Slide Replacer
+  const triggerVibrantImageChange = (vibrantId: string) => {
+    setActiveVibrantIdToChange(vibrantId);
+    vibrantInputRef.current?.click();
+  };
+
+  const handleVibrantImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0 || activeVibrantIdToChange === null) return;
+    const file = files[0];
+
+    const localUrl = URL.createObjectURL(file);
+    setVibrants(prev => prev.map(v => {
+      if (v.id === activeVibrantIdToChange) {
+        return { ...v, image_url: localUrl, isLocal: true, localFile: file };
+      }
+      return v;
+    }));
+  };
+
+  const handleVibrantTitleChange = (id: string, newTitle: string) => {
+    setVibrants(prev => prev.map(v => {
+      if (v.id === id) {
+        return { ...v, title: newTitle };
+      }
+      return v;
+    }));
+  };
+
+  const handleAddVibrantItem = () => {
+    if (vibrants.length >= 6) {
+      alert('Maximum limit of 6 items reached for Vibrants section!');
+      return;
+    }
+    const tempId = Math.random().toString(36).substring(7);
+    const newVibrant: DBVibrant = {
+      id: tempId,
+      title: 'NEW VIBRANT',
+      image_url: '/images/Untitled-design-20_sm7myc.png',
+      order_index: vibrants.length
+    };
+    setVibrants([...vibrants, newVibrant]);
+  };
+
+  const deleteVibrantItem = (vToDelete: DBVibrant) => {
+    if (window.confirm('Are you sure you want to remove this vibrant slide?')) {
+      if (!vToDelete.isLocal && !vToDelete.image_url.startsWith('/images/')) {
+        setDeletedUrls(prev => [...prev, vToDelete.image_url]);
+      }
+      const remaining = vibrants.filter(v => v.id !== vToDelete.id)
+                            .map((v, idx) => ({ ...v, order_index: idx }));
+      setVibrants(remaining);
+    }
+  };
+
+  // R2 file uploader via local route
   const uploadToBlob = async (file: File): Promise<string> => {
     const cleanFilename = encodeURIComponent(file.name.replace(/\s+/g, '_'));
     const response = await fetch(`/api/upload?filename=${cleanFilename}`, {
@@ -383,13 +442,13 @@ export default function AdminPage() {
     });
     if (!response.ok) {
       const errData = await response.json();
-      throw new Error(errData.error || 'Vercel Blob upload failed.');
+      throw new Error(errData.error || 'Cloudflare R2 upload failed.');
     }
     const data = await response.json();
     return data.url;
   };
 
-  // Database and Storage save logic orchestrator
+  // Database Save
   const handleSaveAllChanges = async () => {
     if (!token) return;
     setShowConfirmModal(false);
@@ -397,7 +456,7 @@ export default function AdminPage() {
     setErrorMsg(null);
 
     try {
-      // 1. Process local image file uploads
+      // 1. Staged gallery uploads
       const processedImages = [];
       for (const img of images) {
         if (img.isLocal && img.localFile) {
@@ -418,7 +477,7 @@ export default function AdminPage() {
         }
       }
 
-      // 2. Process local video file uploads
+      // 2. Staged videos uploads
       const processedVideos = [];
       for (const vid of videos) {
         if (vid.isLocal && vid.localFile) {
@@ -439,7 +498,7 @@ export default function AdminPage() {
         }
       }
 
-      // 3. Process local service image file uploads
+      // 3. Staged services uploads
       const processedServices = [];
       for (const s of serviceImages) {
         if (s.isLocal && s.localFile) {
@@ -449,10 +508,9 @@ export default function AdminPage() {
             service_title: s.service_title,
             image_url: publicUrl
           });
-          // Add old service image to deleted list to free storage space
           const oldItem = JSON.parse(initialServiceImages).find((item: any) => item.id === s.id);
-          if (oldItem && oldItem.image_url) {
-            setDeletedImageUrls(prev => [...prev, oldItem.image_url]);
+          if (oldItem && oldItem.image_url && !oldItem.image_url.startsWith('/images/')) {
+            setDeletedUrls(prev => [...prev, oldItem.image_url]);
           }
         } else {
           processedServices.push({
@@ -463,19 +521,42 @@ export default function AdminPage() {
         }
       }
 
-      // 4. Submit all updates in a single API call to save to Vercel KV
-      const deletedUrls = [...deletedImageUrls, ...deletedVideoUrls];
+      // 4. Staged vibrants uploads
+      const processedVibrants = [];
+      for (const v of vibrants) {
+        if (v.isLocal && v.localFile) {
+          const publicUrl = await uploadToBlob(v.localFile);
+          processedVibrants.push({
+            id: v.id,
+            title: v.title,
+            image_url: publicUrl,
+            order_index: v.order_index
+          });
+          const oldItem = JSON.parse(initialVibrants).find((item: any) => item.id === v.id);
+          if (oldItem && oldItem.image_url && !oldItem.image_url.startsWith('/images/')) {
+            setDeletedUrls(prev => [...prev, oldItem.image_url]);
+          }
+        } else {
+          processedVibrants.push({
+            id: v.id,
+            title: v.title,
+            image_url: v.image_url,
+            order_index: v.order_index
+          });
+        }
+      }
+
+      // Save database and trigger cleanups
       const saveResponse = await fetch('/api/admin/save', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           token,
           settings,
           images: processedImages.map((img, idx) => ({ ...img, order_index: idx })),
           videos: processedVideos.map((vid, idx) => ({ ...vid, order_index: idx })),
           serviceImages: processedServices,
+          vibrants: processedVibrants.map((v, idx) => ({ ...v, order_index: idx })),
           deletedUrls
         })
       });
@@ -485,14 +566,11 @@ export default function AdminPage() {
         throw new Error(errorData.error || 'Failed to save admin configurations.');
       }
 
-      // Refresh page data and update initial references
       await fetchData();
-      
-      // Trigger Success Toast banner
       setShowSuccessToast(true);
       setTimeout(() => setShowSuccessToast(false), 5000);
     } catch (err: any) {
-      setErrorMsg(err.message || 'An error occurred while saving your changes. Please retry.');
+      setErrorMsg(err.message || 'An error occurred while saving your changes.');
     } finally {
       setSaveLoading(false);
     }
@@ -521,7 +599,7 @@ export default function AdminPage() {
           <div>
             <h4 className="font-bold text-sm text-emerald-400">Save Successful!</h4>
             <p className="text-xs text-zinc-300 mt-1 leading-normal">
-              Changes saved successfully! The updates will be live on the website within 5 minutes.
+              Changes successfully saved to Cloudflare R2! Changes are live immediately.
             </p>
           </div>
         </div>
@@ -547,7 +625,7 @@ export default function AdminPage() {
               </button>
               <button
                 onClick={handleSaveAllChanges}
-                className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] text-white font-bold text-sm hover:shadow-[0_0_15px_rgba(139,92,246,0.3)] transition duration-200 cursor-pointer"
+                className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] text-white font-bold text-sm hover:shadow-[0_0_15px_rgba(139,92,246,0.35)] transition duration-200 cursor-pointer"
               >
                 Confirm Save
               </button>
@@ -645,6 +723,22 @@ export default function AdminPage() {
 
             <button
               onClick={() => {
+                setActiveTab('vibrants');
+                setSidebarOpen(false);
+              }}
+              className={`w-full h-12 px-4 rounded-xl flex items-center gap-3 text-sm font-bold tracking-wide transition duration-200 cursor-pointer
+                ${activeTab === 'vibrants' 
+                  ? 'bg-[#8B5CF6]/10 border border-[#8B5CF6]/30 text-white' 
+                  : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent'
+                }
+              `}
+            >
+              <Sparkles className="w-4 h-4" />
+              Vibrants Carousel
+            </button>
+
+            <button
+              onClick={() => {
                 setActiveTab('settings');
                 setSidebarOpen(false);
               }}
@@ -696,17 +790,18 @@ export default function AdminPage() {
               {activeTab === 'gallery' && 'Gallery Management'}
               {activeTab === 'videos' && 'Simple Videos'}
               {activeTab === 'services' && 'Services Images'}
+              {activeTab === 'vibrants' && 'Vibrants Carousel'}
               {activeTab === 'settings' && 'Site Information'}
             </h1>
             <p className="text-xs text-zinc-500 tracking-wider mt-1 uppercase">
               {activeTab === 'gallery' && 'Organize display images and categorize weddings, concerts, and more'}
-              {activeTab === 'videos' && 'Manage looping background videos for home display. Note: Videos should be under 25 seconds and must be in a 9:16 aspect ratio (Instagram Reel/vertical format).'}
+              {activeTab === 'videos' && 'Manage looping background videos for home display (9:16 vertical MP4 format)'}
               {activeTab === 'services' && 'Customize background cover photos for all 9 services page items'}
-              {activeTab === 'settings' && 'Update contact email, primary/secondary phone numbers, and WhatsApp redirection link'}
+              {activeTab === 'vibrants' && 'Manage slides inside the "Choose Our Vibrants" carousel slider on home page'}
+              {activeTab === 'settings' && 'Update contact email, primary/secondary phone numbers, and WhatsApp links'}
             </p>
           </div>
 
-          {/* SMART SAVE ACTION BUTTON (CRITICAL REQUIREMENT) */}
           <div>
             <button
               onClick={() => setShowConfirmModal(true)}
@@ -724,7 +819,6 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Tab content error banners */}
         {errorMsg && (
           <div className="mb-8 flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">
             <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
@@ -735,8 +829,6 @@ export default function AdminPage() {
         {/* -------------------- GALLERY TAB CONTENT -------------------- */}
         {activeTab === 'gallery' && (
           <div className="space-y-6">
-            
-            {/* Category tabs selection */}
             <div className="flex flex-wrap gap-2 p-1 rounded-2xl bg-zinc-950 border border-white/5 w-fit">
               {CATEGORIES.map(cat => (
                 <button
@@ -754,15 +846,12 @@ export default function AdminPage() {
               ))}
             </div>
 
-            {/* Gallery images display grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              
               {categoryImages.map((image, idx) => (
                 <div 
                   key={image.id}
                   className="relative group rounded-3xl overflow-hidden border border-white/10 bg-zinc-950/40 p-3 flex flex-col hover:border-[#8B5CF6]/30 transition duration-300"
                 >
-                  {/* Image container */}
                   <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-black flex items-center justify-center">
                     <img 
                       src={image.image_url} 
@@ -771,11 +860,10 @@ export default function AdminPage() {
                     />
                     <div className="absolute top-3 left-3 px-3 py-1 rounded-xl bg-black/60 border border-white/10 text-[10px] font-bold text-zinc-400 tracking-wider flex items-center gap-1.5 backdrop-blur-md">
                       <span className="text-[#8B5CF6] font-extrabold uppercase">{image.category}</span>
-                      <span className="w-1 h-1 rounded-full bg-zinc-600" />
-                      <span>Idx: {idx}</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
+                      <span>Index: {idx}</span>
                     </div>
 
-                    {/* Local upload indicator badge */}
                     {image.isLocal && (
                       <div className="absolute top-3 right-3 px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[10px] font-bold text-amber-500 tracking-wider flex items-center gap-1.5 backdrop-blur-md">
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
@@ -822,7 +910,6 @@ export default function AdminPage() {
                       )}
                     </div>
 
-                    {/* Reordering Controls (Desktop/Mobile compliant) */}
                     <div className="flex gap-2">
                       <button
                         onClick={() => reorderImages(idx, idx - 1)}
@@ -845,7 +932,6 @@ export default function AdminPage() {
                 </div>
               ))}
 
-              {/* Upload Card Trigger */}
               {selectedGalleryCat !== 'All Events' && categoryImages.length < 5 && (
                 <div 
                   onClick={() => fileInputRef.current?.click()}
@@ -856,12 +942,11 @@ export default function AdminPage() {
                   </div>
                   <div>
                     <span className="text-xs font-bold text-zinc-300 block mb-1">ADD CATEGORY PHOTO</span>
-                    <p className="text-[10px] text-zinc-550 leading-relaxed uppercase">Supports formats (PNG, JPG, WEBP). Max limit 5 files per category.</p>
+                    <p className="text-[10px] text-zinc-550 leading-relaxed uppercase">Supports formats (PNG, JPG, WEBP). Max 5 files per category.</p>
                   </div>
                 </div>
               )}
 
-              {/* All Events Warning Banner */}
               {selectedGalleryCat === 'All Events' && (
                 <div className="rounded-3xl border border-dashed border-white/10 bg-zinc-950/5 flex flex-col items-center justify-center p-8 text-center min-h-[220px]">
                   <p className="text-xs text-zinc-500 leading-relaxed uppercase font-bold">
@@ -871,7 +956,6 @@ export default function AdminPage() {
                 </div>
               )}
 
-              {/* Limit Hit Banner */}
               {selectedGalleryCat !== 'All Events' && categoryImages.length >= 5 && (
                 <div className="rounded-3xl border border-white/5 bg-zinc-950/20 flex flex-col items-center justify-center gap-3 p-8 text-center min-h-[220px] opacity-40">
                   <div className="w-12 h-12 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center text-zinc-650">
@@ -891,7 +975,6 @@ export default function AdminPage() {
                 accept="image/*"
                 className="hidden"
               />
-
             </div>
           </div>
         )}
@@ -910,11 +993,9 @@ export default function AdminPage() {
               <span className="text-sm font-bold text-zinc-400">
                 Videos Counter: <span className="text-white">{videos.length}/6</span>
               </span>
-              <span className="text-[11px] text-zinc-500 italic">Looping background display simple videos</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              
               {videos.map((vid, idx) => (
                 <div 
                   key={vid.id}
@@ -972,7 +1053,6 @@ export default function AdminPage() {
                 </div>
               ))}
 
-              {/* Upload Card Trigger */}
               {videos.length < 6 ? (
                 <div 
                   onClick={() => videoInputRef.current?.click()}
@@ -984,7 +1064,7 @@ export default function AdminPage() {
                   <div>
                     <h4 className="text-xs font-bold text-zinc-300 tracking-wider uppercase mb-1">Add Stage Video</h4>
                     <p className="text-[10px] text-zinc-550 max-w-[200px] leading-relaxed mx-auto">
-                      Supports formats (MP4, loop clips). Max total limit 6 stage videos.
+                      Supports MP4 format. Max total limit 6 videos.
                     </p>
                   </div>
                   <input 
@@ -996,7 +1076,6 @@ export default function AdminPage() {
                   />
                 </div>
               ) : (
-                /* Limit block */
                 <div className="rounded-3xl border border-white/5 bg-zinc-950/20 flex flex-col items-center justify-center gap-3 p-8 text-center min-h-[320px] opacity-40">
                   <div className="w-12 h-12 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center text-zinc-650">
                     <FileVideo className="w-5 h-5" />
@@ -1007,8 +1086,168 @@ export default function AdminPage() {
                   </div>
                 </div>
               )}
-
             </div>
+          </div>
+        )}
+
+        {/* -------------------- SERVICES TAB CONTENT -------------------- */}
+        {activeTab === 'services' && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {serviceImages.map((service) => (
+                <div 
+                  key={service.id}
+                  className="rounded-3xl border border-white/10 bg-zinc-950/40 p-4 flex flex-col hover:border-[#8B5CF6]/30 transition duration-300"
+                >
+                  <div className="relative w-full aspect-[16/11] rounded-2xl overflow-hidden bg-black mb-4">
+                    <img 
+                      src={service.image_url} 
+                      alt={service.service_title} 
+                      className="w-full h-full object-cover" 
+                    />
+                    {service.isLocal && (
+                      <div className="absolute top-3 right-3 px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[10px] font-bold text-amber-500 tracking-wider flex items-center gap-1.5 backdrop-blur-md">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                        Staged
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 flex flex-col justify-between">
+                    <div>
+                      <h4 className="font-bold text-sm tracking-wide text-white uppercase mb-1">
+                        {service.service_title}
+                      </h4>
+                      <p className="text-[10px] text-zinc-550 uppercase tracking-widest font-bold font-space-grotesk">Service Cover image</p>
+                    </div>
+                    <button
+                      onClick={() => triggerServiceImageChange(service.id)}
+                      className="mt-6 w-full h-11 rounded-xl border border-white/10 hover:bg-white/5 hover:border-white/20 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition"
+                    >
+                      Replace Image
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <input 
+              type="file"
+              ref={serviceInputRef}
+              onChange={handleServiceImageChange}
+              accept="image/*"
+              className="hidden"
+            />
+          </div>
+        )}
+
+        {/* -------------------- VIBRANTS CAROUSEL TAB CONTENT -------------------- */}
+        {activeTab === 'vibrants' && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between border-b border-white/5 pb-4">
+              <span className="text-sm font-bold text-zinc-400">
+                Total Slides: <span className="text-white">{vibrants.length}/6</span>
+              </span>
+              <button
+                onClick={handleAddVibrantItem}
+                disabled={vibrants.length >= 6}
+                className={`h-10 px-4 rounded-xl text-xs font-bold tracking-wide flex items-center gap-1.5 transition duration-200 cursor-pointer
+                  ${vibrants.length < 6 
+                    ? 'bg-zinc-800 hover:bg-zinc-700 text-white' 
+                    : 'bg-zinc-900 text-zinc-650 cursor-not-allowed'
+                  }
+                `}
+              >
+                <Plus className="w-4 h-4" />
+                Add New Slide
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {vibrants.map((v, idx) => (
+                <div 
+                  key={v.id}
+                  className="rounded-3xl border border-white/10 bg-zinc-950/40 p-4 flex flex-col hover:border-[#8B5CF6]/30 transition duration-300"
+                >
+                  <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-black mb-4">
+                    <img 
+                      src={v.image_url} 
+                      alt={v.title} 
+                      className="w-full h-full object-cover" 
+                    />
+                    <div className="absolute top-3 left-3 px-3 py-1 rounded-xl bg-black/60 border border-white/10 text-[10px] font-bold text-zinc-450 backdrop-blur-md">
+                      Index: {idx}
+                    </div>
+                    {v.isLocal && (
+                      <div className="absolute top-3 right-3 px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[10px] font-bold text-amber-500 tracking-wider flex items-center gap-1.5 backdrop-blur-md">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                        Staged
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="space-y-4 flex-1 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-[10px] font-bold tracking-wider text-zinc-550 uppercase mb-1.5">
+                          Slide Title Text
+                        </label>
+                        <input
+                          type="text"
+                          value={v.title}
+                          onChange={(e) => handleVibrantTitleChange(v.id, e.target.value.toUpperCase())}
+                          className="w-full h-10 px-3 rounded-lg border border-white/10 bg-black/40 text-xs font-bold text-white focus:border-[#8B5CF6] focus:outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => deleteVibrantItem(v)}
+                          className="w-10 h-10 rounded-xl border border-white/5 hover:border-red-500/20 hover:bg-red-500/10 flex items-center justify-center text-zinc-550 hover:text-red-400 transition cursor-pointer"
+                          title="Remove slide"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => triggerVibrantImageChange(v.id)}
+                          className="px-3 h-10 rounded-xl bg-white/5 border border-white/10 text-[10px] font-bold text-zinc-400 hover:text-white transition duration-200 cursor-pointer"
+                        >
+                          Replace Photo
+                        </button>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => reorderVibrants(idx, idx - 1)}
+                          disabled={idx === 0}
+                          className="w-10 h-10 rounded-xl border border-white/5 hover:bg-white/5 flex items-center justify-center text-zinc-405 hover:text-white transition disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer"
+                          title="Move Up"
+                        >
+                          <ArrowUp className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => reorderVibrants(idx, idx + 1)}
+                          disabled={idx === vibrants.length - 1}
+                          className="w-10 h-10 rounded-xl border border-white/5 hover:bg-white/5 flex items-center justify-center text-zinc-405 hover:text-white transition disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer"
+                          title="Move Down"
+                        >
+                          <ArrowDown className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <input 
+              type="file"
+              ref={vibrantInputRef}
+              onChange={handleVibrantImageChange}
+              accept="image/*"
+              className="hidden"
+            />
           </div>
         )}
 
@@ -1060,56 +1299,6 @@ export default function AdminPage() {
                 />
               </div>
             </div>
-          </div>
-        )}
-
-        {/* -------------------- SERVICES TAB CONTENT -------------------- */}
-        {activeTab === 'services' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {serviceImages.map((service) => (
-                <div 
-                  key={service.id}
-                  className="rounded-3xl border border-white/10 bg-zinc-950/40 p-4 flex flex-col hover:border-[#8B5CF6]/30 transition duration-300"
-                >
-                  <div className="relative w-full aspect-[16/11] rounded-2xl overflow-hidden bg-black mb-4">
-                    <img 
-                      src={service.image_url} 
-                      alt={service.service_title} 
-                      className="w-full h-full object-cover" 
-                    />
-                    {service.isLocal && (
-                      <div className="absolute top-3 right-3 px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[10px] font-bold text-amber-500 tracking-wider flex items-center gap-1.5 backdrop-blur-md">
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                        Staged
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1 flex flex-col justify-between">
-                    <div>
-                      <h4 className="font-bold text-sm tracking-wide text-white uppercase mb-1">
-                        {service.service_title}
-                      </h4>
-                      <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Service Cover image</p>
-                    </div>
-                    <button
-                      onClick={() => triggerServiceImageChange(service.id)}
-                      className="mt-6 w-full h-11 rounded-xl border border-white/10 hover:bg-white/5 hover:border-white/20 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition"
-                    >
-                      Replace Image
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <input 
-              type="file"
-              ref={serviceInputRef}
-              onChange={handleServiceImageChange}
-              accept="image/*"
-              className="hidden"
-            />
           </div>
         )}
 

@@ -28,6 +28,7 @@ export async function POST(request: Request) {
       images, 
       videos, 
       serviceImages, 
+      vibrants,
       adminCredentials,
       deletedUrls 
     } = await request.json();
@@ -57,6 +58,9 @@ export async function POST(request: Request) {
     }
     if (serviceImages) {
       await vercelDb.setServices(serviceImages);
+    }
+    if (vibrants) {
+      await vercelDb.setVibrants(vibrants);
     }
     if (adminCredentials) {
       await vercelDb.setCredentials(adminCredentials);
