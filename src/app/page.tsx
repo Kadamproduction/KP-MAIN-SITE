@@ -339,7 +339,7 @@ export default function HomePage() {
           {/* Layer 1: Optimized Full Screen Background Video (Cloudinary vertical source) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
             <video 
-              src="/videos/download_2_sispkn.mp4"
+              src="/videos/upscaled-video_v3jizt.mp4"
               autoPlay 
               muted 
               loop 
