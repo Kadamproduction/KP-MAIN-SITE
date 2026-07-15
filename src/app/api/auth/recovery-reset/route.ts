@@ -11,9 +11,16 @@ export async function POST(request: Request) {
 
     const credentials = await vercelDb.getCredentials();
 
-    const dbRecoveryKey = credentials.recoveryKey || 'KP-777-RESET';
+    // Support multiple keys (db array recoveryKeys or single fallback list)
+    const dbRecoveryKeys: string[] = credentials.recoveryKeys || [
+      credentials.recoveryKey || 'KP-777-RESET',
+      'KP-888-RESET',
+      'KP-999-RESET'
+    ];
 
-    if (recoveryKey.trim() !== dbRecoveryKey.trim()) {
+    const isMatch = dbRecoveryKeys.some((k: string) => k.trim().toLowerCase() === recoveryKey.trim().toLowerCase());
+
+    if (!isMatch) {
       return NextResponse.json({ error: 'Invalid Master Recovery Key.' }, { status: 401 });
     }
 

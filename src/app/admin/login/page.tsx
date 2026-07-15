@@ -229,7 +229,7 @@ export default function AdminLoginPage() {
                     <input 
                       type="text" 
                       required 
-                      placeholder="KP-777-RESET" 
+                      placeholder="" 
                       value={recoveryKey} 
                       onChange={(e) => setRecoveryKey(e.target.value)} 
                       className="w-full h-12 pl-11 pr-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition"
