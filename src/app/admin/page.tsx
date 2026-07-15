@@ -22,7 +22,8 @@ import {
   Menu, 
   X,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  ArrowRight
 } from 'lucide-react';
 
 interface DBImage {
@@ -93,7 +94,17 @@ export default function AdminPage() {
   const [initialAdminPassword, setInitialAdminPassword] = useState('');
   const [initialAdminRecoveryKey, setInitialAdminRecoveryKey] = useState('KP-777-RESET');
   const [resetCount, setResetCount] = useState(0);
+  const [resetPeriodStart, setResetPeriodStart] = useState<number | null>(null);
   const [showPass, setShowPass] = useState(false);
+
+  // Credentials change modal states
+  const [showCredsModal, setShowCredsModal] = useState(false);
+  const [credsRecoveryKey, setCredsRecoveryKey] = useState('');
+  const [newUsername, setNewUsername] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [credsChangeLoading, setCredsChangeLoading] = useState(false);
+  const [credsChangeError, setCredsChangeError] = useState<string | null>(null);
   
   // Unsaved changes tracking states
   const [initialImages, setInitialImages] = useState<string>('');
@@ -176,6 +187,7 @@ export default function AdminPage() {
         setInitialAdminPassword(credData.password);
         setInitialAdminRecoveryKey(credData.recoveryKey || 'KP-777-RESET');
         setResetCount(credData.resetCount || 0);
+        setResetPeriodStart(credData.resetPeriodStart || null);
       }
 
       const loadedServices = data.services || [];
@@ -592,7 +604,8 @@ export default function AdminPage() {
             username: adminUsername,
             passwordHash: adminPassword,
             resetCount: resetCount,
-            recoveryKey: adminRecoveryKey
+            recoveryKey: adminRecoveryKey,
+            resetPeriodStart: resetPeriodStart
           },
           deletedUrls
         })
@@ -616,30 +629,40 @@ export default function AdminPage() {
     }
   };
 
-  const handleResetViaEmail = async () => {
-    if (!settings.email) {
-      alert('Please specify a contact email address first before requesting a reset email.');
+  const handleChangeCredentials = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newPassword !== confirmNewPassword) {
+      setCredsChangeError('New passwords do not match.');
       return;
     }
-    if (!window.confirm('Send a password recovery reset link to ' + settings.email + '?')) return;
-    setResetEmailSending(true);
-    setErrorMsg(null);
+    setCredsChangeLoading(true);
+    setCredsChangeError(null);
     try {
-      const res = await fetch('/api/auth/reset-request', {
+      const res = await fetch('/api/admin/change-credentials', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: settings.email })
+        body: JSON.stringify({
+          token,
+          recoveryKey: credsRecoveryKey,
+          newUsername,
+          newPassword
+        })
       });
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to trigger reset link.');
+        throw new Error(data.error || 'Failed to update credentials.');
       }
-      alert('Success! Recovery reset link has been dispatched to ' + settings.email);
+      alert('Success! Credentials updated successfully.');
+      setShowCredsModal(false);
+      setCredsRecoveryKey('');
+      setNewUsername('');
+      setNewPassword('');
+      setConfirmNewPassword('');
       await fetchData();
     } catch (err: any) {
-      setErrorMsg(err.message);
+      setCredsChangeError(err.message);
     } finally {
-      setResetEmailSending(false);
+      setCredsChangeLoading(false);
     }
   };
 
@@ -1381,39 +1404,45 @@ export default function AdminPage() {
 
               {/* ADMIN CREDENTIALS SECTION */}
               <div className="pt-6 border-t border-white/10 space-y-6">
-                <h4 className="font-bold text-sm text-white uppercase tracking-wider">Credentials</h4>
+                <h4 className="font-bold text-sm text-white uppercase tracking-wider">Console Credentials</h4>
                 
-                <div>
-                  <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">
-                    Username
-                  </label>
-                  <input 
-                    type="text"
-                    value={adminUsername}
-                    onChange={(e) => setAdminUsername(e.target.value)}
-                    className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block mb-1">Username</span>
+                    <span className="text-sm text-white font-medium block">{adminUsername}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block mb-1">Password</span>
+                    <span className="text-sm text-white font-medium block">••••••••</span>
+                  </div>
                 </div>
 
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase">
-                      Password
-                    </label>
+                <div className="rounded-2xl border border-white/5 bg-black/20 p-4 space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <span className="text-[10px] font-bold text-zinc-550 uppercase tracking-widest block">Monthly Changes</span>
+                      <span className="text-xs text-zinc-350 mt-1 block">Resets used: <strong>{resetCount}/3</strong></span>
+                      {resetPeriodStart && (
+                        <span className="text-[9px] text-zinc-500 block mt-1">
+                          Next reset: <strong>{new Date(resetPeriodStart + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}</strong>
+                        </span>
+                      )}
+                    </div>
                     <button
                       type="button"
-                      onClick={() => setShowPass(!showPass)}
-                      className="text-[10px] font-bold text-zinc-550 hover:text-white transition duration-200 uppercase tracking-widest"
+                      onClick={() => {
+                        setShowCredsModal(true);
+                        setCredsChangeError(null);
+                        setCredsRecoveryKey('');
+                        setNewUsername('');
+                        setNewPassword('');
+                        setConfirmNewPassword('');
+                      }}
+                      className="h-10 px-5 rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/30 text-xs font-bold text-[#8B5CF6] hover:bg-[#8B5CF6]/20 transition duration-200 cursor-pointer"
                     >
-                      {showPass ? 'Hide Password' : 'Show Password'}
+                      Change Username & Password
                     </button>
                   </div>
-                  <input 
-                    type={showPass ? 'text' : 'password'}
-                    value={adminPassword}
-                    onChange={(e) => setAdminPassword(e.target.value)}
-                    className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
-                  />
                 </div>
               </div>
             </div>
@@ -1421,6 +1450,98 @@ export default function AdminPage() {
         )}
 
       </main>
+
+      {/* CREDENTIALS UPDATE MODAL */}
+      {showCredsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm select-none">
+          <div className="relative w-full max-w-[420px] rounded-3xl border border-white/10 bg-zinc-950 p-6 md:p-8 shadow-2xl space-y-6">
+            <button 
+              type="button"
+              onClick={() => setShowCredsModal(false)}
+              className="absolute right-6 top-6 w-8 h-8 rounded-full border border-white/5 hover:border-white/20 bg-black/20 flex items-center justify-center hover:bg-zinc-900 transition-colors cursor-pointer"
+            >
+              <X className="w-4 h-4 text-zinc-400 hover:text-white" />
+            </button>
+
+            <div className="space-y-2 pr-8">
+              <h3 className="text-lg font-bold text-white uppercase tracking-wider">Change Credentials</h3>
+              <p className="text-xs text-zinc-450 leading-relaxed">Authorize using your Master Recovery Key to specify a new admin username and password.</p>
+            </div>
+
+            {credsChangeError && (
+              <div className="flex items-start gap-2.5 rounded-xl border border-red-500/20 bg-red-500/10 p-3.5 text-xs text-red-400">
+                <AlertCircle className="w-4.5 h-4.5 flex-shrink-0 mt-0.5" />
+                <p className="leading-relaxed">{credsChangeError}</p>
+              </div>
+            )}
+
+            <form onSubmit={handleChangeCredentials} className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">Master Recovery Key</label>
+                <input 
+                  type="text" 
+                  required 
+                  placeholder="KP-777-RESET" 
+                  value={credsRecoveryKey} 
+                  onChange={(e) => setCredsRecoveryKey(e.target.value)} 
+                  className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition duration-200"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">New Username</label>
+                <input 
+                  type="text" 
+                  required 
+                  placeholder="admin" 
+                  value={newUsername} 
+                  onChange={(e) => setNewUsername(e.target.value)} 
+                  className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition duration-200"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">New Password</label>
+                <input 
+                  type="password" 
+                  required 
+                  placeholder="••••••••" 
+                  value={newPassword} 
+                  onChange={(e) => setNewPassword(e.target.value)} 
+                  className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition duration-200"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">Confirm Password</label>
+                <input 
+                  type="password" 
+                  required 
+                  placeholder="••••••••" 
+                  value={confirmNewPassword} 
+                  onChange={(e) => setConfirmNewPassword(e.target.value)} 
+                  className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition duration-200"
+                />
+              </div>
+
+              <button 
+                type="submit" 
+                disabled={credsChangeLoading}
+                className="w-full h-12 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] text-xs font-bold text-white flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] transition duration-250 cursor-pointer disabled:opacity-40"
+              >
+                {credsChangeLoading ? (
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <>
+                    Save New Logins
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

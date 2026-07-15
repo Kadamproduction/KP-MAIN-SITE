@@ -22,7 +22,9 @@ export async function POST(request: Request) {
     return NextResponse.json({
       username: credentials.username,
       password: credentials.passwordHash,
-      recoveryKey: credentials.recoveryKey || 'KP-777-RESET'
+      recoveryKey: credentials.recoveryKey || 'KP-777-RESET',
+      resetCount: credentials.resetCount || 0,
+      resetPeriodStart: credentials.resetPeriodStart || null
     });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

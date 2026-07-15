@@ -43,6 +43,7 @@ export interface AdminCredentials {
   resetTokenExpiry?: number | null;
   resetCount?: number;
   recoveryKey?: string;
+  resetPeriodStart?: number | null;
 }
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -59,7 +60,8 @@ const DEFAULT_CREDENTIALS: AdminCredentials = {
   resetToken: null,
   resetTokenExpiry: null,
   resetCount: 0,
-  recoveryKey: 'KP-777-RESET'
+  recoveryKey: 'KP-777-RESET',
+  resetPeriodStart: null
 };
 
 const DEFAULT_IMAGES: DBImage[] = [
