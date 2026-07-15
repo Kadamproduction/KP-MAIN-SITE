@@ -63,7 +63,7 @@ const DEFAULT_CREDENTIALS: AdminCredentials = {
   resetCount: 0,
   recoveryKey: 'KP-777-RESET',
   resetPeriodStart: null,
-  recoveryKeys: ['KP-777-RESET', 'KP-888-RESET', 'KP-999-RESET']
+  recoveryKeys: ['KP-777-RESET', 'KP-KADAM-RECOVER-99', 'KP-SECURE-ADMIN-77']
 };
 
 const DEFAULT_IMAGES: DBImage[] = [

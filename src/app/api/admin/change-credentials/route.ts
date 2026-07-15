@@ -28,8 +28,8 @@ export async function POST(request: Request) {
     // Support multiple keys (db array recoveryKeys or single fallback list)
     const dbRecoveryKeys: string[] = credentials.recoveryKeys || [
       credentials.recoveryKey || 'KP-777-RESET',
-      'KP-888-RESET',
-      'KP-999-RESET'
+      'KP-KADAM-RECOVER-99',
+      'KP-SECURE-ADMIN-77'
     ];
 
     const isMatch = dbRecoveryKeys.some((k: string) => k.trim().toLowerCase() === recoveryKey.trim().toLowerCase());
