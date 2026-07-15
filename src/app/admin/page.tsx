@@ -65,6 +65,7 @@ interface SiteSettings {
   phone_1: string;
   phone_2: string;
   address: string;
+  smtp_user?: string;
 }
 
 const CATEGORIES = ['All Events', 'Weddings', 'Festivals', 'Concerts', 'Road Shows'];
@@ -82,7 +83,7 @@ export default function AdminPage() {
   const [videos, setVideos] = useState<DBVideo[]>([]);
   const [serviceImages, setServiceImages] = useState<DBServiceImage[]>([]);
   const [vibrants, setVibrants] = useState<DBVibrant[]>([]);
-  const [settings, setSettings] = useState<SiteSettings>({ email: '', phone_1: '', phone_2: '', address: '' });
+  const [settings, setSettings] = useState<SiteSettings>({ email: '', phone_1: '', phone_2: '', address: '', smtp_user: '' });
   
   // Admin credentials states
   const [adminUsername, setAdminUsername] = useState('admin');
@@ -1369,6 +1370,19 @@ export default function AdminPage() {
                   value={settings.address || ''}
                   onChange={(e) => setSettings({ ...settings, address: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200 resize-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">
+                  SMTP Username (Brevo Login Email)
+                </label>
+                <input 
+                  type="text"
+                  placeholder="kadamproductionweb@gmail.com"
+                  value={settings.smtp_user || ''}
+                  onChange={(e) => setSettings({ ...settings, smtp_user: e.target.value })}
+                  className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
                 />
               </div>
 

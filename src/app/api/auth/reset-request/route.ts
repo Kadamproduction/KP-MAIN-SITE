@@ -56,20 +56,22 @@ export async function POST(request: Request) {
       });
     }
 
+    const smtpUser = settings.smtp_user || 'kadamproductionweb@gmail.com';
+
     // Create SMTP transport using Brevo credentials
     const transporter = nodemailer.createTransport({
       host: 'smtp-relay.brevo.com',
       port: 587,
       secure: false, // true for 465, false for other ports
       auth: {
-        user: 'kadamproductionweb@gmail.com', // Brevo SMTP Username (usually the primary account email)
+        user: smtpUser, // Brevo SMTP Username (usually the primary account email)
         pass: brevoApiKey // Brevo SMTP Password (the xsmtpsib- key)
       }
     });
 
     try {
       await transporter.sendMail({
-        from: '"Kadam Production Console" <kadamproductionweb@gmail.com>',
+        from: `"Kadam Production Console" <${smtpUser}>`,
         to: email,
         subject: 'Admin Password Reset Request',
         html: `

@@ -6,6 +6,7 @@ export interface SiteSettings {
   phone_1: string;
   phone_2: string;
   address: string;
+  smtp_user?: string;
 }
 
 export interface DBImage {
@@ -47,7 +48,8 @@ const DEFAULT_SETTINGS: SiteSettings = {
   email: 'kadamproduction123@gmail.com',
   phone_1: '9537330003',
   phone_2: '8866655651',
-  address: 'Gaurav Path Road, Palanpur, Surat, Gujarat'
+  address: 'Gaurav Path Road, Palanpur, Surat, Gujarat',
+  smtp_user: 'kadamproductionweb@gmail.com'
 };
 
 const DEFAULT_CREDENTIALS: AdminCredentials = {
