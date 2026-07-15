@@ -42,6 +42,7 @@ export interface AdminCredentials {
   resetToken?: string | null;
   resetTokenExpiry?: number | null;
   resetCount?: number;
+  recoveryKey?: string;
 }
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -57,7 +58,8 @@ const DEFAULT_CREDENTIALS: AdminCredentials = {
   passwordHash: 'TemporaryPassword123!',
   resetToken: null,
   resetTokenExpiry: null,
-  resetCount: 0
+  resetCount: 0,
+  recoveryKey: 'KP-777-RESET'
 };
 
 const DEFAULT_IMAGES: DBImage[] = [

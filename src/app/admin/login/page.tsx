@@ -17,7 +17,9 @@ export default function AdminLoginPage() {
 
   // Forgot password modal states
   const [showForgotModal, setShowForgotModal] = useState(false);
-  const [forgotEmail, setForgotEmail] = useState('');
+  const [recoveryKey, setRecoveryKey] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [forgotLoading, setForgotLoading] = useState(false);
   const [forgotSuccess, setForgotSuccess] = useState(false);
   const [forgotError, setForgotError] = useState<string | null>(null);
@@ -57,19 +59,23 @@ export default function AdminLoginPage() {
 
   const handleForgotPasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      setForgotError('Passwords do not match.');
+      return;
+    }
     setForgotLoading(true);
     setForgotError(null);
     setForgotSuccess(false);
 
     try {
-      const res = await fetch('/api/auth/reset-request', {
+      const res = await fetch('/api/auth/recovery-reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: forgotEmail })
+        body: JSON.stringify({ recoveryKey, newPassword })
       });
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to send recovery link.');
+        throw new Error(data.error || 'Failed to reset password.');
       }
       setForgotSuccess(true);
     } catch (err: any) {
@@ -141,7 +147,9 @@ export default function AdminLoginPage() {
                   setShowForgotModal(true);
                   setForgotSuccess(false);
                   setForgotError(null);
-                  setForgotEmail('');
+                  setRecoveryKey('');
+                  setNewPassword('');
+                  setConfirmPassword('');
                 }}
                 className="text-[10px] font-bold text-zinc-400 hover:text-white transition duration-200 cursor-pointer uppercase tracking-widest"
               >
@@ -191,7 +199,7 @@ export default function AdminLoginPage() {
 
             <div className="space-y-2 pr-8">
               <h3 className="text-lg font-bold text-white uppercase tracking-wider">Reset Console Password</h3>
-              <p className="text-xs text-zinc-450">We will send a temporary password recovery link to your registered contact email address.</p>
+              <p className="text-xs text-zinc-450">Enter your Master Recovery Key to instantly configure a new password for the console.</p>
             </div>
 
             {forgotError && (
@@ -204,8 +212,8 @@ export default function AdminLoginPage() {
             {forgotSuccess ? (
               <div className="rounded-xl border border-green-500/20 bg-green-500/10 p-6 text-center space-y-3">
                 <CheckCircle className="w-10 h-10 text-green-500 mx-auto" />
-                <h4 className="font-bold text-sm text-white">Reset Link Dispatched</h4>
-                <p className="text-xs text-zinc-450 leading-relaxed">A secure recovery link was sent to your mailbox. Please check your inbox and junk/spam folders.</p>
+                <h4 className="font-bold text-sm text-white">Password Reset Successful</h4>
+                <p className="text-xs text-zinc-450 leading-relaxed">Your admin password has been updated. You can now close this modal and log in with your new password.</p>
                 <button 
                   onClick={() => setShowForgotModal(false)}
                   className="mt-4 w-full h-10 rounded-xl bg-zinc-800 text-xs font-bold text-white hover:bg-zinc-700 transition"
@@ -216,17 +224,47 @@ export default function AdminLoginPage() {
             ) : (
               <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">Registered Email Address</label>
+                  <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">Master Recovery Key</label>
                   <div className="relative">
                     <input 
-                      type="email" 
+                      type="text" 
                       required 
-                      placeholder="kadamproduction123@gmail.com" 
-                      value={forgotEmail} 
-                      onChange={(e) => setForgotEmail(e.target.value)} 
+                      placeholder="KP-777-RESET" 
+                      value={recoveryKey} 
+                      onChange={(e) => setRecoveryKey(e.target.value)} 
                       className="w-full h-12 pl-11 pr-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition"
                     />
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-550" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-550" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">New Password</label>
+                  <div className="relative">
+                    <input 
+                      type="password" 
+                      required 
+                      placeholder="••••••••" 
+                      value={newPassword} 
+                      onChange={(e) => setNewPassword(e.target.value)} 
+                      className="w-full h-12 pl-11 pr-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition"
+                    />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-550" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">Confirm Password</label>
+                  <div className="relative">
+                    <input 
+                      type="password" 
+                      required 
+                      placeholder="••••••••" 
+                      value={confirmPassword} 
+                      onChange={(e) => setConfirmPassword(e.target.value)} 
+                      className="w-full h-12 pl-11 pr-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition"
+                    />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-550" />
                   </div>
                 </div>
 
@@ -239,7 +277,7 @@ export default function AdminLoginPage() {
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
                     <>
-                      Request Recovery Link
+                      Reset Password Now
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}

@@ -88,8 +88,10 @@ export default function AdminPage() {
   // Admin credentials states
   const [adminUsername, setAdminUsername] = useState('admin');
   const [adminPassword, setAdminPassword] = useState('');
+  const [adminRecoveryKey, setAdminRecoveryKey] = useState('KP-777-RESET');
   const [initialAdminUsername, setInitialAdminUsername] = useState('admin');
   const [initialAdminPassword, setInitialAdminPassword] = useState('');
+  const [initialAdminRecoveryKey, setInitialAdminRecoveryKey] = useState('KP-777-RESET');
   const [resetCount, setResetCount] = useState(0);
   const [showPass, setShowPass] = useState(false);
   
@@ -169,8 +171,10 @@ export default function AdminPage() {
         const credData = await credRes.json();
         setAdminUsername(credData.username);
         setAdminPassword(credData.password);
+        setAdminRecoveryKey(credData.recoveryKey || 'KP-777-RESET');
         setInitialAdminUsername(credData.username);
         setInitialAdminPassword(credData.password);
+        setInitialAdminRecoveryKey(credData.recoveryKey || 'KP-777-RESET');
         setResetCount(credData.resetCount || 0);
       }
 
@@ -194,7 +198,7 @@ export default function AdminPage() {
   // Helper to determine if unsaved changes exist
   const hasChanges = () => {
     if (JSON.stringify(settings) !== settingsSnapshot) return true;
-    if (adminUsername !== initialAdminUsername || adminPassword !== initialAdminPassword) return true;
+    if (adminUsername !== initialAdminUsername || adminPassword !== initialAdminPassword || adminRecoveryKey !== initialAdminRecoveryKey) return true;
     
     const currentImagesSerialized = JSON.stringify(images.map(img => ({
       id: img.id,
@@ -587,7 +591,8 @@ export default function AdminPage() {
           adminCredentials: {
             username: adminUsername,
             passwordHash: adminPassword,
-            resetCount: resetCount
+            resetCount: resetCount,
+            recoveryKey: adminRecoveryKey
           },
           deletedUrls
         })
@@ -601,6 +606,7 @@ export default function AdminPage() {
       await fetchData();
       setInitialAdminUsername(adminUsername);
       setInitialAdminPassword(adminPassword);
+      setInitialAdminRecoveryKey(adminRecoveryKey);
       setShowSuccessToast(true);
       setTimeout(() => setShowSuccessToast(false), 5000);
     } catch (err: any) {
@@ -1373,19 +1379,6 @@ export default function AdminPage() {
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">
-                  SMTP Username (Brevo Login Email)
-                </label>
-                <input 
-                  type="text"
-                  placeholder="kadamproductionweb@gmail.com"
-                  value={settings.smtp_user || ''}
-                  onChange={(e) => setSettings({ ...settings, smtp_user: e.target.value })}
-                  className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
-                />
-              </div>
-
               {/* ADMIN CREDENTIALS SECTION */}
               <div className="pt-6 border-t border-white/10 space-y-6">
                 <h4 className="font-bold text-sm text-white uppercase tracking-wider">Credentials</h4>
@@ -1423,30 +1416,20 @@ export default function AdminPage() {
                   />
                 </div>
 
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-white/5 bg-black/20 p-4">
-                  <div>
-                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block">Limits & Quick Reset</span>
-                    <span className="text-xs text-zinc-350 mt-1 block">Attempts: <strong>{resetCount}/3</strong></span>
-                  </div>
-                  <div className="flex gap-2.5">
-                    {resetCount > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => setResetCount(0)}
-                        className="h-9 px-4 rounded-xl border border-zinc-800 hover:border-white/20 bg-zinc-900/50 text-[10px] font-bold text-white hover:bg-zinc-800 transition duration-200"
-                      >
-                        Clear Limit
-                      </button>
-                    )}
-                    <button
-                      type="button"
-                      disabled={resetEmailSending}
-                      onClick={handleResetViaEmail}
-                      className="h-9 px-4 rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/30 text-[10px] font-bold text-[#8B5CF6] hover:bg-[#8B5CF6]/20 transition duration-200 disabled:opacity-40"
-                    >
-                      {resetEmailSending ? 'Sending...' : 'Reset via Email'}
-                    </button>
-                  </div>
+                <div>
+                  <label className="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">
+                    Master Recovery Key
+                  </label>
+                  <input 
+                    type="text"
+                    value={adminRecoveryKey}
+                    onChange={(e) => setAdminRecoveryKey(e.target.value)}
+                    placeholder="KP-777-RESET"
+                    className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
+                  />
+                  <span className="text-[10px] text-zinc-550 leading-normal block mt-2">
+                    * If you ever get locked out, enter this Master Recovery Key on the login page to instantly reset your password. Keep it simple and memorable (e.g. KP-777-RESET).
+                  </span>
                 </div>
               </div>
             </div>
