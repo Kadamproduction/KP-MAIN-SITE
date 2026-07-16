@@ -68,6 +68,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${lora.variable} ${courierPrime.variable} ${gloock.variable} dark h-full antialiased`}>
+      <head>
+        <link rel="preload" href="/Scene-1-2_kyav4b.json" as="fetch" crossOrigin="anonymous" />
+        <link rel="preload" href="/logo.png" as="image" />
+      </head>
       <body className="min-h-full bg-black text-white flex flex-col font-space-grotesk select-none overflow-x-hidden">
         <AuthProvider>
           {children}
@@ -75,7 +79,7 @@ export default function RootLayout({
         {/* Load Lottie player for premium vector animations */}
         <Script 
           src="https://unpkg.com/@lottiefiles/lottie-player@2.0.4/dist/lottie-player.js" 
-          strategy="afterInteractive" 
+          strategy="beforeInteractive" 
         />
         {/* Prevent mobile pinch zoom and double-tap zoom */}
         <Script id="disable-zoom" strategy="afterInteractive">
