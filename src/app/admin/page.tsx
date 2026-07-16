@@ -1093,11 +1093,12 @@ export default function AdminPage() {
                 >
                   <div className="relative w-full aspect-[9/16] rounded-2xl overflow-hidden bg-black flex items-center justify-center">
                     <video 
-                      src={vid.video_url} 
+                      src={vid.video_url.startsWith('/videos/') ? `https://pub-fae002ea80ad4682b9a9920a6ba1bcd3.r2.dev${vid.video_url}` : vid.video_url} 
                       muted 
                       loop
                       playsInline
                       autoPlay
+                      preload="none"
                       className="w-full h-full object-cover brightness-[0.7]" 
                     />
                     <div className="absolute top-3 left-3 px-3 py-1 rounded-xl bg-black/60 border border-white/10 text-[10px] font-bold text-zinc-400 tracking-wider">

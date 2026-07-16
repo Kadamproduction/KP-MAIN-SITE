@@ -19,6 +19,9 @@ import ProjectsSection from '@/components/ProjectsSection';
 import Image from 'next/image';
 
 import { useAuth } from '@/context/AuthContext';
+import LazyVideo from '@/components/LazyVideo';
+
+const R2_BASE = 'https://pub-fae002ea80ad4682b9a9920a6ba1bcd3.r2.dev';
 
 // Local social media SVG icons for task 4
 const InstagramIcon = (props: any) => (
@@ -50,15 +53,15 @@ const WhatsAppIcon = (props: any) => (
 
 // 3 portrait Cloudinary videos (Task 1 vertical 9:16 layout) repeated to fill 9 grid cells
 const defaultVideoSources = [
-  '/videos/Trim-6.mp4',
-  '/videos/Trim-3-1.mp4',
-  '/videos/Trim-1.mp4',
-  '/videos/Untitled_design_2_pbfqf3.mp4',
-  '/videos/download_2_sispkn.mp4',
-  '/videos/Untitled_design_3_lw9eld.mp4',
-  '/videos/Trim-6.mp4',
-  '/videos/Trim-3-1.mp4',
-  '/videos/Trim-1.mp4'
+  `${R2_BASE}/videos/Trim-6.mp4`,
+  `${R2_BASE}/videos/Trim-3-1.mp4`,
+  `${R2_BASE}/videos/Trim-1.mp4`,
+  `${R2_BASE}/videos/Untitled_design_2_pbfqf3.mp4`,
+  `${R2_BASE}/videos/download_2_sispkn.mp4`,
+  `${R2_BASE}/videos/Untitled_design_3_lw9eld.mp4`,
+  `${R2_BASE}/videos/Trim-6.mp4`,
+  `${R2_BASE}/videos/Trim-3-1.mp4`,
+  `${R2_BASE}/videos/Trim-1.mp4`
 ];
 
 const marqueeUpperText = [
@@ -277,7 +280,10 @@ export default function HomePage() {
         if (!res.ok) throw new Error('API request failed');
         const data = await res.json();
         if (data.videos && data.videos.length > 0) {
-          const urls = data.videos.map((item: any) => item.video_url);
+          const urls = data.videos.map((item: any) => {
+            const url = item.video_url;
+            return url.startsWith('/videos/') ? `${R2_BASE}${url}` : url;
+          });
           while (urls.length < 3) {
             urls.push(defaultVideoSources[urls.length % defaultVideoSources.length]);
           }
@@ -340,7 +346,7 @@ export default function HomePage() {
           {/* Layer 1: Optimized Full Screen Background Video (Cloudinary vertical source) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
             <video 
-              src="/videos/upscaled-video_v3jizt.mp4"
+              src={`${R2_BASE}/videos/upscaled-video_v3jizt.mp4`}
               autoPlay 
               muted 
               loop 
@@ -532,13 +538,12 @@ export default function HomePage() {
                 className="relative w-full max-w-[340px] md:max-w-none mx-auto rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col hover:border-purple-550/30 hover:shadow-[0_0_35px_rgba(139,92,246,0.15)] transition-all duration-500 shadow-2xl"
               >
                 {/* Tall Video component */}
-                <video 
+                <LazyVideo 
                   src={isMobile === false ? videoSources[idx] : undefined} 
                   autoPlay={isMobile === false} 
                   muted 
                   loop 
                   playsInline 
-                  preload={isMobile === false ? "auto" : "none"}
                   className="w-full aspect-[9/16] object-cover rounded-[1.8rem] md:rounded-[2.2rem]"
                 />
                 
@@ -585,14 +590,13 @@ export default function HomePage() {
                     className="min-w-[88vw] snap-center relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col shadow-2xl"
                   >
                     {/* Tall Video component */}
-                    <video 
+                    <LazyVideo 
                       id={`stage-video-${idx}`}
                       src={(isMobile === true && isActive) ? videoSources[idx] : undefined} 
                       autoPlay={isMobile === true && isActive}
                       muted 
                       playsInline 
                       loop
-                      preload={(isMobile === true && isActive) ? "auto" : "none"}
                       className="w-full aspect-[9/16] object-cover rounded-[1.8rem]"
                     />
                     
