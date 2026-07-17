@@ -383,10 +383,14 @@ export default function HomePage() {
           {/* Layer 3: Split Hero Content (Text Left, Lottie Right) */}
           <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-12 items-center pt-2 md:pt-0">
             
-            {/* Right Side: Circular metallic logo Lottie player placeholder (Reserved for new Lottie file) */}
+            {/* Right Side: Circular metallic logo Lottie player (First on mobile via order class) */}
             <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[360px] xs:max-w-[400px] sm:max-w-[440px] lg:max-w-[560px] mx-auto">
-              {/* Lottie player removed temporarily. Grid dimensions preserved for new upload. */}
-              <div className="w-full h-full flex items-center justify-center border border-white/5 bg-zinc-950/20 rounded-full backdrop-blur-sm shadow-[0_0_50px_rgba(255,255,255,0.02)]" />
+              <div 
+                dangerouslySetInnerHTML={{
+                  __html: `<lottie-player src="/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
+                }}
+                className="w-full h-full flex items-center justify-center"
+              />
             </div>
 
             {/* Left Side: Headlines (Last on mobile, centered text) */}
@@ -533,15 +537,22 @@ export default function HomePage() {
                 key={idx}
                 className="relative w-full max-w-[340px] md:max-w-none mx-auto rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col hover:border-purple-550/30 hover:shadow-[0_0_35px_rgba(139,92,246,0.15)] transition-all duration-500 shadow-2xl"
               >
-                {/* Tall Video component */}
-                <LazyVideo 
-                  src={isMobile === false ? videoSources[idx] : undefined} 
-                  autoPlay={isMobile === false} 
-                  muted 
-                  loop 
-                  playsInline 
-                  className="w-full aspect-[9/16] object-cover rounded-[1.8rem] md:rounded-[2.2rem]"
-                />
+                {/* Tall Video component with static mounting configuration to avoid autoplay block */}
+                {videoSources[idx] ? (
+                  <video 
+                    src={videoSources[idx]} 
+                    autoPlay 
+                    muted 
+                    loop 
+                    playsInline 
+                    preload="metadata"
+                    className="w-full aspect-[9/16] object-cover rounded-[1.8rem] md:rounded-[2.2rem]"
+                  />
+                ) : (
+                  <div className="w-full aspect-[9/16] bg-zinc-950/40 rounded-[1.8rem] md:rounded-[2.2rem] animate-pulse flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-white/20 animate-ping" />
+                  </div>
+                )}
                 
                 {/* Padded Content below the video */}
                 <div className="flex-1 flex flex-col justify-between items-center text-center p-4 pt-6">
@@ -585,16 +596,23 @@ export default function HomePage() {
                     key={idx}
                     className="min-w-[88vw] snap-center relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col shadow-2xl"
                   >
-                    {/* Tall Video component */}
-                    <LazyVideo 
-                      id={`stage-video-${idx}`}
-                      src={(isMobile === true && isActive) ? videoSources[idx] : undefined} 
-                      autoPlay={isMobile === true && isActive}
-                      muted 
-                      playsInline 
-                      loop
-                      className="w-full aspect-[9/16] object-cover rounded-[1.8rem]"
-                    />
+                    {/* Tall Video component with static mounting configuration to avoid autoplay block */}
+                    {videoSources[idx] && isActive ? (
+                      <video 
+                        id={`stage-video-${idx}`}
+                        src={videoSources[idx]} 
+                        autoPlay
+                        muted 
+                        playsInline 
+                        loop
+                        preload="metadata"
+                        className="w-full aspect-[9/16] object-cover rounded-[1.8rem]"
+                      />
+                    ) : (
+                      <div className="w-full aspect-[9/16] bg-zinc-950/40 rounded-[1.8rem] animate-pulse flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 rounded-full bg-white/20 animate-ping" />
+                      </div>
+                    )}
                     
                     {/* Padded Content below the video */}
                     <div className="flex-1 flex flex-col justify-between items-center text-center p-4 pt-6">
