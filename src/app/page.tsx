@@ -387,7 +387,7 @@ export default function HomePage() {
             <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[360px] xs:max-w-[400px] sm:max-w-[440px] lg:max-w-[560px] mx-auto">
               <div 
                 dangerouslySetInnerHTML={{
-                  __html: `<lottie-player src="/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
+                  __html: `<lottie-player src="https://assets.kadamproduction.in/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
                 }}
                 className="w-full h-full flex items-center justify-center"
               />
