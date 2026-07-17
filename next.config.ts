@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'assets.kadamproduction.in',
+        hostname: 'pub-fae002ea80ad4682b9a9920a6ba1bcd3.r2.dev',
       },
     ],
     minimumCacheTTL: 31536000,

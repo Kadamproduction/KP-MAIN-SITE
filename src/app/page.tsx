@@ -21,7 +21,7 @@ import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import LazyVideo from '@/components/LazyVideo';
 
-const R2_BASE = 'https://assets.kadamproduction.in';
+const R2_BASE = 'https://pub-fae002ea80ad4682b9a9920a6ba1bcd3.r2.dev';
 
 // Local social media SVG icons for task 4
 const InstagramIcon = (props: any) => (
