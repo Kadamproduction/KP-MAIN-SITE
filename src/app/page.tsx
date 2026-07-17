@@ -308,15 +308,15 @@ export default function HomePage() {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
 
-    // Minimum display time for page loader logo
+    // Minimum display time for page loader logo (5 seconds)
     const minTimer = setTimeout(() => {
       setMinTimeElapsed(true);
-    }, 1800);
+    }, 5000);
 
-    // Fallback maximum timeout (6 seconds) to prevent infinite loaders
+    // Fallback maximum timeout (10 seconds) to prevent infinite loaders
     const fallbackTimer = setTimeout(() => {
       setVideoLoaded(true);
-    }, 6000);
+    }, 10000);
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -383,14 +383,10 @@ export default function HomePage() {
           {/* Layer 3: Split Hero Content (Text Left, Lottie Right) */}
           <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-12 items-center pt-2 md:pt-0">
             
-            {/* Right Side: Circular metallic logo Lottie player (First on mobile via order class) */}
+            {/* Right Side: Circular metallic logo Lottie player placeholder (Reserved for new Lottie file) */}
             <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[360px] xs:max-w-[400px] sm:max-w-[440px] lg:max-w-[560px] mx-auto">
-              <div 
-                dangerouslySetInnerHTML={{
-                  __html: `<lottie-player src="/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
-                }}
-                className="w-full h-full flex items-center justify-center"
-              />
+              {/* Lottie player removed temporarily. Grid dimensions preserved for new upload. */}
+              <div className="w-full h-full flex items-center justify-center border border-white/5 bg-zinc-950/20 rounded-full backdrop-blur-sm shadow-[0_0_50px_rgba(255,255,255,0.02)]" />
             </div>
 
             {/* Left Side: Headlines (Last on mobile, centered text) */}
