@@ -21,14 +21,6 @@ const nextConfig: NextConfig = {
         source: '/videos/:path*',
         destination: `${process.env.R2_PUBLIC_URL}/videos/:path*`,
       },
-      {
-        source: '/Scene-1-2_kyav4b.json',
-        destination: `${process.env.R2_PUBLIC_URL}/Scene-1-2_kyav4b.json`,
-      },
-      {
-        source: '/logo.png',
-        destination: `${process.env.R2_PUBLIC_URL}/logo.png`,
-      },
     ];
   },
 };
