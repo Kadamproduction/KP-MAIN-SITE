@@ -1093,7 +1093,7 @@ export default function AdminPage() {
                 >
                   <div className="relative w-full aspect-[9/16] rounded-2xl overflow-hidden bg-black flex items-center justify-center">
                     <video 
-                      src={vid.video_url.startsWith('/videos/') ? `https://pub-fae002ea80ad4682b9a9920a6ba1bcd3.r2.dev${vid.video_url}` : vid.video_url} 
+                      src={vid.video_url.startsWith('/videos/') ? `https://assets.kadamproduction.in${vid.video_url}` : vid.video_url} 
                       muted 
                       loop
                       playsInline
