@@ -1079,11 +1079,6 @@ export default function AdminPage() {
               </span>
             </div>
 
-            <div className="flex items-center justify-between border-b border-white/5 pb-4">
-              <span className="text-sm font-bold text-zinc-400">
-                Videos Counter: <span className="text-white">{videos.length}/6</span>
-              </span>
-            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {videos.map((vid, idx) => (

@@ -3,6 +3,20 @@ import { s3 } from '@/utils/s3';
 import { NextResponse } from 'next/server';
 import sharp from 'sharp';
 import path from 'path';
+import { execFileSync } from 'child_process';
+import os from 'os';
+import crypto from 'crypto';
+import fs from 'fs';
+
+function getFFmpegPath() {
+  const cwd = process.cwd();
+  const winPath = path.join(cwd, 'node_modules', '@ffmpeg-installer', 'win32-x64', 'ffmpeg.exe');
+  const linuxPath = path.join(cwd, 'node_modules', '@ffmpeg-installer', 'linux-x64', 'ffmpeg');
+  
+  if (fs.existsSync(linuxPath)) return linuxPath;
+  if (fs.existsSync(winPath)) return winPath;
+  return 'ffmpeg'; // system fallback
+}
 
 export async function POST(request: Request): Promise<NextResponse> {
   const { searchParams } = new URL(request.url);
@@ -39,6 +53,75 @@ export async function POST(request: Request): Promise<NextResponse> {
       }
     }
 
+    // Automatically compress and convert videos on upload to MP4 + WebM
+    if (ext === '.mp4') {
+      try {
+        console.log(`Automatically compressing and converting video: ${filename}`);
+        const ffmpegPath = getFFmpegPath();
+        const tempDir = os.tmpdir();
+        const randId = crypto.randomBytes(8).toString('hex');
+        const localInput = path.join(tempDir, `input_${randId}.mp4`);
+        const localOptMp4 = path.join(tempDir, `opt_${randId}.mp4`);
+        const localOptWebm = path.join(tempDir, `opt_${randId}.webm`);
+
+        fs.writeFileSync(localInput, buffer);
+
+        // 1. Compress to HQ H.264 MP4 (no audio, faststart, CRF 23)
+        console.log('Running FFmpeg H.264 compression...');
+        execFileSync(ffmpegPath, [
+          '-y',
+          '-i', localInput,
+          '-c:v', 'libx264',
+          '-profile:v', 'high',
+          '-level:v', '4.1',
+          '-crf', '23',
+          '-an',
+          '-pix_fmt', 'yuv420p',
+          '-movflags', '+faststart',
+          localOptMp4
+        ], { stdio: 'ignore', timeout: 45000 });
+
+        // 2. Compress to WebM VP9 (no audio, CRF 32)
+        console.log('Running FFmpeg WebM compression...');
+        execFileSync(ffmpegPath, [
+          '-y',
+          '-i', localInput,
+          '-c:v', 'libvpx-vp9',
+          '-crf', '32',
+          '-b:v', '800k',
+          '-an',
+          localOptWebm
+        ], { stdio: 'ignore', timeout: 45000 });
+
+        const compressedMp4Buffer = fs.readFileSync(localOptMp4);
+        const compressedWebmBuffer = fs.readFileSync(localOptWebm);
+
+        // Upload WebM companion to R2 first
+        const baseName = filename.slice(0, -4);
+        const webmFilename = `${baseName}.webm`;
+        console.log(`Uploading WebM companion to R2: ${webmFilename}...`);
+        const putWebmCmd = new PutObjectCommand({
+          Bucket: process.env.R2_BUCKET_NAME,
+          Key: webmFilename,
+          Body: compressedWebmBuffer,
+          ContentType: 'video/webm',
+        });
+        await s3.send(putWebmCmd);
+
+        // Replace buffer with compressed MP4 for primary upload
+        buffer = compressedMp4Buffer;
+        contentType = 'video/mp4';
+
+        // Cleanup temp files
+        fs.unlinkSync(localInput);
+        fs.unlinkSync(localOptMp4);
+        fs.unlinkSync(localOptWebm);
+        console.log('Video compression and conversion complete!');
+      } catch (videoError: any) {
+        console.warn('Video compression failed, uploading raw video instead:', videoError.message || videoError);
+      }
+    }
+
     // Upload to Cloudflare R2
     const command = new PutObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME,
@@ -57,3 +140,4 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 }
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60; // 60 seconds (maximum timeout limit for Vercel functions)
