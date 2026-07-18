@@ -60,7 +60,7 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
                   transition={{ duration: 0.4 }}
                   className="w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center pointer-events-auto"
                   dangerouslySetInnerHTML={{
-                    __html: `<lottie-player src="/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
+                    __html: `<lottie-player src="/Logo.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
                   }}
                 />
               )}

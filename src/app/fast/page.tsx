@@ -22,7 +22,7 @@ export default function FastOptimizationPage() {
     { log: 'Rewriting video source streams directly to R2 Edge (https://pub-fae002ea80ad4682b9a9920a6ba1bcd3.r2.dev)...', progress: 40, score: 78 },
     { log: 'Compiling lazy-loading scroll hook triggers for off-screen video elements...', progress: 55, score: 85 },
     { log: 'Mapping event portfolio images to Vercel AVIF/WebP auto-scaling pipeline...', progress: 70, score: 92 },
-    { log: 'Injecting document header preload links for hero Lottie asset (Scene-1-2_kyav4b.json)...', progress: 85, score: 96 },
+    { log: 'Injecting document header preload links for hero Lottie asset (Logo.json)...', progress: 85, score: 96 },
     { log: 'Configuring priority Script strategy for lottie-player.js bootstrap element...', progress: 95, score: 98 },
     { log: 'Clearing intermediate server-side render cache variables...', progress: 98, score: 99 },
     { log: 'Speed optimization complete! Overall load efficiency increased by 92.4%. Site status: OPTIMIZED (A+).', progress: 100, score: 100 }

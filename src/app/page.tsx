@@ -346,6 +346,7 @@ export default function HomePage() {
           {/* Layer 1: Optimized Full Screen Background Video (Cloudinary vertical source) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
             <video 
+              src={`${R2_BASE}/videos/upscaled-video_v3jizt.mp4`}
               autoPlay 
               muted 
               loop 
@@ -353,10 +354,7 @@ export default function HomePage() {
               preload="auto"
               onLoadedData={() => setVideoLoaded(true)}
               className="w-full h-full object-cover brightness-[0.45]"
-            >
-              <source src={`${R2_BASE}/videos/upscaled-video_v3jizt.webm`} type="video/webm" />
-              <source src={`${R2_BASE}/videos/upscaled-video_v3jizt.mp4`} type="video/mp4" />
-            </video>
+            />
             <div className="absolute inset-0 bg-black/45 bg-gradient-to-t from-black/60 via-transparent to-black/60" />
           </div>
 
@@ -389,7 +387,7 @@ export default function HomePage() {
             <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[360px] xs:max-w-[400px] sm:max-w-[440px] lg:max-w-[560px] mx-auto">
               <div 
                 dangerouslySetInnerHTML={{
-                  __html: `<lottie-player src="/Scene-1-2_kyav4b.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
+                  __html: `<lottie-player src="/Logo.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
                 }}
                 className="w-full h-full flex items-center justify-center"
               />
@@ -540,23 +538,17 @@ export default function HomePage() {
                 className="relative w-full max-w-[340px] md:max-w-none mx-auto rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col hover:border-purple-550/30 hover:shadow-[0_0_35px_rgba(139,92,246,0.15)] transition-all duration-500 shadow-2xl"
               >
                 {/* Tall Video component with static mounting configuration to avoid autoplay block */}
-                {videoSources[idx] ? (() => {
-                  const mp4Url = videoSources[idx];
-                  const webmUrl = mp4Url.endsWith('.mp4') ? mp4Url.slice(0, -4) + '.webm' : '';
-                  return (
-                    <video 
-                      autoPlay 
-                      muted 
-                      loop 
-                      playsInline 
-                      preload="metadata"
-                      className="w-full aspect-[9/16] object-cover rounded-[1.8rem] md:rounded-[2.2rem]"
-                    >
-                      {webmUrl && <source src={webmUrl} type="video/webm" />}
-                      <source src={mp4Url} type="video/mp4" />
-                    </video>
-                  );
-                })() : (
+                {videoSources[idx] ? (
+                  <video 
+                    src={videoSources[idx]}
+                    autoPlay 
+                    muted 
+                    loop 
+                    playsInline 
+                    preload="metadata"
+                    className="w-full aspect-[9/16] object-cover rounded-[1.8rem] md:rounded-[2.2rem]"
+                  />
+                ) : (
                   <div className="w-full aspect-[9/16] bg-zinc-950/40 rounded-[1.8rem] md:rounded-[2.2rem] animate-pulse flex items-center justify-center">
                     <div className="w-1.5 h-1.5 rounded-full bg-white/20 animate-ping" />
                   </div>
@@ -605,24 +597,18 @@ export default function HomePage() {
                     className="min-w-[88vw] snap-center relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col shadow-2xl"
                   >
                     {/* Tall Video component with static mounting configuration to avoid autoplay block */}
-                    {videoSources[idx] && isActive ? (() => {
-                      const mp4Url = videoSources[idx];
-                      const webmUrl = mp4Url.endsWith('.mp4') ? mp4Url.slice(0, -4) + '.webm' : '';
-                      return (
-                        <video 
-                          id={`stage-video-${idx}`}
-                          autoPlay
-                          muted 
-                          playsInline 
-                          loop
-                          preload="metadata"
-                          className="w-full aspect-[9/16] object-cover rounded-[1.8rem]"
-                        >
-                          {webmUrl && <source src={webmUrl} type="video/webm" />}
-                          <source src={mp4Url} type="video/mp4" />
-                        </video>
-                      );
-                    })() : (
+                    {videoSources[idx] && isActive ? (
+                      <video 
+                        id={`stage-video-${idx}`}
+                        src={videoSources[idx]}
+                        autoPlay
+                        muted 
+                        playsInline 
+                        loop
+                        preload="metadata"
+                        className="w-full aspect-[9/16] object-cover rounded-[1.8rem]"
+                      />
+                    ) : (
                       <div className="w-full aspect-[9/16] bg-zinc-950/40 rounded-[1.8rem] animate-pulse flex items-center justify-center">
                         <div className="w-1.5 h-1.5 rounded-full bg-white/20 animate-ping" />
                       </div>

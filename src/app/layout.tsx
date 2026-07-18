@@ -69,7 +69,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${lora.variable} ${courierPrime.variable} ${gloock.variable} dark h-full antialiased`}>
       <head>
-        <link rel="preload" href="/Scene-1-2_kyav4b.json" as="fetch" crossOrigin="anonymous" />
+        <link rel="preload" href="/Logo.json" as="fetch" crossOrigin="anonymous" />
         <link rel="preload" href="/logo.png" as="image" />
       </head>
       <body className="min-h-full bg-black text-white flex flex-col font-space-grotesk select-none overflow-x-hidden">
