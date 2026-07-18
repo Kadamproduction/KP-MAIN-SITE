@@ -754,7 +754,7 @@ export default function AdminPage() {
             <img 
               src="/logo.png" 
               alt="Kadam Production Logo" 
-              className="w-10 h-10 rounded-full border border-white/10 object-cover flex-shrink-0"
+              className="w-16 h-16 rounded-full border border-white/10 object-cover flex-shrink-0"
             />
             <div>
               <h2 className="font-bold text-sm tracking-wide text-white leading-none">ADMIN PANEL</h2>

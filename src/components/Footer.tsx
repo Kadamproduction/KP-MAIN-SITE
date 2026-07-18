@@ -69,7 +69,7 @@ export default function Footer() {
             <img 
               src="/logo.png" 
               alt="Kadam Production Logo" 
-              className="w-10 h-10 rounded-full border border-white/10 object-cover"
+              className="w-16 h-16 rounded-full border border-white/10 object-cover"
             />
             <div>
               <h4 className="text-md font-black tracking-tight text-white">KADAM PRODUCTION</h4>
