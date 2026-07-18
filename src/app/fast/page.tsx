@@ -47,7 +47,7 @@ export default function FastOptimizationPage() {
       if (i === 1) {
         try {
           const t0 = performance.now();
-          await fetch('/api/public/data');
+          await fetch(`/api/public/data?t=${Date.now()}`);
           const t1 = performance.now();
           setLogs(prev => [...prev, `[PING] API data fetch completed in ${(t1 - t0).toFixed(1)}ms.`]);
         } catch {

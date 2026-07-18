@@ -318,7 +318,7 @@ export default function HomePage() {
   useEffect(() => {
     async function loadKVVideos() {
       try {
-        const res = await fetch('/api/public/data');
+        const res = await fetch(`/api/public/data?t=${Date.now()}`);
         if (!res.ok) throw new Error('API request failed');
         const data = await res.json();
         if (data.videos && data.videos.length > 0) {

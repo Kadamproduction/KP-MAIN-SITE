@@ -155,7 +155,7 @@ export default function AdminPage() {
     setLoading(true);
     setErrorMsg(null);
     try {
-      const res = await fetch('/api/public/data');
+      const res = await fetch(`/api/public/data?t=${Date.now()}`);
       if (!res.ok) throw new Error('Failed to load database.');
       const data = await res.json();
 

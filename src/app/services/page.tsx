@@ -186,7 +186,7 @@ export default function ServicesPage() {
   useEffect(() => {
     async function loadKVServiceImages() {
       try {
-        const res = await fetch('/api/public/data');
+        const res = await fetch(`/api/public/data?t=${Date.now()}`);
         if (!res.ok) throw new Error('API request failed');
         const data = await res.json();
         if (data.services && data.services.length > 0) {

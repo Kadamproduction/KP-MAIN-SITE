@@ -135,7 +135,7 @@ export default function GalleryPage() {
   useEffect(() => {
     async function loadKVImages() {
       try {
-        const res = await fetch('/api/public/data');
+        const res = await fetch(`/api/public/data?t=${Date.now()}`);
         if (!res.ok) throw new Error('API request failed');
         const data = await res.json();
         if (data.images && data.images.length > 0) {
