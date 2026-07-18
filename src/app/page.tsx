@@ -126,6 +126,46 @@ const cylinderStats = [
   }
 ];
 
+interface StageVideoProps {
+  src: string;
+  isActive: boolean;
+  id?: string;
+  className?: string;
+}
+
+function StageVideo({ src, isActive, id, className }: StageVideoProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (isActive) {
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn('Playback deferred/blocked:', err);
+        });
+      }
+    } else {
+      video.pause();
+    }
+  }, [isActive, src]);
+
+  return (
+    <video
+      ref={videoRef}
+      id={id}
+      src={src}
+      muted
+      playsInline
+      loop
+      preload="auto"
+      className={className}
+    />
+  );
+}
+
 export default function HomePage() {
   const router = useRouter();
   const [loadingComplete, setLoadingComplete] = useState(false);
@@ -535,13 +575,9 @@ export default function HomePage() {
               >
                 {/* Tall Video component with static mounting configuration to avoid autoplay block */}
                 {videoSources[idx] ? (
-                  <video 
+                  <StageVideo
                     src={videoSources[idx]}
-                    autoPlay 
-                    muted 
-                    loop 
-                    playsInline 
-                    preload="metadata"
+                    isActive={true}
                     className="w-full aspect-[9/16] object-cover rounded-[1.8rem] md:rounded-[2.2rem]"
                   />
                 ) : (
@@ -594,14 +630,10 @@ export default function HomePage() {
                   >
                     {/* Tall Video component with static mounting configuration to avoid autoplay block */}
                     {videoSources[idx] ? (
-                      <video 
+                      <StageVideo
                         id={`stage-video-${idx}`}
                         src={videoSources[idx]}
-                        autoPlay={idx === 0}
-                        muted 
-                        playsInline 
-                        loop
-                        preload="metadata"
+                        isActive={isActive}
                         className="w-full aspect-[9/16] object-cover rounded-[1.8rem]"
                       />
                     ) : (

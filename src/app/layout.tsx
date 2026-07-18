@@ -71,6 +71,14 @@ export default function RootLayout({
       <head>
         <link rel="preload" href="/Logo.json" as="fetch" crossOrigin="anonymous" />
         <link rel="preload" href="/logo.png" as="image" />
+        {/* Preload background and stage loops for instant playback */}
+        <link rel="preload" href="https://assets.kadamproduction.in/videos/upscaled-video_v3jizt.mp4" as="video" type="video/mp4" />
+        <link rel="preload" href="https://assets.kadamproduction.in/videos/download_2_sispkn.mp4" as="video" type="video/mp4" />
+        <link rel="preload" href="https://assets.kadamproduction.in/videos/Trim-1.mp4" as="video" type="video/mp4" />
+        <link rel="preload" href="https://assets.kadamproduction.in/videos/Trim-3-1.mp4" as="video" type="video/mp4" />
+        <link rel="preload" href="https://assets.kadamproduction.in/videos/Trim-6.mp4" as="video" type="video/mp4" />
+        <link rel="preload" href="https://assets.kadamproduction.in/videos/Untitled_design_2_pbfqf3.mp4" as="video" type="video/mp4" />
+        <link rel="preload" href="https://assets.kadamproduction.in/videos/Untitled_design_3_lw9eld.mp4" as="video" type="video/mp4" />
       </head>
       <body className="min-h-full bg-black text-white flex flex-col font-space-grotesk select-none overflow-x-hidden">
         <AuthProvider>
