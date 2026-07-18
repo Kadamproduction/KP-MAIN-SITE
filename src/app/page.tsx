@@ -20,6 +20,7 @@ import Image from 'next/image';
 
 import { useAuth } from '@/context/AuthContext';
 import LazyVideo from '@/components/LazyVideo';
+import LottiePlayer from '@/components/LottiePlayer';
 
 const R2_BASE = 'https://assets.kadamproduction.in';
 
@@ -385,12 +386,7 @@ export default function HomePage() {
             
             {/* Right Side: Circular metallic logo Lottie player (First on mobile via order class) */}
             <div className="md:col-span-5 order-first md:order-last flex items-center justify-center relative w-full aspect-square max-w-[360px] xs:max-w-[400px] sm:max-w-[440px] lg:max-w-[560px] mx-auto">
-              <div 
-                dangerouslySetInnerHTML={{
-                  __html: `<lottie-player src="/Logo.json" background="transparent" speed="1" style="width: 100%; height: 100%; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; -webkit-backface-visibility: hidden;" loop autoplay></lottie-player>`
-                }}
-                className="w-full h-full flex items-center justify-center"
-              />
+              <LottiePlayer src="/Logo.json" className="w-full h-full flex items-center justify-center" />
             </div>
 
             {/* Left Side: Headlines (Last on mobile, centered text) */}
@@ -597,11 +593,11 @@ export default function HomePage() {
                     className="min-w-[88vw] snap-center relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col shadow-2xl"
                   >
                     {/* Tall Video component with static mounting configuration to avoid autoplay block */}
-                    {videoSources[idx] && isActive ? (
+                    {videoSources[idx] ? (
                       <video 
                         id={`stage-video-${idx}`}
                         src={videoSources[idx]}
-                        autoPlay
+                        autoPlay={idx === 0}
                         muted 
                         playsInline 
                         loop

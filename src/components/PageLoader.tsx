@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import LottiePlayer from './LottiePlayer';
 
 interface PageLoaderProps {
   onComplete: () => void;
@@ -30,27 +31,27 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
   }, [isReady, onComplete]);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isActive && (
-        <div className="fixed inset-0 z-[9999] overflow-hidden pointer-events-none">
-          {/* CURTAIN SPLIT TOP (Slides Up on logo fade) */}
-          <motion.div 
-            initial={{ y: 0 }}
-            animate={{ y: showLogo ? 0 : '-100%' }}
-            transition={{ duration: 0.8, ease: [0.77, 0, 0.175, 1] }}
-            className="absolute top-0 left-0 right-0 h-1/2 bg-black pointer-events-auto"
+        <div className="fixed inset-0 z-[9999] overflow-hidden flex pointer-events-none">
+          {/* Left Curtain Curtain */}
+          <motion.div
+            initial={{ x: 0 }}
+            animate={isReady ? { x: '-100%' } : { x: 0 }}
+            transition={{ duration: 0.85, ease: [0.77, 0, 0.175, 1] }}
+            className="w-1/2 h-full bg-zinc-950 border-r border-white/5 pointer-events-auto"
           />
 
-          {/* CURTAIN SPLIT BOTTOM (Slides Down on logo fade) */}
-          <motion.div 
-            initial={{ y: 0 }}
-            animate={{ y: showLogo ? 0 : '100%' }}
-            transition={{ duration: 0.8, ease: [0.77, 0, 0.175, 1] }}
-            className="absolute bottom-0 left-0 right-0 h-1/2 bg-black pointer-events-auto"
+          {/* Right Curtain Curtain */}
+          <motion.div
+            initial={{ x: 0 }}
+            animate={isReady ? { x: '100%' } : { x: 0 }}
+            transition={{ duration: 0.85, ease: [0.77, 0, 0.175, 1] }}
+            className="w-1/2 h-full bg-zinc-950 border-l border-white/5 pointer-events-auto"
           />
 
-          {/* Centered Lottie Logo (Fades out when showLogo is false) */}
-          <div className="absolute inset-0 flex items-center justify-center z-50">
+          {/* Centered Lottie Logo */}
+          <div className="absolute inset-0 flex items-center justify-center z-10">
             <AnimatePresence>
               {showLogo && (
                 <motion.div
@@ -59,10 +60,9 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.4 }}
                   className="w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center pointer-events-auto"
-                  dangerouslySetInnerHTML={{
-                    __html: `<lottie-player src="/Logo.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>`
-                  }}
-                />
+                >
+                  <LottiePlayer src="/Logo.json" className="w-full h-full" />
+                </motion.div>
               )}
             </AnimatePresence>
           </div>
