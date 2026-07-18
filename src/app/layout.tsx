@@ -46,6 +46,17 @@ export const metadata: Metadata = {
   title: 'Kadam Production | Premium DJ & Event Services',
   description: 'Creating unforgettable atmospheres with premium DJ performances, sound systems, and lighting for weddings, festivals, and corporate events.',
   keywords: ['DJ services', 'event management', 'wedding DJ', 'sound system', 'lighting design', 'Gujarat events'],
+  icons: {
+    icon: [
+      { url: '/favicon-96x96.png?v=3', sizes: '96x96', type: 'image/png' },
+      { url: '/favicon.svg?v=3', type: 'image/svg+xml' }
+    ],
+    shortcut: '/favicon.ico?v=3',
+    apple: [
+      { url: '/apple-touch-icon.png?v=3', sizes: '180x180', type: 'image/png' }
+    ]
+  },
+  manifest: '/site.webmanifest',
   openGraph: {
     title: 'Kadam Production | Premium Event Services',
     description: '1000+ events completed. Professional DJ, sound, and lighting services.',
@@ -69,11 +80,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${lora.variable} ${courierPrime.variable} ${gloock.variable} dark h-full antialiased`}>
       <head>
-        <link rel="icon" type="image/png" href="/favicon-96x96.png?v=3" sizes="96x96" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3" />
-        <link rel="shortcut icon" href="/favicon.ico?v=3" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
-        <link rel="manifest" href="/site.webmanifest" />
         <link rel="preload" href="/Logo.json" as="fetch" crossOrigin="anonymous" />
         <link rel="preload" href="/logo.png" as="image" />
         {/* Preload background and stage loops for instant playback */}
