@@ -206,22 +206,23 @@ export default function HomePage() {
     if (!stagesSliderRef.current) return;
     const container = stagesSliderRef.current;
     const children = container.children;
-    let closestIndex = 0;
+    let closestIdx = 0;
     let minDistance = Infinity;
     const containerCenter = container.scrollLeft + container.clientWidth / 2;
     
-    for (let i = 0; i < children.length; i++) {
+    // Skip left spacer (index 0) and right spacer (last index) to map slides correctly
+    for (let i = 1; i < children.length - 1; i++) {
       const child = children[i] as HTMLElement;
       const childCenter = child.offsetLeft + child.clientWidth / 2;
       const distance = Math.abs(childCenter - containerCenter);
       if (distance < minDistance) {
         minDistance = distance;
-        closestIndex = i;
+        closestIdx = i - 1; // Map child index i (1..6) to slide index (0..5)
       }
     }
     
-    if (closestIndex !== activeStageIdx && closestIndex >= 0 && closestIndex < cylinderStats.length) {
-      setActiveStageIdx(closestIndex);
+    if (closestIdx !== activeStageIdx && closestIdx >= 0 && closestIdx < cylinderStats.length) {
+      setActiveStageIdx(closestIdx);
     }
   };
 
