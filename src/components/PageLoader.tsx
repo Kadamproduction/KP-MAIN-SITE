@@ -39,7 +39,7 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
             initial={{ x: 0 }}
             animate={isReady ? { x: '-100%' } : { x: 0 }}
             transition={{ duration: 0.85, ease: [0.77, 0, 0.175, 1] }}
-            className="w-1/2 h-full bg-zinc-950 border-r border-white/5 pointer-events-auto"
+            className="w-1/2 h-full bg-zinc-950 pointer-events-auto"
           />
 
           {/* Right Curtain Curtain */}
@@ -47,7 +47,7 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
             initial={{ x: 0 }}
             animate={isReady ? { x: '100%' } : { x: 0 }}
             transition={{ duration: 0.85, ease: [0.77, 0, 0.175, 1] }}
-            className="w-1/2 h-full bg-zinc-950 border-l border-white/5 pointer-events-auto"
+            className="w-1/2 h-full bg-zinc-950 pointer-events-auto"
           />
 
           {/* Centered Lottie Logo */}
