@@ -48,12 +48,12 @@ export const metadata: Metadata = {
   keywords: ['DJ services', 'event management', 'wedding DJ', 'sound system', 'lighting design', 'Gujarat events'],
   icons: {
     icon: [
-      { url: '/favicon-96x96.png?v=3', sizes: '96x96', type: 'image/png' },
-      { url: '/favicon.svg?v=3', type: 'image/svg+xml' }
+      { url: '/favicon-96x96.png?v=4', sizes: '96x96', type: 'image/png' },
+      { url: '/favicon.svg?v=4', type: 'image/svg+xml' }
     ],
-    shortcut: '/favicon.ico?v=3',
+    shortcut: '/favicon.ico?v=4',
     apple: [
-      { url: '/apple-touch-icon.png?v=3', sizes: '180x180', type: 'image/png' }
+      { url: '/apple-touch-icon.png?v=4', sizes: '180x180', type: 'image/png' }
     ]
   },
   manifest: '/site.webmanifest',
