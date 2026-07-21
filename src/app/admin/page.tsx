@@ -23,7 +23,9 @@ import {
   X,
   Sparkles,
   ExternalLink,
-  ArrowRight
+  ArrowRight,
+  Mail,
+  Send
 } from 'lucide-react';
 
 interface DBImage {
@@ -66,7 +68,11 @@ interface SiteSettings {
   phone_1: string;
   phone_2: string;
   address: string;
+  smtp_host?: string;
+  smtp_port?: string;
   smtp_user?: string;
+  smtp_pass?: string;
+  from_email?: string;
 }
 
 const CATEGORIES = ['All Events', 'Weddings', 'Festivals', 'Concerts', 'Road Shows'];
@@ -1510,7 +1516,7 @@ export default function AdminPage() {
                     <div className="pt-2">
                       <button
                         type="button"
-                        onClick={() => handleSave()}
+                        onClick={() => setShowConfirmModal(true)}
                         disabled={saveLoading}
                         className="h-11 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white transition duration-200 cursor-pointer disabled:opacity-50 shadow-md"
                       >

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
-import { getSiteSettings } from '@/utils/vercelDb';
+import { vercelDb } from '@/utils/vercelDb';
 
 export async function POST(req: Request) {
   try {
@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     }
 
     // Use passed settings or fallback to saved database settings
-    const settings = await getSiteSettings();
+    const settings = await vercelDb.getSettings();
     const host = smtp_host || settings.smtp_host || 'smtp-relay.brevo.com';
     const port = parseInt(smtp_port || settings.smtp_port || '587', 10);
     const user = smtp_user || settings.smtp_user;
