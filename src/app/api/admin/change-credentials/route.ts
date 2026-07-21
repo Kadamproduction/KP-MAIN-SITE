@@ -38,44 +38,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid 6-Digit OTP code. Please check your email inbox.' }, { status: 401 });
     }
 
-    const now = Date.now();
-    let count = credentials.resetCount || 0;
-    let periodStart = credentials.resetPeriodStart || null;
-
-    // Check if period expired (30 days since first change of the period)
-    const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
-    if (periodStart && now >= periodStart + thirtyDaysMs) {
-      count = 0;
-      periodStart = null;
-    }
-
-    if (count >= 3) {
-      const resetDate = new Date(periodStart! + thirtyDaysMs);
-      return NextResponse.json({ 
-        error: `Maximum credential changes (3 per month) reached. Resets on ${resetDate.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}.` 
-      }, { status: 400 });
-    }
-
     // Clear OTP after successful use
     credentials.otpCode = null;
     credentials.otpExpiry = null;
 
-    // Update credentials
+    // Update credentials (Unlimited changes allowed)
     credentials.username = newUsername;
     credentials.passwordHash = newPassword;
-    count += 1;
-    if (!periodStart) {
-      periodStart = now; // First change in the new monthly window
-    }
-    credentials.resetCount = count;
-    credentials.resetPeriodStart = periodStart;
+    credentials.resetCount = (credentials.resetCount || 0) + 1;
 
     await vercelDb.setCredentials(credentials);
 
     return NextResponse.json({ 
       success: true, 
-      resetCount: count, 
-      resetPeriodStart: periodStart 
+      resetCount: credentials.resetCount
     });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

@@ -25,7 +25,9 @@ import {
   ExternalLink,
   ArrowRight,
   Mail,
-  Send
+  Send,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 
 interface DBImage {
@@ -111,6 +113,7 @@ export default function AdminPage() {
   const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [showNewPass, setShowNewPass] = useState(false);
   const [credsChangeLoading, setCredsChangeLoading] = useState(false);
   const [credsChangeError, setCredsChangeError] = useState<string | null>(null);
   
@@ -1604,13 +1607,8 @@ export default function AdminPage() {
                 <div className="rounded-2xl border border-white/5 bg-black/20 p-4 space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                      <span className="text-[10px] font-bold text-zinc-550 uppercase tracking-widest block">Monthly Changes</span>
-                      <span className="text-xs text-zinc-350 mt-1 block">Resets used: <strong>{resetCount}/3</strong></span>
-                      {resetPeriodStart && (
-                        <span className="text-[9px] text-zinc-500 block mt-1">
-                          Next reset: <strong>{new Date(resetPeriodStart + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}</strong>
-                        </span>
-                      )}
+                      <span className="text-[10px] font-bold text-zinc-550 uppercase tracking-widest block">Credential Resets</span>
+                      <span className="text-xs text-zinc-350 mt-1 block">Status: <strong className="text-emerald-400 font-bold">Unlimited ♾️</strong></span>
                     </div>
                     <button
                       type="button"
@@ -1622,6 +1620,7 @@ export default function AdminPage() {
                         setNewUsername('');
                         setNewPassword('');
                         setConfirmNewPassword('');
+                        setShowNewPass(false);
                       }}
                       className="h-10 px-5 rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/30 text-xs font-bold text-[#8B5CF6] hover:bg-[#8B5CF6]/20 transition duration-200 cursor-pointer"
                     >
@@ -1705,26 +1704,44 @@ export default function AdminPage() {
 
               <div>
                 <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">New Password</label>
-                <input 
-                  type="password" 
-                  required 
-                  placeholder="••••••••" 
-                  value={newPassword} 
-                  onChange={(e) => setNewPassword(e.target.value)} 
-                  className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition duration-200"
-                />
+                <div className="relative">
+                  <input 
+                    type={showNewPass ? 'text' : 'password'} 
+                    required 
+                    placeholder="••••••••" 
+                    value={newPassword} 
+                    onChange={(e) => setNewPassword(e.target.value)} 
+                    className="w-full h-12 pl-4 pr-11 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition duration-200"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPass(!showNewPass)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition cursor-pointer"
+                  >
+                    {showNewPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </div>
 
               <div>
                 <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">Confirm Password</label>
-                <input 
-                  type="password" 
-                  required 
-                  placeholder="••••••••" 
-                  value={confirmNewPassword} 
-                  onChange={(e) => setConfirmNewPassword(e.target.value)} 
-                  className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition duration-200"
-                />
+                <div className="relative">
+                  <input 
+                    type={showNewPass ? 'text' : 'password'} 
+                    required 
+                    placeholder="••••••••" 
+                    value={confirmNewPassword} 
+                    onChange={(e) => setConfirmNewPassword(e.target.value)} 
+                    className="w-full h-12 pl-4 pr-11 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition duration-200"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPass(!showNewPass)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition cursor-pointer"
+                  >
+                    {showNewPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </div>
 
               <button 
