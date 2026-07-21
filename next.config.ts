@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const r2PublicUrl = process.env.R2_PUBLIC_URL || 'https://assets.kadamproduction.in';
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -15,11 +17,11 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/images/:path*',
-        destination: `${process.env.R2_PUBLIC_URL}/images/:path*`,
+        destination: `${r2PublicUrl}/images/:path*`,
       },
       {
         source: '/videos/:path*',
-        destination: `${process.env.R2_PUBLIC_URL}/videos/:path*`,
+        destination: `${r2PublicUrl}/videos/:path*`,
       },
     ];
   },
