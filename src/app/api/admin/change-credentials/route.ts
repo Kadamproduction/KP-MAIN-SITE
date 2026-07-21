@@ -3,7 +3,7 @@ import { vercelDb } from '@/utils/vercelDb';
 
 export async function POST(request: Request) {
   try {
-    const { token, recoveryKey, newUsername, newPassword } = await request.json();
+    const { token, otp, newUsername, newPassword } = await request.json();
 
     if (!token) {
       return NextResponse.json({ error: 'Token missing.' }, { status: 401 });
@@ -19,23 +19,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid session token.' }, { status: 401 });
     }
 
-    if (!recoveryKey || !newUsername || !newPassword) {
-      return NextResponse.json({ error: 'Recovery Key, New Username, and New Password are required.' }, { status: 400 });
+    if (!otp || !newUsername || !newPassword) {
+      return NextResponse.json({ error: 'OTP, New Username, and New Password are required.' }, { status: 400 });
     }
 
     const credentials = await vercelDb.getCredentials();
 
-    // Support multiple keys (db array recoveryKeys or single fallback list)
-    const dbRecoveryKeys: string[] = credentials.recoveryKeys || [
-      credentials.recoveryKey || 'KP-777-RESET',
-      'KP-KADAM-RECOVER-99',
-      'KP-SECURE-ADMIN-77'
-    ];
+    // Verify OTP
+    if (!credentials.otpCode || !credentials.otpExpiry) {
+      return NextResponse.json({ error: 'No OTP requested. Please click "Send OTP to Email" first.' }, { status: 400 });
+    }
 
-    const isMatch = dbRecoveryKeys.some((k: string) => k.trim().toLowerCase() === recoveryKey.trim().toLowerCase());
+    if (Date.now() > credentials.otpExpiry) {
+      return NextResponse.json({ error: 'OTP has expired. Please request a new OTP.' }, { status: 400 });
+    }
 
-    if (!isMatch) {
-      return NextResponse.json({ error: 'Invalid Master Recovery Key.' }, { status: 401 });
+    if (credentials.otpCode.trim() !== otp.trim()) {
+      return NextResponse.json({ error: 'Invalid 6-Digit OTP code. Please check your email inbox.' }, { status: 401 });
     }
 
     const now = Date.now();
@@ -55,6 +55,10 @@ export async function POST(request: Request) {
         error: `Maximum credential changes (3 per month) reached. Resets on ${resetDate.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}.` 
       }, { status: 400 });
     }
+
+    // Clear OTP after successful use
+    credentials.otpCode = null;
+    credentials.otpExpiry = null;
 
     // Update credentials
     credentials.username = newUsername;

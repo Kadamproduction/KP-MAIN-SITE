@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import nodemailer from 'nodemailer';
 import { vercelDb } from '@/utils/vercelDb';
 
 export async function POST(request: Request) {
@@ -16,6 +17,7 @@ export async function POST(request: Request) {
     const isEmailMatch = 
       email.toLowerCase() === settings.email.toLowerCase() || 
       email.toLowerCase() === credentials.username.toLowerCase() ||
+      email.toLowerCase() === (settings.from_email || '').toLowerCase() ||
       email.toLowerCase() === 'kadamproductionweb@gmail.com' ||
       email.toLowerCase() === 'kadamproduction123@gmail.com';
 
@@ -23,26 +25,54 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No admin account found with that email address.' }, { status: 404 });
     }
 
-    // Generate secure token & expiry (15 mins)
-    const resetToken = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
-    const resetTokenExpiry = Date.now() + 15 * 60 * 1000;
+    // Generate 6-digit OTP & 10-minute expiry
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiry = Date.now() + 10 * 60 * 1000;
 
-    // Save token to DB
-    credentials.resetToken = resetToken;
-    credentials.resetTokenExpiry = resetTokenExpiry;
-    credentials.resetCount = 0; // reset counter
+    // Save OTP to DB
+    credentials.otpCode = otp;
+    credentials.otpExpiry = otpExpiry;
     await vercelDb.setCredentials(credentials);
 
-    // Get live request URL origin
-    const origin = request.headers.get('origin') || 'https://www.kadamproduction.in';
-    const resetLink = `${origin}/admin/reset-password?token=${resetToken}`;
+    // Send OTP via SMTP if configured
+    const host = settings.smtp_host || 'smtp-relay.brevo.com';
+    const port = parseInt(settings.smtp_port || '587', 10);
+    const user = settings.smtp_user;
+    const pass = settings.smtp_pass;
+    const recipientEmail = settings.from_email || settings.email || 'kadamproductionweb@gmail.com';
 
-    console.log('--- ADMIN RESET LINK GENERATED ---');
-    console.log('Reset Link:', resetLink);
+    if (user && pass) {
+      try {
+        const transporter = nodemailer.createTransport({
+          host: host,
+          port: port,
+          secure: port === 465,
+          auth: { user, pass },
+        });
+
+        await transporter.sendMail({
+          from: `Kadam Production Admin Security <${recipientEmail}>`,
+          to: recipientEmail,
+          subject: `🔑 Password Reset OTP: ${otp}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; padding: 25px; background-color: #0d0f19; color: #ffffff; border-radius: 16px; max-width: 500px; margin: 0 auto;">
+              <h2 style="color: #8b5cf6; margin-top: 0;">Password Reset OTP</h2>
+              <p style="font-size: 14px; color: #a1a1aa;">Use the following 6-digit OTP to reset your Kadam Production admin password:</p>
+              <div style="background-color: #161926; padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center; margin: 20px 0;">
+                <span style="font-size: 32px; font-weight: 800; color: #38bdf8; letter-spacing: 6px;">${otp}</span>
+              </div>
+              <p style="font-size: 12px; color: #71717a;">Valid for 10 minutes.</p>
+            </div>
+          `,
+        });
+      } catch (smtpErr) {
+        console.error('SMTP email send error:', smtpErr);
+      }
+    }
 
     return NextResponse.json({ 
       success: true, 
-      message: 'Reset request processed successfully (SMTP key is removed).'
+      message: `OTP sent to your email (${recipientEmail}).`
     });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

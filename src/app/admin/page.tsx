@@ -105,7 +105,9 @@ export default function AdminPage() {
 
   // Credentials change modal states
   const [showCredsModal, setShowCredsModal] = useState(false);
-  const [credsRecoveryKey, setCredsRecoveryKey] = useState('');
+  const [credsOtp, setCredsOtp] = useState('');
+  const [credsOtpSending, setCredsOtpSending] = useState(false);
+  const [credsOtpSuccessMsg, setCredsOtpSuccessMsg] = useState<string | null>(null);
   const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -675,6 +677,27 @@ export default function AdminPage() {
     }
   };
 
+  const handleSendCredsOtp = async () => {
+    setCredsOtpSending(true);
+    setCredsChangeError(null);
+    setCredsOtpSuccessMsg(null);
+    try {
+      const res = await fetch('/api/admin/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to send OTP email.');
+      }
+      setCredsOtpSuccessMsg(data.message || '6-digit OTP sent to your registered email!');
+    } catch (err: any) {
+      setCredsChangeError(err.message || 'SMTP Connection Error');
+    } finally {
+      setCredsOtpSending(false);
+    }
+  };
+
   const handleChangeCredentials = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmNewPassword) {
@@ -689,7 +712,7 @@ export default function AdminPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           token,
-          recoveryKey: credsRecoveryKey,
+          otp: credsOtp,
           newUsername,
           newPassword
         })
@@ -700,7 +723,7 @@ export default function AdminPage() {
       }
       alert('Success! Credentials updated successfully.');
       setShowCredsModal(false);
-      setCredsRecoveryKey('');
+      setCredsOtp('');
       setNewUsername('');
       setNewPassword('');
       setConfirmNewPassword('');
@@ -1594,7 +1617,8 @@ export default function AdminPage() {
                       onClick={() => {
                         setShowCredsModal(true);
                         setCredsChangeError(null);
-                        setCredsRecoveryKey('');
+                        setCredsOtpSuccessMsg(null);
+                        setCredsOtp('');
                         setNewUsername('');
                         setNewPassword('');
                         setConfirmNewPassword('');
@@ -1626,8 +1650,15 @@ export default function AdminPage() {
 
             <div className="space-y-2 pr-8">
               <h3 className="text-lg font-bold text-white uppercase tracking-wider">Change Credentials</h3>
-              <p className="text-xs text-zinc-450 leading-relaxed">Authorize using your Master Recovery Key to specify a new admin username and password.</p>
+              <p className="text-xs text-zinc-450 leading-relaxed">Send a 6-digit OTP code to your configured SMTP email address to verify your identity and update your login details.</p>
             </div>
+
+            {credsOtpSuccessMsg && (
+              <div className="flex items-start gap-2.5 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3.5 text-xs text-emerald-400">
+                <CheckCircle className="w-4.5 h-4.5 flex-shrink-0 mt-0.5" />
+                <p className="leading-relaxed">{credsOtpSuccessMsg}</p>
+              </div>
+            )}
 
             {credsChangeError && (
               <div className="flex items-start gap-2.5 rounded-xl border border-red-500/20 bg-red-500/10 p-3.5 text-xs text-red-400">
@@ -1638,14 +1669,25 @@ export default function AdminPage() {
 
             <form onSubmit={handleChangeCredentials} className="space-y-4">
               <div>
-                <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">Master Recovery Key</label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase">6-Digit OTP Code</label>
+                  <button
+                    type="button"
+                    onClick={handleSendCredsOtp}
+                    disabled={credsOtpSending}
+                    className="text-[11px] font-bold text-[#8B5CF6] hover:text-[#A78BFA] transition cursor-pointer disabled:opacity-40"
+                  >
+                    {credsOtpSending ? 'Sending OTP...' : 'Send OTP to Email'}
+                  </button>
+                </div>
                 <input 
                   type="text" 
                   required 
-                  placeholder="" 
-                  value={credsRecoveryKey} 
-                  onChange={(e) => setCredsRecoveryKey(e.target.value)} 
-                  className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition duration-200"
+                  maxLength={6}
+                  placeholder="123456" 
+                  value={credsOtp} 
+                  onChange={(e) => setCredsOtp(e.target.value)} 
+                  className="w-full h-12 px-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none tracking-widest text-center font-bold transition duration-200"
                 />
               </div>
 
@@ -1694,7 +1736,7 @@ export default function AdminPage() {
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
-                    Save New Logins
+                    Verify OTP & Save Logins
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}

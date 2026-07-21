@@ -45,6 +45,8 @@ export interface AdminCredentials {
   passwordHash: string;
   resetToken?: string | null;
   resetTokenExpiry?: number | null;
+  otpCode?: string | null;
+  otpExpiry?: number | null;
   resetCount?: number;
   recoveryKey?: string;
   resetPeriodStart?: number | null;
