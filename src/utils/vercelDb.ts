@@ -6,6 +6,11 @@ export interface SiteSettings {
   phone_1: string;
   phone_2: string;
   address: string;
+  smtp_host?: string;
+  smtp_port?: string;
+  smtp_user?: string;
+  smtp_pass?: string;
+  from_email?: string;
 }
 
 export interface DBImage {

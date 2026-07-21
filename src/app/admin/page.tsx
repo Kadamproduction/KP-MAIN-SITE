@@ -112,6 +112,11 @@ export default function AdminPage() {
   const [initialServiceImages, setInitialServiceImages] = useState<string>('');
   const [initialVibrants, setInitialVibrants] = useState<string>('');
   const [settingsSnapshot, setSettingsSnapshot] = useState<string>('');
+
+  // SMTP Test Email States
+  const [testEmailAddress, setTestEmailAddress] = useState('');
+  const [testEmailSending, setTestEmailSending] = useState(false);
+  const [testEmailFeedback, setTestEmailFeedback] = useState<{ isSuccess: boolean; msg: string } | null>(null);
   
   // Items marked for deletion (to be removed from R2 on save)
   const [deletedUrls, setDeletedUrls] = useState<string[]>([]);
@@ -204,6 +209,41 @@ export default function AdminPage() {
       setErrorMsg(err.message || 'Failed to fetch settings data.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSendTestEmail = async () => {
+    if (!testEmailAddress) {
+      setTestEmailFeedback({ isSuccess: false, msg: 'Please enter a test email address.' });
+      return;
+    }
+    setTestEmailSending(true);
+    setTestEmailFeedback(null);
+
+    try {
+      const res = await fetch('/api/admin/test-smtp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          testEmail: testEmailAddress,
+          smtp_host: settings.smtp_host,
+          smtp_port: settings.smtp_port,
+          smtp_user: settings.smtp_user,
+          smtp_pass: settings.smtp_pass,
+          from_email: settings.from_email
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to send test email.');
+      }
+
+      setTestEmailFeedback({ isSuccess: true, msg: data.message || 'Test email sent successfully!' });
+    } catch (err: any) {
+      setTestEmailFeedback({ isSuccess: false, msg: err.message || 'SMTP Connection Error' });
+    } finally {
+      setTestEmailSending(false);
     }
   };
 
@@ -1396,6 +1436,125 @@ export default function AdminPage() {
                   onChange={(e) => setSettings({ ...settings, address: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200 resize-none"
                 />
+              </div>
+
+              {/* SMTP / EMAIL SETTINGS CARD */}
+              <div className="pt-6 border-t border-white/10">
+                <div className="rounded-3xl border border-white/10 bg-[#0d0f19] p-6 space-y-5">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-zinc-800/80 border border-white/10 flex items-center justify-center text-zinc-300 flex-shrink-0">
+                      <Mail className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-base text-white">SMTP / Email Settings</h4>
+                      <p className="text-xs text-zinc-400 mt-0.5">Configure outgoing email for notifications, welcome emails, etc.</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 pt-2">
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-300 mb-1.5">SMTP Host</label>
+                      <input 
+                        type="text" 
+                        placeholder="smtp-relay.brevo.com"
+                        value={settings.smtp_host || ''}
+                        onChange={(e) => setSettings({ ...settings, smtp_host: e.target.value })}
+                        className="w-full h-11 px-4 rounded-xl border border-white/10 bg-[#161926] text-sm text-white placeholder-zinc-600 focus:border-blue-500 focus:outline-none transition"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-300 mb-1.5">Port</label>
+                      <input 
+                        type="text" 
+                        placeholder="587"
+                        value={settings.smtp_port || ''}
+                        onChange={(e) => setSettings({ ...settings, smtp_port: e.target.value })}
+                        className="w-full h-11 px-4 rounded-xl border border-white/10 bg-[#161926] text-sm text-white placeholder-zinc-600 focus:border-blue-500 focus:outline-none transition"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-300 mb-1.5">SMTP Username</label>
+                      <input 
+                        type="text" 
+                        placeholder="a11152001@smtp-brevo.com"
+                        value={settings.smtp_user || ''}
+                        onChange={(e) => setSettings({ ...settings, smtp_user: e.target.value })}
+                        className="w-full h-11 px-4 rounded-xl border border-white/10 bg-[#161926] text-sm text-white placeholder-zinc-600 focus:border-blue-500 focus:outline-none transition"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-300 mb-1.5">SMTP Password</label>
+                      <input 
+                        type="password" 
+                        placeholder="•••••••• (leave blank to keep)"
+                        value={settings.smtp_pass || ''}
+                        onChange={(e) => setSettings({ ...settings, smtp_pass: e.target.value })}
+                        className="w-full h-11 px-4 rounded-xl border border-white/10 bg-[#161926] text-sm text-white placeholder-zinc-600 focus:border-blue-500 focus:outline-none transition"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-300 mb-1.5">From Email</label>
+                      <input 
+                        type="email" 
+                        placeholder="kadamproductionweb@gmail.com"
+                        value={settings.from_email || ''}
+                        onChange={(e) => setSettings({ ...settings, from_email: e.target.value })}
+                        className="w-full h-11 px-4 rounded-xl border border-white/10 bg-[#161926] text-sm text-white placeholder-zinc-600 focus:border-blue-500 focus:outline-none transition"
+                      />
+                    </div>
+
+                    <div className="pt-2">
+                      <button
+                        type="button"
+                        onClick={() => handleSave()}
+                        disabled={saveLoading}
+                        className="h-11 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white transition duration-200 cursor-pointer disabled:opacity-50 shadow-md"
+                      >
+                        {saveLoading ? 'Saving...' : 'Save SMTP'}
+                      </button>
+                    </div>
+
+                    <div className="pt-5 border-t border-white/5 space-y-3">
+                      <label className="block text-xs font-medium text-zinc-300">Send Test Email</label>
+                      
+                      {testEmailFeedback && (
+                        <div className={`p-3 rounded-xl text-xs flex items-center gap-2 border ${testEmailFeedback.isSuccess ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-red-500/10 border-red-500/20 text-red-400'}`}>
+                          <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                          <span>{testEmailFeedback.msg}</span>
+                        </div>
+                      )}
+
+                      <div className="flex gap-3">
+                        <input 
+                          type="email" 
+                          placeholder="test@example.com"
+                          value={testEmailAddress}
+                          onChange={(e) => setTestEmailAddress(e.target.value)}
+                          className="flex-1 h-11 px-4 rounded-xl border border-white/10 bg-[#161926] text-sm text-white placeholder-zinc-600 focus:border-emerald-500 focus:outline-none transition"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleSendTestEmail}
+                          disabled={testEmailSending}
+                          className="h-11 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white flex items-center gap-2 transition duration-200 cursor-pointer disabled:opacity-50 shadow-md"
+                        >
+                          {testEmailSending ? (
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          ) : (
+                            <>
+                              <Send className="w-3.5 h-3.5" />
+                              <span>Test</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* ADMIN CREDENTIALS SECTION */}
