@@ -84,7 +84,7 @@ export default function AdminPage() {
   const [videos, setVideos] = useState<DBVideo[]>([]);
   const [serviceImages, setServiceImages] = useState<DBServiceImage[]>([]);
   const [vibrants, setVibrants] = useState<DBVibrant[]>([]);
-  const [settings, setSettings] = useState<SiteSettings>({ email: '', phone_1: '', phone_2: '', address: '', smtp_user: '' });
+  const [settings, setSettings] = useState<SiteSettings>({ email: '', phone_1: '', phone_2: '', address: '' });
   
   // Admin credentials states
   const [adminUsername, setAdminUsername] = useState('admin');
