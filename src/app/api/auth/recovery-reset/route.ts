@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { vercelDb } from '@/utils/vercelDb';
+import { hashPassword } from '@/utils/crypto';
 
 export async function POST(request: Request) {
   try {
@@ -24,11 +25,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid Master Recovery Key.' }, { status: 401 });
     }
 
-    // Update password
-    credentials.passwordHash = newPassword;
+    // Update password with scrypt hashing
+    credentials.passwordHash = hashPassword(newPassword);
+    credentials.otpCode = null;
+    credentials.otpExpiry = null;
     credentials.resetToken = null;
     credentials.resetTokenExpiry = null;
     credentials.resetCount = 0;
+    credentials.resetPeriodStart = null;
     
     await vercelDb.setCredentials(credentials);
 

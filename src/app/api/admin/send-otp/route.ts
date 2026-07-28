@@ -1,18 +1,20 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { vercelDb } from '@/utils/vercelDb';
+import { hashPassword } from '@/utils/crypto';
+import crypto from 'crypto';
 
 export async function POST(req: Request) {
   try {
     const creds = await vercelDb.getCredentials();
     const settings = await vercelDb.getSettings();
 
-    // 1. Generate 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    // 1. Generate secure 6-digit OTP using crypto.randomInt
+    const otp = crypto.randomInt(100000, 999999).toString();
     const expiry = Date.now() + 10 * 60 * 1000; // 10 minutes
 
-    // Save OTP to credentials database
-    creds.otpCode = otp;
+    // Save hashed OTP to credentials database
+    creds.otpCode = hashPassword(otp);
     creds.otpExpiry = expiry;
     await vercelDb.setCredentials(creds);
 

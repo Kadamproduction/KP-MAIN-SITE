@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { vercelDb } from '@/utils/vercelDb';
+import { verifyPassword, hashPassword } from '@/utils/crypto';
 
 export async function POST(request: Request) {
   try {
@@ -34,7 +35,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'OTP has expired. Please request a new OTP.' }, { status: 400 });
     }
 
-    if (credentials.otpCode.trim() !== otp.trim()) {
+    // Verify hashed OTP code
+    const isOtpValid = verifyPassword(otp, credentials.otpCode);
+    if (!isOtpValid) {
       return NextResponse.json({ error: 'Invalid 6-Digit OTP code. Please check your email inbox.' }, { status: 401 });
     }
 
@@ -42,9 +45,9 @@ export async function POST(request: Request) {
     credentials.otpCode = null;
     credentials.otpExpiry = null;
 
-    // Update credentials (Unlimited changes allowed)
+    // Update credentials with hashed password
     credentials.username = newUsername;
-    credentials.passwordHash = newPassword;
+    credentials.passwordHash = hashPassword(newPassword);
     credentials.resetCount = (credentials.resetCount || 0) + 1;
 
     await vercelDb.setCredentials(credentials);
