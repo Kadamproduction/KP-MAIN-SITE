@@ -11,9 +11,8 @@ import Image from 'next/image';
 
 
 
-// 9 high-quality Cloudinary event production images
+// 8 high-quality Cloudinary event production images
 const defaultGalleryImages = [
-  { id: 1, category: 'Weddings', title: 'Premium Varmala Stage', event: 'Wedding Ceremony', src: '/images/Untitled-design-13.png' },
   { id: 2, category: 'Festivals', title: 'Cultural Garba Arena', event: 'Navratri Dandiya', src: '/images/Untitled-design-18_tdjp2b.png' },
   { id: 3, category: 'Concerts', title: 'Live Rock concert audio', event: 'Sunburn Arena', src: '/images/Untitled-design-21_atubxz.png' },
   { id: 4, category: 'Corporate', title: 'Interactive Truss rig', event: 'Launch Production', src: '/images/Untitled-design-20_sm7myc.png' },
@@ -142,8 +141,8 @@ export default function GalleryPage() {
           const mapped = data.images.map((item: any, idx: number) => ({
             id: item.id || idx,
             category: item.category,
-            title: item.category === 'Weddings' ? 'Premium Varmala Stage' : item.category === 'Festivals' ? 'Cultural Garba Arena' : item.category === 'Concerts' ? 'Live Rock concert audio' : item.category === 'Corporate' ? 'Interactive Truss rig' : 'Mobile LED Truss',
-            event: item.category === 'Weddings' ? 'Wedding Ceremony' : item.category === 'Festivals' ? 'Navratri Dandiya' : item.category === 'Concerts' ? 'Sunburn Arena' : item.category === 'Corporate' ? 'Launch Production' : 'Gujarat Promotion',
+            title: item.category === 'Weddings' ? 'Royal Reception Stage' : item.category === 'Festivals' ? 'Cultural Garba Arena' : item.category === 'Concerts' ? 'Live Rock concert audio' : item.category === 'Corporate' ? 'Interactive Truss rig' : 'Mobile LED Truss',
+            event: item.category === 'Weddings' ? 'Elite Reception Setup' : item.category === 'Festivals' ? 'Navratri Dandiya' : item.category === 'Concerts' ? 'Sunburn Arena' : item.category === 'Corporate' ? 'Launch Production' : 'Gujarat Promotion',
             src: item.image_url
           }));
           setGalleryImages(mapped);

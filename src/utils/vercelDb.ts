@@ -72,7 +72,6 @@ const DEFAULT_CREDENTIALS: AdminCredentials = {
 };
 
 const DEFAULT_IMAGES: DBImage[] = [
-  { id: '1', category: 'Weddings', image_url: '/images/Untitled-design-13.png', order_index: 1 },
   { id: '2', category: 'Festivals', image_url: '/images/Untitled-design-18_tdjp2b.png', order_index: 2 },
   { id: '3', category: 'Concerts', image_url: '/images/Untitled-design-21_atubxz.png', order_index: 3 },
   { id: '4', category: 'Corporate', image_url: '/images/Untitled-design-20_sm7myc.png', order_index: 4 },
