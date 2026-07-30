@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'assets.kadamproduction.in',
       },
+      {
+        protocol: 'https',
+        hostname: 'pub-fae002ea80ad4682b9a9920a6ba1bcd3.r2.dev',
+      },
     ],
     minimumCacheTTL: 31536000,
     formats: ['image/webp', 'image/avif'],
