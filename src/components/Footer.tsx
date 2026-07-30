@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
@@ -23,7 +23,10 @@ const WhatsAppIcon = (props: any) => (
 );
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  const [currentYear, setCurrentYear] = useState(2026);
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
   const pathname = usePathname();
   const [quickLinksOpen, setQuickLinksOpen] = useState(false);
   const [servicesLinksOpen, setServicesLinksOpen] = useState(false);
@@ -188,7 +191,7 @@ export default function Footer() {
           © {currentYear} Kadam Production. All rights reserved.
         </p>
         <p className="text-[10px] text-zinc-650 flex items-center gap-1">
-          Designed by <a href="https://www.trishulhub.in" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white font-bold uppercase transition-colors">Trishulhub agency</a>
+          Designed by <a href="https://www.trishulhub.in" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white font-bold uppercase transition-colors">Trishulhub</a>
         </p>
       </div>
     </footer>

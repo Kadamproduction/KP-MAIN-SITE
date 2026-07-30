@@ -396,10 +396,10 @@ export default function HomePage() {
                 playsInline 
                 preload="auto"
                 onLoadedData={() => setVideoLoaded(true)}
-                className="w-full h-full object-cover brightness-[0.45]"
+                className="w-full h-full object-cover opacity-30 brightness-[0.85]"
               />
             )}
-            <div className="absolute inset-0 bg-black/45 bg-gradient-to-t from-black/60 via-transparent to-black/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/80" />
           </div>
 
           {/* Task 4: Social Icons stacked vertically on absolute LEFT side of hero section */}
