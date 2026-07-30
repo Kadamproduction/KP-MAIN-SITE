@@ -385,18 +385,20 @@ export default function HomePage() {
         {/* HERO SECTION */}
         <section className="relative min-h-screen md:h-screen flex flex-col justify-center items-center overflow-hidden pt-16 pb-12 md:pt-0 md:pb-0">
           
-          {/* Layer 1: Optimized Full Screen Background Video (Cloudinary vertical source) */}
+          {/* Layer 1: Optimized Full Screen Background Video (WebM for Mobile, MP4 for Desktop) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
-            <video 
-              src={`${R2_BASE}/videos/upscaled-video_v3jizt.mp4`}
-              autoPlay 
-              muted 
-              loop 
-              playsInline 
-              preload="auto"
-              onLoadedData={() => setVideoLoaded(true)}
-              className="w-full h-full object-cover brightness-[0.45]"
-            />
+            {isMobile !== null && (
+              <video 
+                src={isMobile ? `/videos/hero-mobile.webm` : `${R2_BASE}/videos/upscaled-video_v3jizt.mp4`}
+                autoPlay 
+                muted 
+                loop 
+                playsInline 
+                preload="auto"
+                onLoadedData={() => setVideoLoaded(true)}
+                className="w-full h-full object-cover brightness-[0.45]"
+              />
+            )}
             <div className="absolute inset-0 bg-black/45 bg-gradient-to-t from-black/60 via-transparent to-black/60" />
           </div>
 
