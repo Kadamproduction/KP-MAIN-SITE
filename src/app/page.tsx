@@ -567,7 +567,7 @@ export default function HomePage() {
 
         {/* Visual Section Divider */}
         <div className="w-full max-w-7xl mx-auto px-6 relative z-30">
-          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-purple-600/60 to-transparent" />
+          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-purple-500/90 to-transparent" />
         </div>
 
         {/* 1.4 INTERACTIVE VIDEO GRID & CAROUSEL SECTION */}
@@ -638,7 +638,7 @@ export default function HomePage() {
             <div 
               ref={stagesSliderRef}
               onScroll={handleStagesScroll}
-              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+              className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
             >
               {/* Left padding spacer */}
               <div className="min-w-[4vw] flex-shrink-0" />

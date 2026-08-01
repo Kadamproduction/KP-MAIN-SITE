@@ -82,7 +82,7 @@ export default function SpotlightNavbar() {
             className="fixed inset-0 bg-[#000000]/98 backdrop-blur-3xl z-40 md:hidden flex flex-col justify-center px-8"
           >
             {/* Brand Logo inside mobile menu (Top Left) */}
-            <div className="absolute top-5 left-8 flex items-center gap-3">
+            <div className="absolute top-5 left-5 flex items-center gap-3">
               <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center overflow-hidden bg-black flex-shrink-0">
                 <img 
                   src="/logo.png" 
