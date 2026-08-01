@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Maximize2, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import FlipText from '@/components/FlipText';
@@ -24,14 +25,25 @@ const defaultGalleryImages = [
   { id: 9, category: 'Corporate', title: 'High-end lighting design', event: 'VIP Corporate Meet', src: '/images/Untitled-design-25_f2t475.png' }
 ];
 
-const categories = ['All Events', 'Weddings', 'Festivals', 'Concerts', 'Corporate', 'Road Shows'];
+const categories = ['Weddings', 'Festivals', 'Concerts', 'Corporate', 'Road Shows'];
 
-export default function GalleryPage() {
+function GalleryContent() {
   const [galleryImages, setGalleryImages] = useState<any[]>(defaultGalleryImages);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gallerySliderRef = useRef<HTMLDivElement>(null);
-  const [selectedCategory, setSelectedCategory] = useState('All Events');
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category');
+  const [selectedCategory, setSelectedCategory] = useState('Weddings');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (categoryParam) {
+      const decoded = decodeURIComponent(categoryParam);
+      if (categories.includes(decoded)) {
+        setSelectedCategory(decoded);
+      }
+    }
+  }, [categoryParam]);
 
   // Autoplay relative scroll for Gallery Slider (slides right every 3s) & touch wrap-around
   useEffect(() => {
@@ -168,9 +180,7 @@ export default function GalleryPage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [lightboxIndex]);
 
-  const filteredImages = galleryImages.filter((img) => 
-    selectedCategory === 'All Events' || img.category === selectedCategory
-  );
+  const filteredImages = galleryImages.filter((img) => img.category === selectedCategory);
 
   const handleNext = () => {
     setLightboxIndex((prev) => {
@@ -243,7 +253,7 @@ export default function GalleryPage() {
           <motion.div 
             layout 
             ref={gallerySliderRef}
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full"
+            className="grid grid-cols-2 gap-4 md:flex md:gap-6 md:overflow-x-auto md:snap-x md:snap-mandatory md:scroll-smooth pb-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full"
           >
             {filteredImages.map((image, idx) => (
               <motion.div
@@ -253,7 +263,11 @@ export default function GalleryPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4 }}
-                className="h-[300px] sm:h-[400px] md:h-[450px] w-[300px] sm:w-[380px] md:w-[calc(50%-12px)] relative group rounded-2xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 shadow-lg bg-zinc-900/30 cursor-pointer snap-start flex-shrink-0"
+                className={`${
+                  idx === 0 
+                    ? 'col-span-2 h-[220px] sm:h-[300px] md:h-[450px] md:w-[calc(50%-12px)]' 
+                    : 'col-span-1 aspect-square md:aspect-auto md:h-[450px] md:w-[calc(50%-12px)]'
+                } relative group rounded-2xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 shadow-lg bg-zinc-900/30 cursor-pointer md:snap-start md:flex-shrink-0`}
                 onClick={() => setLightboxIndex(idx)}
               >
                 <Image 
@@ -361,5 +375,13 @@ export default function GalleryPage() {
         <Footer />
       </div>
     </>
+  );
+}
+
+export default function GalleryPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+      <GalleryContent />
+    </Suspense>
   );
 }

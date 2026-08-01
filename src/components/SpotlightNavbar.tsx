@@ -81,6 +81,23 @@ export default function SpotlightNavbar() {
             transition={{ type: 'spring', damping: 25, stiffness: 220 }}
             className="fixed inset-0 bg-[#000000]/98 backdrop-blur-3xl z-40 md:hidden flex flex-col justify-center px-8"
           >
+            {/* Brand Logo inside mobile menu (Top Left) */}
+            <div className="absolute top-5 left-8 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center overflow-hidden bg-black flex-shrink-0">
+                <img 
+                  src="/logo.png" 
+                  alt="Kadam Production Logo" 
+                  className="w-[90%] h-[90%] object-contain translate-y-[1px]"
+                />
+              </div>
+              <span 
+                className="text-xs font-black tracking-widest text-white uppercase animate-pulse"
+                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+              >
+                KADAM PRODUCTION
+              </span>
+            </div>
+
             <div className="space-y-8 flex flex-col">
               {navItems.map((item, idx) => {
                 const Icon = item.icon;

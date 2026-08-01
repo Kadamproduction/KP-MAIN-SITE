@@ -44,16 +44,16 @@ export default function Footer() {
     { label: 'Home', href: '/' },
     { label: 'Services', href: '/services' },
     { label: 'Gallery', href: '/gallery' },
-    { label: 'About', href: '/about' },
-    { label: 'Contact', href: '/contact' },
+    { label: 'About us', href: '/about' },
+    { label: 'Contact us', href: '/contact' },
   ];
 
   const servicesLinks = [
-    { label: 'Weddings', href: '/services' },
-    { label: 'Festivals', href: '/services' },
-    { label: 'Concerts', href: '/services' },
-    { label: 'Corporate Events', href: '/services' },
-    { label: 'Road Shows', href: '/services' },
+    { label: 'Weddings', href: '/services?service=weddings' },
+    { label: 'Festivals', href: '/services?service=festivals' },
+    { label: 'Concerts', href: '/services?service=concerts' },
+    { label: 'Corporate Events', href: '/services?service=corporate' },
+    { label: 'Road Shows', href: '/services?service=roadshows' },
   ];
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -69,16 +69,19 @@ export default function Footer() {
         {/* Brand Description */}
         <div className="space-y-6">
           <Link href="/" className="flex items-center gap-3 group">
-            <img 
-              src="/logo.png" 
-              alt="Kadam Production Logo" 
-              className="w-16 h-16 rounded-full border border-white/10 object-cover"
-            />
+            <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center overflow-hidden bg-black flex-shrink-0">
+              <img 
+                src="/logo.png" 
+                alt="Kadam Production Logo" 
+                className="w-[90%] h-[90%] object-contain translate-y-[2px]"
+              />
+            </div>
             <div>
               <h4 className="text-md font-black tracking-tight text-white">KADAM PRODUCTION</h4>
             </div>
           </Link>
           
+
 
 
           {/* Social Links */}
@@ -151,7 +154,7 @@ export default function Footer() {
 
         {/* Contact Info */}
         <div className="space-y-6">
-          <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-white">Contact Info</h4>
+          <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-white">Contact Us</h4>
           <ul className="space-y-4 text-xs">
             <li className="flex gap-3 text-zinc-400">
               <Phone className="w-4 h-4 text-white flex-shrink-0" />

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, useRef, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   Music, Volume2, Lightbulb, Sliders, 
@@ -164,12 +164,40 @@ const servicesData = [
   }
 ];
 
-export default function ServicesPage() {
+function ServicesContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const serviceParam = searchParams.get('service');
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const servicesSliderRef = useRef<HTMLDivElement>(null);
   const { siteSettings } = useAuth();
   const whatsappUrl = `https://wa.me/91${siteSettings.phone_1}`;
+
+  useEffect(() => {
+    if (serviceParam && servicesSliderRef.current) {
+      const serviceId = parseInt(serviceParam);
+      let targetIndex = -1;
+      
+      if (!isNaN(serviceId)) {
+        targetIndex = servicesData.findIndex(s => s.id === serviceId);
+      } else {
+        const paramLower = serviceParam.toLowerCase();
+        targetIndex = servicesData.findIndex(s => 
+          s.title.toLowerCase().includes(paramLower) || 
+          s.subtitle.toLowerCase().includes(paramLower)
+        );
+      }
+      
+      if (targetIndex !== -1 && servicesSliderRef.current.children[targetIndex]) {
+        setTimeout(() => {
+          const targetCard = servicesSliderRef.current?.children[targetIndex] as HTMLElement;
+          if (targetCard) {
+            targetCard.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          }
+        }, 600);
+      }
+    }
+  }, [serviceParam]);
 
   const [images, setImages] = useState<Record<number, string>>({
     1: '/images/Untitled-design-15_bdfxt9.png',
@@ -362,6 +390,25 @@ export default function ServicesPage() {
                       className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+
+                    {/* Open in Gallery Button */}
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const catMap: Record<string, string> = {
+                          'WEDDINGS': 'Weddings',
+                          'CONCERTS': 'Concerts',
+                          'FESTIVALS': 'Festivals',
+                          'CORPORATE EVENTS': 'Corporate',
+                          'ROAD SHOWS': 'Road Shows'
+                        };
+                        const targetCat = catMap[service.title] || 'Weddings';
+                        router.push(`/gallery?category=${encodeURIComponent(targetCat)}`);
+                      }}
+                      className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-black/70 border border-white/20 text-[9px] font-black text-white hover:bg-purple-600 hover:border-transparent transition-all z-20 cursor-pointer backdrop-blur-md uppercase tracking-wider active:scale-95"
+                    >
+                      Open in Gallery
+                    </button>
                   </div>
 
                   {/* Text Contents */}
@@ -453,5 +500,13 @@ export default function ServicesPage() {
         <Footer />
       </div>
     </>
+  );
+}
+
+export default function ServicesPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+      <ServicesContent />
+    </Suspense>
   );
 }

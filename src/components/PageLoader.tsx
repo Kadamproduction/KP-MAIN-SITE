@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import LottiePlayer from './LottiePlayer';
 
 interface PageLoaderProps {
   onComplete: () => void;
@@ -15,14 +14,14 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
 
   useEffect(() => {
     if (isReady) {
-      // Hide the logo immediately when ready
+      // Hide the logo first
       setShowLogo(false);
       
-      // Start curtain split exit animation
+      // Start curtain upward exit animation after logo fades out
       const exitTimer = setTimeout(() => {
         setIsActive(false);
         onComplete();
-      }, 900); // Give the exit animation enough time to slide away (800ms)
+      }, 700);
       
       return () => {
         clearTimeout(exitTimer);
@@ -34,38 +33,66 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
     <AnimatePresence mode="wait">
       {isActive && (
         <div className="fixed inset-0 z-[9999] overflow-hidden flex pointer-events-none">
-          {/* Left Curtain Curtain */}
+          {/* Single Curtain Slide Up */}
           <motion.div
-            initial={{ x: 0 }}
-            animate={isReady ? { x: '-100%' } : { x: 0 }}
-            transition={{ duration: 0.85, ease: [0.77, 0, 0.175, 1] }}
-            className="w-1/2 h-full bg-zinc-950 pointer-events-auto"
-          />
-
-          {/* Right Curtain Curtain */}
-          <motion.div
-            initial={{ x: 0 }}
-            animate={isReady ? { x: '100%' } : { x: 0 }}
-            transition={{ duration: 0.85, ease: [0.77, 0, 0.175, 1] }}
-            className="w-1/2 h-full bg-zinc-950 pointer-events-auto"
-          />
-
-          {/* Centered Lottie Logo */}
-          <div className="absolute inset-0 flex items-center justify-center z-10">
-            <AnimatePresence>
-              {showLogo && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.4 }}
-                  className="w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center pointer-events-auto"
-                >
-                  <LottiePlayer src="/Logo.json" className="w-full h-full" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+            initial={{ y: 0 }}
+            animate={isReady ? { y: '-100%' } : { y: 0 }}
+            transition={{ duration: 0.8, ease: [0.77, 0, 0.175, 1] }}
+            className="absolute inset-0 bg-zinc-950 pointer-events-auto flex flex-col items-center justify-center"
+          >
+            {/* Centered Creative Brand Reveal */}
+            <div className="relative z-10 flex flex-col items-center justify-center p-6">
+              <AnimatePresence>
+                {showLogo && (
+                  <div className="flex flex-col items-center gap-6 pointer-events-auto">
+                    {/* Glowing staggered letter reveal */}
+                    <motion.div
+                      className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-center"
+                      initial="hidden"
+                      animate="visible"
+                      variants={{
+                        visible: {
+                          transition: {
+                            staggerChildren: 0.04
+                          }
+                        }
+                      }}
+                    >
+                      {"KADAM PRODUCTION".split(" ").map((word, wIdx) => (
+                        <div key={wIdx} className="flex gap-[0.1em] whitespace-nowrap">
+                          {word.split("").map((char, cIdx) => (
+                            <motion.span
+                              key={cIdx}
+                              variants={{
+                                hidden: { opacity: 0, y: 15, filter: 'blur(5px)' },
+                                visible: { opacity: 1, y: 0, filter: 'blur(0px)' }
+                              }}
+                              transition={{ duration: 0.45, ease: 'easeOut' }}
+                              className="text-3xl sm:text-5xl font-light tracking-[0.15em] text-white uppercase"
+                              style={{ 
+                                fontFamily: 'Space Grotesk, sans-serif',
+                                textShadow: '0 0 15px rgba(255,255,255,0.4)'
+                              }}
+                            >
+                              {char}
+                            </motion.span>
+                          ))}
+                        </div>
+                      ))}
+                    </motion.div>
+                    
+                    {/* Mini loading progress bar */}
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: 160 }}
+                      transition={{ duration: 1.0, ease: 'easeInOut' }}
+                      className="h-[2px] bg-gradient-to-r from-purple-500 to-pink-500 rounded-full shadow-[0_0_10px_#a855f7]"
+                    />
+                  </div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
         </div>
       )}
     </AnimatePresence>

@@ -10,7 +10,6 @@ import {
   ChevronDown, Film, Building2, Radio, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import FlipText from '@/components/FlipText';
-import CylinderCarousel from '@/components/CylinderCarousel';
 import PageLoader from '@/components/PageLoader';
 import CursorFollower from '@/components/CursorFollower';
 import SpotlightNavbar from '@/components/SpotlightNavbar';
@@ -189,6 +188,15 @@ export default function HomePage() {
 
   const stagesSliderRef = useRef<HTMLDivElement>(null);
   const [activeStageIdx, setActiveStageIdx] = useState(0);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const scrollToStageSlide = (idx: number) => {
     setActiveStageIdx(idx);
@@ -203,27 +211,33 @@ export default function HomePage() {
   };
 
   const handleStagesScroll = () => {
-    if (!stagesSliderRef.current) return;
-    const container = stagesSliderRef.current;
-    const children = container.children;
-    let closestIdx = 0;
-    let minDistance = Infinity;
-    const containerCenter = container.scrollLeft + container.clientWidth / 2;
-    
-    // Skip left spacer (index 0) and right spacer (last index) to map slides correctly
-    for (let i = 1; i < children.length - 1; i++) {
-      const child = children[i] as HTMLElement;
-      const childCenter = child.offsetLeft + child.clientWidth / 2;
-      const distance = Math.abs(childCenter - containerCenter);
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestIdx = i - 1; // Map child index i (1..6) to slide index (0..5)
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+
+    scrollTimeoutRef.current = setTimeout(() => {
+      if (!stagesSliderRef.current) return;
+      const container = stagesSliderRef.current;
+      const children = container.children;
+      let closestIdx = 0;
+      let minDistance = Infinity;
+      const containerCenter = container.scrollLeft + container.clientWidth / 2;
+      
+      // Skip left spacer (index 0) and right spacer (last index) to map slides correctly
+      for (let i = 1; i < children.length - 1; i++) {
+        const child = children[i] as HTMLElement;
+        const childCenter = child.offsetLeft + child.clientWidth / 2;
+        const distance = Math.abs(childCenter - containerCenter);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIdx = i - 1; // Map child index i (1..6) to slide index (0..5)
+        }
       }
-    }
-    
-    if (closestIdx !== activeStageIdx && closestIdx >= 0 && closestIdx < cylinderStats.length) {
-      setActiveStageIdx(closestIdx);
-    }
+      
+      if (closestIdx !== activeStageIdx && closestIdx >= 0 && closestIdx < cylinderStats.length) {
+        setActiveStageIdx(closestIdx);
+      }
+    }, 100); // 100ms debounce
   };
 
   const handleStageVideoEnded = (idx: number) => {
@@ -550,6 +564,11 @@ export default function HomePage() {
             ))}
           </div>
         </section>
+
+        {/* Visual Section Divider */}
+        <div className="w-full max-w-7xl mx-auto px-6 relative z-30">
+          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
+        </div>
 
         {/* 1.4 INTERACTIVE VIDEO GRID & CAROUSEL SECTION */}
         <section className="relative pt-10 pb-10 md:py-28 px-6 md:px-12 bg-black overflow-hidden flex flex-col items-center border-t border-white/5">
