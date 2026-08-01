@@ -262,7 +262,7 @@ function GalleryContent() {
           <motion.div 
             layout 
             ref={gallerySliderRef}
-            className="grid grid-cols-2 gap-4 md:flex md:gap-6 md:overflow-x-auto md:snap-x md:snap-mandatory md:scroll-smooth pb-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full"
+            className="grid grid-cols-2 gap-4 md:gap-6 pb-12 w-full"
           >
             {filteredImages.map((image, idx) => (
               <motion.div
@@ -274,9 +274,9 @@ function GalleryContent() {
                 transition={{ duration: 0.4 }}
                 className={`${
                   idx === 0 
-                    ? 'col-span-2 h-[220px] sm:h-[300px] md:h-[450px] md:w-[calc(50%-12px)]' 
-                    : 'col-span-1 aspect-square md:aspect-auto md:h-[450px] md:w-[calc(50%-12px)]'
-                } relative group rounded-2xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 shadow-lg bg-zinc-900/30 cursor-pointer md:snap-start md:flex-shrink-0`}
+                    ? 'col-span-2 h-[220px] sm:h-[320px] md:h-[480px] lg:h-[550px]' 
+                    : 'col-span-1 aspect-square'
+                } relative group rounded-2xl overflow-hidden border border-white/5 hover:border-[#8B5CF6]/30 shadow-lg bg-zinc-900/30 cursor-pointer`}
                 onClick={() => setLightboxIndex(idx)}
               >
                 <Image 
@@ -296,38 +296,7 @@ function GalleryContent() {
                 </div>
               </motion.div>
             ))}
-            <div className="w-6 flex-shrink-0" />
           </motion.div>
-
-          {/* PC Manual Navigation Buttons */}
-          <div className="hidden md:flex justify-center items-center gap-4 mt-6 mb-12 md:mb-16">
-            <button 
-              onClick={() => {
-                const slider = gallerySliderRef.current;
-                if (!slider) return;
-                const firstCard = slider.children[0] as HTMLElement;
-                const cardWidth = firstCard?.clientWidth || 450;
-                slider.scrollBy({ left: -(cardWidth + 24), behavior: 'smooth' });
-              }}
-              className="w-12 h-12 rounded-full border border-white/20 hover:border-white/50 bg-zinc-900/50 hover:bg-zinc-800 text-white flex items-center justify-center transition-all duration-300 cursor-pointer shadow-lg"
-              aria-label="Previous image"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button 
-              onClick={() => {
-                const slider = gallerySliderRef.current;
-                if (!slider) return;
-                const firstCard = slider.children[0] as HTMLElement;
-                const cardWidth = firstCard?.clientWidth || 450;
-                slider.scrollBy({ left: cardWidth + 24, behavior: 'smooth' });
-              }}
-              className="w-12 h-12 rounded-full border border-white/20 hover:border-white/50 bg-zinc-900/50 hover:bg-zinc-800 text-white flex items-center justify-center transition-all duration-300 cursor-pointer shadow-lg"
-              aria-label="Next image"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
         </section>
 
         {/* LIGHTBOX MODAL */}
