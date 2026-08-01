@@ -65,10 +65,23 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
                               key={cIdx}
                               variants={{
                                 hidden: { opacity: 0, y: 15, filter: 'blur(5px)' },
-                                visible: { opacity: 1, y: 0, filter: 'blur(0px)' }
+                                visible: { 
+                                  opacity: [1, 0.4, 1],
+                                  y: 0, 
+                                  filter: 'blur(0px)'
+                                }
                               }}
-                              transition={{ duration: 0.45, ease: 'easeOut' }}
-                              className="text-3xl sm:text-5xl font-light tracking-[0.15em] text-white uppercase"
+                              transition={{
+                                y: { duration: 0.45, ease: 'easeOut' },
+                                filter: { duration: 0.45, ease: 'easeOut' },
+                                opacity: { 
+                                  repeat: Infinity, 
+                                  duration: 2.0, 
+                                  ease: 'easeInOut', 
+                                  delay: 0.4 + (wIdx * 3 + cIdx) * 0.06 
+                                }
+                              }}
+                              className="text-3xl sm:text-5xl font-semibold tracking-[0.15em] text-white uppercase"
                               style={{ 
                                 fontFamily: 'Space Grotesk, sans-serif',
                                 textShadow: '0 0 15px rgba(255,255,255,0.4)'
