@@ -180,7 +180,16 @@ function GalleryContent() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [lightboxIndex]);
 
-  const filteredImages = galleryImages.filter((img) => img.category === selectedCategory);
+  const filteredImages = (() => {
+    const list = galleryImages.filter((img) => img.category === selectedCategory);
+    if (list.length > 0 && list.length < 5) {
+      const existingIds = new Set(list.map((img) => img.id));
+      const otherImages = galleryImages.filter((img) => !existingIds.has(img.id));
+      const needed = 5 - list.length;
+      return [...list, ...otherImages.slice(0, needed)];
+    }
+    return list;
+  })();
 
   const handleNext = () => {
     setLightboxIndex((prev) => {

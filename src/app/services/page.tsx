@@ -233,6 +233,7 @@ function ServicesContent() {
 
   // Autoplay relative scroll for Services Slider (slides right every 3s) & touch wrap-around
   useEffect(() => {
+    if (serviceParam) return; // Do not autoscroll if a specific service page category was chosen
     const slider = servicesSliderRef.current;
     if (!slider) return;
 
@@ -273,7 +274,7 @@ function ServicesContent() {
       slider.removeEventListener('touchstart', handleTouchStart);
       slider.removeEventListener('touchmove', handleTouchMove);
     };
-  }, []);
+  }, [serviceParam]);
 
   // Render organic sound wave flowing animation on canvas for premium visual effect
   useEffect(() => {
@@ -381,13 +382,26 @@ function ServicesContent() {
                   }}
                 >
                   {/* Thumbnail area (aspect 4:5 Instagram Portrait size) */}
-                  <div className="relative w-full aspect-[16/11] overflow-hidden">
+                  <div 
+                    onClick={() => {
+                      const catMap: Record<string, string> = {
+                        'WEDDINGS': 'Weddings',
+                        'CONCERTS': 'Concerts',
+                        'FESTIVALS': 'Festivals',
+                        'CORPORATE EVENTS': 'Corporate',
+                        'ROAD SHOWS': 'Road Shows'
+                      };
+                      const targetCat = catMap[service.title] || 'Weddings';
+                      router.push(`/gallery?category=${encodeURIComponent(targetCat)}`);
+                    }}
+                    className="relative w-full aspect-[16/11] overflow-hidden cursor-pointer"
+                  >
                     <Image 
                       src={images[service.id] || service.image} 
                       alt={service.title}
                       fill
                       sizes="(max-width: 640px) 88vw, (max-width: 768px) 360px, 400px"
-                      className="object-cover"
+                      className="object-cover transition-transform duration-500 hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
 
@@ -405,7 +419,7 @@ function ServicesContent() {
                         const targetCat = catMap[service.title] || 'Weddings';
                         router.push(`/gallery?category=${encodeURIComponent(targetCat)}`);
                       }}
-                      className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-black/70 border border-white/20 text-[9px] font-black text-white hover:bg-purple-600 hover:border-transparent transition-all z-20 cursor-pointer backdrop-blur-md uppercase tracking-wider active:scale-95"
+                      className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-black/40 border border-white/10 text-[9px] font-black text-white hover:bg-purple-600/70 hover:border-transparent transition-all z-20 cursor-pointer backdrop-blur-md uppercase tracking-wider active:scale-95"
                     >
                       Open in Gallery
                     </button>

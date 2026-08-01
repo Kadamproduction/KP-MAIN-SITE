@@ -54,6 +54,7 @@ export default function Footer() {
     { label: 'Concerts', href: '/services?service=concerts' },
     { label: 'Corporate Events', href: '/services?service=corporate' },
     { label: 'Road Shows', href: '/services?service=roadshows' },
+    { label: 'SFX & Pyrotechnics', href: '/services?service=sfx' },
   ];
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {

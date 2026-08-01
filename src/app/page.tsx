@@ -567,7 +567,7 @@ export default function HomePage() {
 
         {/* Visual Section Divider */}
         <div className="w-full max-w-7xl mx-auto px-6 relative z-30">
-          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
+          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-purple-600/60 to-transparent" />
         </div>
 
         {/* 1.4 INTERACTIVE VIDEO GRID & CAROUSEL SECTION */}

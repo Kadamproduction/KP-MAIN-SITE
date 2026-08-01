@@ -18,7 +18,7 @@ const navItems: NavItem[] = [
   { label: 'SERVICES', href: '/services', icon: Zap },
   { label: 'GALLERY', href: '/gallery', icon: Image },
   { label: 'ABOUT', href: '/about', icon: Users },
-  { label: 'CONTACT', href: '/contact', icon: Mail },
+  { label: 'CONTACT US', href: '/contact', icon: Mail },
 ];
 
 export default function SpotlightNavbar() {
@@ -91,7 +91,7 @@ export default function SpotlightNavbar() {
                 />
               </div>
               <span 
-                className="text-xs font-black tracking-widest text-white uppercase animate-pulse"
+                className="text-xs font-black tracking-widest text-white uppercase"
                 style={{ fontFamily: 'Space Grotesk, sans-serif' }}
               >
                 KADAM PRODUCTION
