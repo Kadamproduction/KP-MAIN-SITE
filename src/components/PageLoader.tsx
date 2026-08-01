@@ -45,9 +45,9 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
               <AnimatePresence>
                 {showLogo && (
                   <div className="flex flex-col items-center gap-6 pointer-events-auto">
-                    {/* Glowing staggered letter reveal + infinite pulsing */}
+                    {/* Glowing staggered letter reveal */}
                     <motion.div
-                      className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-center"
+                      className="flex flex-row justify-center whitespace-nowrap overflow-visible"
                       initial="hidden"
                       animate="visible"
                       variants={{
@@ -58,39 +58,22 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
                         }
                       }}
                     >
-                      {"KADAM PRODUCTION".split(" ").map((word, wIdx) => (
-                        <div key={wIdx} className="flex gap-[0.1em] whitespace-nowrap">
-                          {word.split("").map((char, cIdx) => (
-                            <motion.span
-                              key={cIdx}
-                              variants={{
-                                hidden: { opacity: 0, y: 15, filter: 'blur(5px)' },
-                                visible: { 
-                                  opacity: [1, 0.4, 1],
-                                  y: 0, 
-                                  filter: 'blur(0px)'
-                                }
-                              }}
-                              transition={{
-                                y: { duration: 0.45, ease: 'easeOut' },
-                                filter: { duration: 0.45, ease: 'easeOut' },
-                                opacity: { 
-                                  repeat: Infinity, 
-                                  duration: 2.0, 
-                                  ease: 'easeInOut', 
-                                  delay: 0.4 + (wIdx * 3 + cIdx) * 0.06 
-                                }
-                              }}
-                              className="text-3xl sm:text-5xl font-semibold tracking-[0.15em] text-white uppercase"
-                              style={{ 
-                                fontFamily: 'Space Grotesk, sans-serif',
-                                textShadow: '0 0 15px rgba(255,255,255,0.4)'
-                              }}
-                            >
-                              {char}
-                            </motion.span>
-                          ))}
-                        </div>
+                      {"KADAM PRODUCTION".split("").map((char, cIdx) => (
+                        <motion.span
+                          key={cIdx}
+                          variants={{
+                            hidden: { opacity: 0, y: 15, filter: 'blur(5px)' },
+                            visible: { opacity: 1, y: 0, filter: 'blur(0px)' }
+                          }}
+                          transition={{ duration: 0.45, ease: 'easeOut' }}
+                          className="text-2xl sm:text-4xl md:text-5xl font-semibold tracking-[0.06em] sm:tracking-[0.12em] text-white uppercase"
+                          style={{ 
+                            fontFamily: 'Space Grotesk, sans-serif',
+                            textShadow: '0 0 15px rgba(255,255,255,0.4)'
+                          }}
+                        >
+                          {char === " " ? "\u00A0" : char}
+                        </motion.span>
                       ))}
                     </motion.div>
                     
