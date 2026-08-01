@@ -45,27 +45,22 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
               <AnimatePresence>
                 {showLogo && (
                   <div className="flex flex-col items-center gap-6 pointer-events-auto">
-                    {/* Glowing staggered letter reveal */}
+                    {/* Glowing slide-loop text */}
                     <motion.div
                       className="flex flex-row justify-center whitespace-nowrap overflow-visible"
-                      initial="hidden"
-                      animate="visible"
-                      variants={{
-                        visible: {
-                          transition: {
-                            staggerChildren: 0.04
-                          }
-                        }
+                      animate={{
+                        x: ['100vw', '0vw', '0vw', '-100vw']
+                      }}
+                      transition={{
+                        duration: 3.5,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                        times: [0, 0.25, 0.75, 1]
                       }}
                     >
                       {"KADAM PRODUCTION".split("").map((char, cIdx) => (
-                        <motion.span
+                        <span
                           key={cIdx}
-                          variants={{
-                            hidden: { opacity: 0, y: 15, filter: 'blur(5px)' },
-                            visible: { opacity: 1, y: 0, filter: 'blur(0px)' }
-                          }}
-                          transition={{ duration: 0.45, ease: 'easeOut' }}
                           className="text-2xl sm:text-4xl md:text-5xl font-semibold tracking-[0.06em] sm:tracking-[0.12em] text-white uppercase"
                           style={{ 
                             fontFamily: 'Space Grotesk, sans-serif',
@@ -73,7 +68,7 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
                           }}
                         >
                           {char === " " ? "\u00A0" : char}
-                        </motion.span>
+                        </span>
                       ))}
                     </motion.div>
                     
