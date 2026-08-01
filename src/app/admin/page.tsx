@@ -77,7 +77,7 @@ interface SiteSettings {
   from_email?: string;
 }
 
-const CATEGORIES = ['All Events', 'Weddings', 'Festivals', 'Concerts', 'Road Shows'];
+const CATEGORIES = ['All Events', 'Weddings', 'Festivals', 'Concerts', 'Corporate', 'Road Shows', 'SFX & Pyrotechnics'];
 
 export default function AdminPage() {
   const router = useRouter();
@@ -548,6 +548,17 @@ export default function AdminPage() {
     setShowConfirmModal(false);
     setSaveLoading(true);
     setErrorMsg(null);
+
+    // Validation: Enforce exactly 5 images per category in the gallery section
+    const categoriesToValidate = ['Weddings', 'Festivals', 'Concerts', 'Corporate', 'Road Shows', 'SFX & Pyrotechnics'];
+    for (const cat of categoriesToValidate) {
+      const count = images.filter(img => img.category === cat).length;
+      if (count !== 5) {
+        setErrorMsg(`Validation Error: Every gallery category must have exactly 5 images. "${cat}" currently has ${count} images. Please adjust to exactly 5 before saving.`);
+        setSaveLoading(false);
+        return;
+      }
+    }
 
     try {
       // 1. Staged gallery uploads

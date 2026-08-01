@@ -25,7 +25,7 @@ const defaultGalleryImages = [
   { id: 9, category: 'Corporate', title: 'High-end lighting design', event: 'VIP Corporate Meet', src: '/images/Untitled-design-25_f2t475.png' }
 ];
 
-const categories = ['Weddings', 'Festivals', 'Concerts', 'Corporate', 'Road Shows'];
+const categories = ['Weddings', 'Festivals', 'Concerts', 'Corporate', 'Road Shows', 'SFX & Pyrotechnics'];
 
 function GalleryContent() {
   const [galleryImages, setGalleryImages] = useState<any[]>(defaultGalleryImages);

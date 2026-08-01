@@ -72,15 +72,47 @@ const DEFAULT_CREDENTIALS: AdminCredentials = {
 };
 
 const DEFAULT_IMAGES: DBImage[] = [
+  // Weddings (5 images)
   { id: '1', category: 'Weddings', image_url: '/images/Untitled-design-13.png', order_index: 1 },
-  { id: '2', category: 'Festivals', image_url: '/images/Untitled-design-18_tdjp2b.png', order_index: 2 },
-  { id: '3', category: 'Concerts', image_url: '/images/Untitled-design-21_atubxz.png', order_index: 3 },
-  { id: '4', category: 'Corporate', image_url: '/images/Untitled-design-20_sm7myc.png', order_index: 4 },
-  { id: '5', category: 'Road Shows', image_url: '/images/Untitled-design-17_ubz6ho.png', order_index: 5 },
-  { id: '6', category: 'Weddings', image_url: '/images/Untitled-design-15_bdfxt9.png', order_index: 6 },
+  { id: '2', category: 'Weddings', image_url: '/images/Untitled-design-15_bdfxt9.png', order_index: 2 },
+  { id: '3', category: 'Weddings', image_url: '/images/Untitled-design-18_tdjp2b.png', order_index: 3 },
+  { id: '4', category: 'Weddings', image_url: '/images/Untitled-design-21_atubxz.png', order_index: 4 },
+  { id: '5', category: 'Weddings', image_url: '/images/Untitled-design-20_sm7myc.png', order_index: 5 },
+  
+  // Festivals (5 images)
+  { id: '6', category: 'Festivals', image_url: '/images/Untitled-design-18_tdjp2b.png', order_index: 6 },
   { id: '7', category: 'Festivals', image_url: '/images/Untitled-design-14_ogyqmd.png', order_index: 7 },
-  { id: '8', category: 'Concerts', image_url: '/images/Untitled-design-32_atcfrs.png', order_index: 8 },
-  { id: '9', category: 'Corporate', image_url: '/images/Untitled-design-25_f2t475.png', order_index: 9 }
+  { id: '8', category: 'Festivals', image_url: '/images/Untitled-design-32_atcfrs.png', order_index: 8 },
+  { id: '9', category: 'Festivals', image_url: '/images/Untitled-design-13.png', order_index: 9 },
+  { id: '10', category: 'Festivals', image_url: '/images/Untitled-design-21_atubxz.png', order_index: 10 },
+
+  // Concerts (5 images)
+  { id: '11', category: 'Concerts', image_url: '/images/Untitled-design-21_atubxz.png', order_index: 11 },
+  { id: '12', category: 'Concerts', image_url: '/images/Untitled-design-32_atcfrs.png', order_index: 12 },
+  { id: '13', category: 'Concerts', image_url: '/images/Untitled-design-15_bdfxt9.png', order_index: 13 },
+  { id: '14', category: 'Concerts', image_url: '/images/Untitled-design-13.png', order_index: 14 },
+  { id: '15', category: 'Concerts', image_url: '/images/Untitled-design-18_tdjp2b.png', order_index: 15 },
+
+  // Corporate (5 images)
+  { id: '16', category: 'Corporate', image_url: '/images/Untitled-design-20_sm7myc.png', order_index: 16 },
+  { id: '17', category: 'Corporate', image_url: '/images/Untitled-design-25_f2t475.png', order_index: 17 },
+  { id: '18', category: 'Corporate', image_url: '/images/Untitled-design-17_ubz6ho.png', order_index: 18 },
+  { id: '19', category: 'Corporate', image_url: '/images/Untitled-design-15_bdfxt9.png', order_index: 19 },
+  { id: '20', category: 'Corporate', image_url: '/images/Untitled-design-13.png', order_index: 20 },
+
+  // Road Shows (5 images)
+  { id: '21', category: 'Road Shows', image_url: '/images/Untitled-design-17_ubz6ho.png', order_index: 21 },
+  { id: '22', category: 'Road Shows', image_url: '/images/Untitled-design-13.png', order_index: 22 },
+  { id: '23', category: 'Road Shows', image_url: '/images/Untitled-design-15_bdfxt9.png', order_index: 23 },
+  { id: '24', category: 'Road Shows', image_url: '/images/Untitled-design-18_tdjp2b.png', order_index: 24 },
+  { id: '25', category: 'Road Shows', image_url: '/images/Untitled-design-21_atubxz.png', order_index: 25 },
+
+  // SFX & Pyrotechnics (5 images)
+  { id: '26', category: 'SFX & Pyrotechnics', image_url: '/images/ChatGPT_Image_Jul_8_2026_02_56_39_PM_nux2y0.png', order_index: 26 },
+  { id: '27', category: 'SFX & Pyrotechnics', image_url: '/images/Untitled-design-13.png', order_index: 27 },
+  { id: '28', category: 'SFX & Pyrotechnics', image_url: '/images/Untitled-design-15_bdfxt9.png', order_index: 28 },
+  { id: '29', category: 'SFX & Pyrotechnics', image_url: '/images/Untitled-design-18_tdjp2b.png', order_index: 29 },
+  { id: '30', category: 'SFX & Pyrotechnics', image_url: '/images/Untitled-design-21_atubxz.png', order_index: 30 }
 ];
 
 const DEFAULT_VIDEOS: DBVideo[] = [
