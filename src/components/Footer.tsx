@@ -70,11 +70,11 @@ export default function Footer() {
         {/* Brand Description */}
         <div className="space-y-6">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center overflow-hidden bg-black flex-shrink-0">
+            <div className="w-16 h-16 flex items-center justify-center flex-shrink-0">
               <img 
                 src="/logo.png" 
                 alt="Kadam Production Logo" 
-                className="w-[90%] h-[90%] object-contain translate-y-[2px]"
+                className="w-full h-full object-contain"
               />
             </div>
             <div>

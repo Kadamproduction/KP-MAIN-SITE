@@ -364,10 +364,10 @@ export default function HomePage() {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
 
-    // Minimum display time for page loader logo (5 seconds)
+    // Minimum display time for page loader logo (2 seconds)
     const minTimer = setTimeout(() => {
       setMinTimeElapsed(true);
-    }, 5000);
+    }, 2000);
 
     // Fallback maximum timeout (10 seconds) to prevent infinite loaders
     const fallbackTimer = setTimeout(() => {

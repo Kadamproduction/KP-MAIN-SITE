@@ -77,19 +77,15 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
                       ))}
                     </motion.div>
                     
-                    {/* Infinite scanning loading line */}
-                    <motion.div
-                      animate={{ opacity: [0.7, 1, 0.7] }}
-                      transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-                      className="w-40 h-[2px] bg-white/10 rounded-full overflow-hidden relative shadow-[0_0_10px_rgba(168,85,247,0.1)]"
-                    >
+                    {/* Single progress loading line (Animates once and stops) */}
+                    <div className="w-40 h-[2px] bg-white/10 rounded-full overflow-hidden relative">
                       <motion.div 
-                        initial={{ left: '-100%' }}
-                        animate={{ left: '100%' }}
-                        transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-                        className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-purple-500 to-transparent shadow-[0_0_8px_#a855f7]"
+                        initial={{ width: 0 }}
+                        animate={isReady ? { width: '100%' } : { width: '85%' }}
+                        transition={{ duration: 1.5, ease: 'easeInOut' }}
+                        className="absolute top-0 bottom-0 left-0 bg-gradient-to-r from-purple-500 to-pink-500 shadow-[0_0_10px_#a855f7]"
                       />
-                    </motion.div>
+                    </div>
                   </div>
                 )}
               </AnimatePresence>
