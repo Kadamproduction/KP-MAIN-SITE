@@ -145,6 +145,70 @@ const DEFAULT_VIBRANTS: DBVibrant[] = [
   { id: '5', title: 'UNIQUE EVENTS', image_url: '/images/Untitled-design-25_f2t475.png', order_index: 5 }
 ];
 
+export interface DBSignatureProject {
+  id: string;
+  number: string;
+  name: string;
+  category: string;
+  col1_img1: string;
+  col1_img2: string;
+  col2_img: string;
+  link: string;
+}
+
+export interface DBCrewMember {
+  name: string;
+  role: string;
+  bio: string;
+  src: string;
+}
+
+export interface DBAbout {
+  hero_image_url: string;
+  crew: DBCrewMember[];
+}
+
+const DEFAULT_SIGNATURES: DBSignatureProject[] = [
+  {
+    id: 'wedding-productions',
+    number: '01',
+    name: 'Royal Weddings',
+    category: 'Wedding Production',
+    col1_img1: '/images/Untitled-design-13.png',
+    col1_img2: '/images/Untitled-design-18_tdjp2b.png',
+    col2_img: '/images/Untitled-design-21_atubxz.png',
+    link: 'https://github.com'
+  },
+  {
+    id: 'festival-productions',
+    number: '02',
+    name: 'Cultural Festivals',
+    category: 'Arena Production',
+    col1_img1: '/images/Untitled-design-20_sm7myc.png',
+    col1_img2: '/images/Untitled-design-17_ubz6ho.png',
+    col2_img: '/images/Untitled-design-15_bdfxt9.png',
+    link: 'https://github.com'
+  },
+  {
+    id: 'concert-productions',
+    number: '03',
+    name: 'Live Concerts',
+    category: 'Stadium Production',
+    col1_img1: '/images/Untitled-design-14_ogyqmd.png',
+    col1_img2: '/images/Untitled-design-32_atcfrs.png',
+    col2_img: '/images/Untitled-design-25_f2t475.png',
+    link: 'https://github.com'
+  }
+];
+
+const DEFAULT_ABOUT: DBAbout = {
+  hero_image_url: '/images/Untitled-design-13.png',
+  crew: [
+    { name: 'ROHAN', role: 'Managing Director', bio: 'Directing creative operations, production strategies, and high-end light & sound installations.', src: '/images/WhatsApp-Image-2026-01-10-at-8.52.25-PM-3_vohntj.png' },
+    { name: 'DISHANT', role: 'Managing Director', bio: 'Overseeing event execution, client coordination, and technical system setups.', src: '/images/WhatsApp-Image-2026-01-10-at-8.52.25-PM-2_ug0sl5.png' }
+  ]
+};
+
 // Helper to read database.json from R2
 async function getFullDb(): Promise<any> {
   try {
@@ -164,6 +228,8 @@ async function getFullDb(): Promise<any> {
     if (!db.videos || db.videos.length === 0) { db.videos = DEFAULT_VIDEOS; updated = true; }
     if (!db.services || db.services.length === 0) { db.services = DEFAULT_SERVICES; updated = true; }
     if (!db.vibrants || db.vibrants.length === 0) { db.vibrants = DEFAULT_VIBRANTS; updated = true; }
+    if (!db.signatures || db.signatures.length === 0) { db.signatures = DEFAULT_SIGNATURES; updated = true; }
+    if (!db.about) { db.about = DEFAULT_ABOUT; updated = true; }
 
     if (updated) {
       await saveFullDb(db);
@@ -178,6 +244,8 @@ async function getFullDb(): Promise<any> {
         videos: DEFAULT_VIDEOS,
         services: DEFAULT_SERVICES,
         vibrants: DEFAULT_VIBRANTS,
+        signatures: DEFAULT_SIGNATURES,
+        about: DEFAULT_ABOUT,
         credentials: DEFAULT_CREDENTIALS
       };
       await saveFullDb(db);
@@ -267,6 +335,28 @@ export const vercelDb = {
   async setCredentials(credentials: AdminCredentials): Promise<void> {
     const db = await getFullDb();
     db.credentials = credentials;
+    await saveFullDb(db);
+  },
+
+  async getSignatures(): Promise<DBSignatureProject[]> {
+    const db = await getFullDb();
+    return db.signatures || DEFAULT_SIGNATURES;
+  },
+
+  async setSignatures(signatures: DBSignatureProject[]): Promise<void> {
+    const db = await getFullDb();
+    db.signatures = signatures;
+    await saveFullDb(db);
+  },
+
+  async getAbout(): Promise<DBAbout> {
+    const db = await getFullDb();
+    return db.about || DEFAULT_ABOUT;
+  },
+
+  async setAbout(about: DBAbout): Promise<void> {
+    const db = await getFullDb();
+    db.about = about;
     await saveFullDb(db);
   }
 };

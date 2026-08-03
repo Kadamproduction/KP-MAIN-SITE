@@ -27,7 +27,9 @@ import {
   Mail,
   Send,
   Eye,
-  EyeOff
+  EyeOff,
+  Award,
+  Users
 } from 'lucide-react';
 
 interface DBImage {
@@ -65,6 +67,29 @@ interface DBVibrant {
   localFile?: File;
 }
 
+interface DBSignatureProject {
+  id: string;
+  number: string;
+  name: string;
+  category: string;
+  col1_img1: string;
+  col1_img2: string;
+  col2_img: string;
+  link: string;
+}
+
+interface DBCrewMember {
+  name: string;
+  role: string;
+  bio: string;
+  src: string;
+}
+
+interface DBAbout {
+  hero_image_url: string;
+  crew: DBCrewMember[];
+}
+
 interface SiteSettings {
   email: string;
   phone_1: string;
@@ -84,7 +109,7 @@ export default function AdminPage() {
   const { user, token, loading: authLoading, logout } = useAuth();
 
   // Navigation tabs state
-  const [activeTab, setActiveTab] = useState<'gallery' | 'videos' | 'services' | 'vibrants' | 'settings'>('gallery');
+  const [activeTab, setActiveTab] = useState<'gallery' | 'videos' | 'services' | 'vibrants' | 'signature' | 'about' | 'settings'>('gallery');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Core Data States
@@ -92,6 +117,14 @@ export default function AdminPage() {
   const [videos, setVideos] = useState<DBVideo[]>([]);
   const [serviceImages, setServiceImages] = useState<DBServiceImage[]>([]);
   const [vibrants, setVibrants] = useState<DBVibrant[]>([]);
+  const [signatures, setSignatures] = useState<DBSignatureProject[]>([]);
+  const [aboutData, setAboutData] = useState<DBAbout>({
+    hero_image_url: '/images/Untitled-design-13.png',
+    crew: [
+      { name: 'ROHAN', role: 'Managing Director', bio: 'Directing creative operations, production strategies, and high-end light & sound installations.', src: '/images/WhatsApp-Image-2026-01-10-at-8.52.25-PM-3_vohntj.png' },
+      { name: 'DISHANT', role: 'Managing Director', bio: 'Overseeing event execution, client coordination, and technical system setups.', src: '/images/WhatsApp-Image-2026-01-10-at-8.52.25-PM-2_ug0sl5.png' }
+    ]
+  });
   const [settings, setSettings] = useState<SiteSettings>({ email: '', phone_1: '', phone_2: '', address: '' });
   
   // Admin credentials states
@@ -122,6 +155,8 @@ export default function AdminPage() {
   const [initialVideos, setInitialVideos] = useState<string>('');
   const [initialServiceImages, setInitialServiceImages] = useState<string>('');
   const [initialVibrants, setInitialVibrants] = useState<string>('');
+  const [initialSignatures, setInitialSignatures] = useState<string>('');
+  const [initialAboutData, setInitialAboutData] = useState<string>('');
   const [settingsSnapshot, setSettingsSnapshot] = useState<string>('');
 
   // SMTP Test Email States
@@ -152,6 +187,14 @@ export default function AdminPage() {
   
   const [activeServiceIdToChange, setActiveServiceIdToChange] = useState<number | null>(null);
   const [activeVibrantIdToChange, setActiveVibrantIdToChange] = useState<string | null>(null);
+
+  // Signature change triggers
+  const [activeSignatureChangeId, setActiveSignatureChangeId] = useState<{ id: string; field: 'col1_img1' | 'col1_img2' | 'col2_img' } | null>(null);
+  const signatureFileInputRef = useRef<HTMLInputElement>(null);
+
+  // About change triggers
+  const [activeAboutChange, setActiveAboutChange] = useState<{ type: 'hero' | 'crew'; index?: number } | null>(null);
+  const aboutFileInputRef = useRef<HTMLInputElement>(null);
 
   // Verify auth on mount
   useEffect(() => {
@@ -213,6 +256,15 @@ export default function AdminPage() {
       const loadedVibrants = data.vibrants || [];
       setVibrants(loadedVibrants);
       setInitialVibrants(JSON.stringify(loadedVibrants));
+
+      const loadedSignatures = data.signatures || [];
+      setSignatures(loadedSignatures);
+      setInitialSignatures(JSON.stringify(loadedSignatures));
+
+      if (data.about) {
+        setAboutData(data.about);
+        setInitialAboutData(JSON.stringify(data.about));
+      }
 
       // Reset deletions tracking queue
       setDeletedUrls([]);
@@ -312,6 +364,38 @@ export default function AdminPage() {
       order_index: v.order_index
     })));
     if (currentVibrantsSerialized !== cleanInitialVibrants) return true;
+
+    const currentSignaturesSerialized = JSON.stringify(signatures.map(s => ({
+      id: s.id,
+      name: s.name,
+      category: s.category,
+      col1_img1: s.col1_img1,
+      col1_img2: s.col1_img2,
+      col2_img: s.col2_img,
+      link: s.link
+    })));
+    const cleanInitialSignatures = JSON.stringify(JSON.parse(initialSignatures || '[]').map((s: any) => ({
+      id: s.id,
+      name: s.name,
+      category: s.category,
+      col1_img1: s.col1_img1,
+      col1_img2: s.col1_img2,
+      col2_img: s.col2_img,
+      link: s.link
+    })));
+    if (currentSignaturesSerialized !== cleanInitialSignatures) return true;
+
+    const currentAboutSerialized = JSON.stringify({
+      hero_image_url: aboutData.hero_image_url,
+      crew: aboutData.crew.map(c => ({
+        name: c.name,
+        role: c.role,
+        bio: c.bio,
+        src: c.src
+      }))
+    });
+    const cleanInitialAbout = JSON.stringify(JSON.parse(initialAboutData || '{}'));
+    if (currentAboutSerialized !== cleanInitialAbout) return true;
 
     return false;
   };
@@ -501,6 +585,70 @@ export default function AdminPage() {
     }));
   };
 
+  // Signature image change handlers
+  const triggerSignatureImageChange = (id: string, field: 'col1_img1' | 'col1_img2' | 'col2_img') => {
+    setActiveSignatureChangeId({ id, field });
+    signatureFileInputRef.current?.click();
+  };
+
+  const handleSignatureImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0 || !activeSignatureChangeId) return;
+    const file = files[0];
+
+    const localUrl = URL.createObjectURL(file);
+    setSignatures(prev => prev.map(s => {
+      if (s.id === activeSignatureChangeId.id) {
+        return { 
+          ...s, 
+          [activeSignatureChangeId.field]: localUrl, 
+          [`${activeSignatureChangeId.field}_file`]: file,
+          [`${activeSignatureChangeId.field}_isLocal`]: true
+        };
+      }
+      return s;
+    }));
+    setActiveSignatureChangeId(null);
+  };
+
+  // About image change handlers
+  const triggerAboutImageChange = (type: 'hero' | 'crew', index?: number) => {
+    setActiveAboutChange({ type, index });
+    aboutFileInputRef.current?.click();
+  };
+
+  const handleAboutImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0 || !activeAboutChange) return;
+    const file = files[0];
+
+    const localUrl = URL.createObjectURL(file);
+    if (activeAboutChange.type === 'hero') {
+      setAboutData(prev => ({
+        ...prev,
+        hero_image_url: localUrl,
+        hero_isLocal: true,
+        hero_file: file
+      } as any));
+    } else if (activeAboutChange.type === 'crew' && typeof activeAboutChange.index === 'number') {
+      const idx = activeAboutChange.index;
+      setAboutData(prev => {
+        const updatedCrew = [...prev.crew];
+        updatedCrew[idx] = {
+          ...updatedCrew[idx],
+          src: localUrl,
+          isLocal: true,
+          file: file
+        } as any;
+        return {
+          ...prev,
+          crew: updatedCrew
+        };
+      });
+    }
+    setActiveAboutChange(null);
+  };
+
   const handleAddVibrantItem = () => {
     if (vibrants.length >= 6) {
       alert('Maximum limit of 6 items reached for Vibrants section!');
@@ -651,6 +799,82 @@ export default function AdminPage() {
         }
       }
 
+      // 5. Staged signatures uploads
+      const processedSignatures = [];
+      for (const s of signatures) {
+        let col1_img1_url = s.col1_img1;
+        let col1_img2_url = s.col1_img2;
+        let col2_img_url = s.col2_img;
+
+        if ((s as any).col1_img1_isLocal && (s as any).col1_img1_file) {
+          col1_img1_url = await uploadToBlob((s as any).col1_img1_file);
+          const oldItem = JSON.parse(initialSignatures || '[]').find((item: any) => item.id === s.id);
+          if (oldItem && oldItem.col1_img1 && !oldItem.col1_img1.startsWith('/images/')) {
+            deletedUrls.push(oldItem.col1_img1);
+          }
+        }
+        if ((s as any).col1_img2_isLocal && (s as any).col1_img2_file) {
+          col1_img2_url = await uploadToBlob((s as any).col1_img2_file);
+          const oldItem = JSON.parse(initialSignatures || '[]').find((item: any) => item.id === s.id);
+          if (oldItem && oldItem.col1_img2 && !oldItem.col1_img2.startsWith('/images/')) {
+            deletedUrls.push(oldItem.col1_img2);
+          }
+        }
+        if ((s as any).col2_img_isLocal && (s as any).col2_img_file) {
+          col2_img_url = await uploadToBlob((s as any).col2_img_file);
+          const oldItem = JSON.parse(initialSignatures || '[]').find((item: any) => item.id === s.id);
+          if (oldItem && oldItem.col2_img && !oldItem.col2_img.startsWith('/images/')) {
+            deletedUrls.push(oldItem.col2_img);
+          }
+        }
+
+        processedSignatures.push({
+          id: s.id,
+          number: s.number,
+          name: s.name,
+          category: s.category,
+          col1_img1: col1_img1_url,
+          col1_img2: col1_img2_url,
+          col2_img: col2_img_url,
+          link: s.link
+        });
+      }
+
+      // 6. Staged about uploads
+      let processedAboutHero = aboutData.hero_image_url;
+      if ((aboutData as any).hero_isLocal && (aboutData as any).hero_file) {
+        processedAboutHero = await uploadToBlob((aboutData as any).hero_file);
+        const oldItem = JSON.parse(initialAboutData || '{}');
+        if (oldItem && oldItem.hero_image_url && !oldItem.hero_image_url.startsWith('/images/')) {
+          deletedUrls.push(oldItem.hero_image_url);
+        }
+      }
+
+      const processedCrew = [];
+      for (let i = 0; i < aboutData.crew.length; i++) {
+        const c = aboutData.crew[i];
+        let crewSrc = c.src;
+        if ((c as any).isLocal && (c as any).file) {
+          crewSrc = await uploadToBlob((c as any).file);
+          const oldItem = JSON.parse(initialAboutData || '{}');
+          const oldCrew = oldItem?.crew?.[i];
+          if (oldCrew && oldCrew.src && !oldCrew.src.startsWith('/images/')) {
+            deletedUrls.push(oldCrew.src);
+          }
+        }
+        processedCrew.push({
+          name: c.name,
+          role: c.role,
+          bio: c.bio,
+          src: crewSrc
+        });
+      }
+
+      const processedAbout = {
+        hero_image_url: processedAboutHero,
+        crew: processedCrew
+      };
+
       // Save database and trigger cleanups
       const saveResponse = await fetch('/api/admin/save', {
         method: 'POST',
@@ -662,6 +886,8 @@ export default function AdminPage() {
           videos: processedVideos.map((vid, idx) => ({ ...vid, order_index: idx })),
           serviceImages: processedServices,
           vibrants: processedVibrants.map((v, idx) => ({ ...v, order_index: idx })),
+          signatures: processedSignatures,
+          about: processedAbout,
           adminCredentials: {
             username: adminUsername,
             passwordHash: adminPassword,
@@ -837,7 +1063,7 @@ export default function AdminPage() {
             <img 
               src="/logo.png" 
               alt="Kadam Production Logo" 
-              className="w-16 h-16 rounded-full border border-white/10 object-cover flex-shrink-0"
+              className="w-16 h-16 object-contain flex-shrink-0"
             />
             <div>
               <h2 className="font-bold text-sm tracking-wide text-white leading-none">ADMIN PANEL</h2>
@@ -907,7 +1133,39 @@ export default function AdminPage() {
               `}
             >
               <Sparkles className="w-4 h-4" />
-              Home Carousel
+              Our Vibrants
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab('signature');
+                setSidebarOpen(false);
+              }}
+              className={`w-full h-12 px-4 rounded-xl flex items-center gap-3 text-sm font-bold tracking-wide transition duration-200 cursor-pointer
+                ${activeTab === 'signature' 
+                  ? 'bg-[#8B5CF6]/10 border border-[#8B5CF6]/30 text-white' 
+                  : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent'
+                }
+              `}
+            >
+              <Award className="w-4 h-4" />
+              Signature
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab('about');
+                setSidebarOpen(false);
+              }}
+              className={`w-full h-12 px-4 rounded-xl flex items-center gap-3 text-sm font-bold tracking-wide transition duration-200 cursor-pointer
+                ${activeTab === 'about' 
+                  ? 'bg-[#8B5CF6]/10 border border-[#8B5CF6]/30 text-white' 
+                  : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent'
+                }
+              `}
+            >
+              <Users className="w-4 h-4" />
+              About Us
             </button>
 
             <button
@@ -963,7 +1221,9 @@ export default function AdminPage() {
               {activeTab === 'gallery' && 'Gallery'}
               {activeTab === 'videos' && 'Videos'}
               {activeTab === 'services' && 'Services'}
-              {activeTab === 'vibrants' && 'Home Carousel'}
+              {activeTab === 'vibrants' && 'Our Vibrants'}
+              {activeTab === 'signature' && 'Signature'}
+              {activeTab === 'about' && 'About Us'}
               {activeTab === 'settings' && 'Settings'}
             </h1>
             <p className="text-[10px] md:text-xs text-zinc-550 tracking-wider mt-1 uppercase">
@@ -971,6 +1231,8 @@ export default function AdminPage() {
               {activeTab === 'videos' && 'Manage stage video loop reels'}
               {activeTab === 'services' && 'Customize service cover images'}
               {activeTab === 'vibrants' && 'Manage vibrations slider'}
+              {activeTab === 'signature' && 'Customize Signature Productions cards'}
+              {activeTab === 'about' && 'Manage About Us hero and crew members list'}
               {activeTab === 'settings' && 'Update contact profiles & credentials'}
             </p>
           </div>
@@ -1414,6 +1676,218 @@ export default function AdminPage() {
               type="file"
               ref={vibrantInputRef}
               onChange={handleVibrantImageChange}
+              accept="image/*"
+              className="hidden"
+            />
+          </div>
+        )}
+
+        {/* -------------------- SIGNATURE PROJECTS TAB CONTENT -------------------- */}
+        {activeTab === 'signature' && (
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 gap-8">
+              {signatures.map((s, idx) => (
+                <div 
+                  key={s.id} 
+                  className="p-6 rounded-3xl border border-white/5 bg-zinc-900/30 space-y-6"
+                  style={{
+                    boxShadow: '0 0 30px rgba(0,0,0,0.2)'
+                  }}
+                >
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/5 pb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl font-black text-zinc-700">{s.number}</span>
+                      <h3 className="text-lg font-bold text-white uppercase">{s.name}</h3>
+                    </div>
+                    <span className="text-xs text-[#8B5CF6] font-bold tracking-widest uppercase">{s.category}</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1.5">Project Name</label>
+                        <input 
+                          type="text"
+                          value={s.name}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setSignatures(prev => prev.map(item => item.id === s.id ? { ...item, name: val } : item));
+                          }}
+                          className="w-full h-10 px-3 rounded-lg border border-white/10 bg-black/40 text-xs font-semibold text-white focus:border-[#8B5CF6] focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1.5">Project Category</label>
+                        <input 
+                          type="text"
+                          value={s.category}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setSignatures(prev => prev.map(item => item.id === s.id ? { ...item, category: val } : item));
+                          }}
+                          className="w-full h-10 px-3 rounded-lg border border-white/10 bg-black/40 text-xs font-semibold text-white focus:border-[#8B5CF6] focus:outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3">
+                      {/* Image 1 slot */}
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="text-[9px] font-bold text-zinc-500 uppercase">Image 1</span>
+                        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-white/5 bg-black">
+                          <img src={s.col1_img1} className="w-full h-full object-cover" />
+                        </div>
+                        <button 
+                          onClick={() => triggerSignatureImageChange(s.id, 'col1_img1')}
+                          className="w-full h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-bold text-zinc-400 hover:text-white transition duration-200 cursor-pointer"
+                        >
+                          Change
+                        </button>
+                      </div>
+                      {/* Image 2 slot */}
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="text-[9px] font-bold text-zinc-500 uppercase">Image 2</span>
+                        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-white/5 bg-black">
+                          <img src={s.col1_img2} className="w-full h-full object-cover" />
+                        </div>
+                        <button 
+                          onClick={() => triggerSignatureImageChange(s.id, 'col1_img2')}
+                          className="w-full h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-bold text-zinc-400 hover:text-white transition duration-200 cursor-pointer"
+                        >
+                          Change
+                        </button>
+                      </div>
+                      {/* Image 3 slot */}
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="text-[9px] font-bold text-zinc-500 uppercase">Cover Image</span>
+                        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-white/5 bg-black">
+                          <img src={s.col2_img} className="w-full h-full object-cover" />
+                        </div>
+                        <button 
+                          onClick={() => triggerSignatureImageChange(s.id, 'col2_img')}
+                          className="w-full h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-bold text-zinc-400 hover:text-white transition duration-200 cursor-pointer"
+                        >
+                          Change
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <input 
+              type="file"
+              ref={signatureFileInputRef}
+              onChange={handleSignatureImageChange}
+              accept="image/*"
+              className="hidden"
+            />
+          </div>
+        )}
+
+        {/* -------------------- ABOUT US SETTINGS TAB CONTENT -------------------- */}
+        {activeTab === 'about' && (
+          <div className="space-y-8">
+            {/* About Hero Image Management */}
+            <div className="p-6 rounded-3xl border border-white/5 bg-zinc-900/30 space-y-6">
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-3">About Us Hero Image</h3>
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="relative w-full md:w-64 aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 bg-black flex-shrink-0">
+                  <img src={aboutData.hero_image_url} className="w-full h-full object-cover" />
+                </div>
+                <div className="space-y-3">
+                  <p className="text-xs text-zinc-500 font-semibold leading-relaxed">This is the hero image displayed in the main graphic showcase on the About Us page.</p>
+                  <button 
+                    onClick={() => triggerAboutImageChange('hero')}
+                    className="px-4 h-10 rounded-xl bg-[#8B5CF6] hover:bg-[#7c4ee4] text-xs font-bold text-white transition duration-200 cursor-pointer"
+                  >
+                    Upload New Hero Image
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Crew Members Management */}
+            <div className="p-6 rounded-3xl border border-white/5 bg-zinc-900/30 space-y-6">
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-3">Manage Crew Members</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {aboutData.crew.map((member, idx) => (
+                  <div key={idx} className="p-5 rounded-2xl border border-white/5 bg-black/30 space-y-4">
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                      <div className="relative w-24 h-24 rounded-2xl overflow-hidden border border-white/10 bg-black flex-shrink-0">
+                        <img src={member.src} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="space-y-2 w-full">
+                        <span className="text-[10px] text-[#8B5CF6] font-bold tracking-widest uppercase">CREW MEMBER {idx + 1}</span>
+                        <button 
+                          onClick={() => triggerAboutImageChange('crew', idx)}
+                          className="w-full h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-bold text-zinc-400 hover:text-white transition duration-200 cursor-pointer"
+                        >
+                          Change Photo
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4 pt-2">
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1.5">Member Name</label>
+                        <input 
+                          type="text"
+                          value={member.name}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setAboutData(prev => {
+                              const updatedCrew = [...prev.crew];
+                              updatedCrew[idx] = { ...updatedCrew[idx], name: val };
+                              return { ...prev, crew: updatedCrew };
+                            });
+                          }}
+                          className="w-full h-10 px-3 rounded-lg border border-white/10 bg-black/40 text-xs font-semibold text-white focus:border-[#8B5CF6] focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1.5">Role / Title</label>
+                        <input 
+                          type="text"
+                          value={member.role}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setAboutData(prev => {
+                              const updatedCrew = [...prev.crew];
+                              updatedCrew[idx] = { ...updatedCrew[idx], role: val };
+                              return { ...prev, crew: updatedCrew };
+                            });
+                          }}
+                          className="w-full h-10 px-3 rounded-lg border border-white/10 bg-black/40 text-xs font-semibold text-white focus:border-[#8B5CF6] focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1.5">Bio / Description</label>
+                        <textarea 
+                          value={member.bio}
+                          rows={3}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setAboutData(prev => {
+                              const updatedCrew = [...prev.crew];
+                              updatedCrew[idx] = { ...updatedCrew[idx], bio: val };
+                              return { ...prev, crew: updatedCrew };
+                            });
+                          }}
+                          className="w-full p-3 rounded-lg border border-white/10 bg-black/40 text-xs font-semibold text-white focus:border-[#8B5CF6] focus:outline-none resize-none leading-relaxed"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <input 
+              type="file"
+              ref={aboutFileInputRef}
+              onChange={handleAboutImageChange}
               accept="image/*"
               className="hidden"
             />

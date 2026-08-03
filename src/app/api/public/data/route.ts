@@ -3,12 +3,14 @@ import { vercelDb } from '@/utils/vercelDb';
 
 export async function GET() {
   try {
-    const [settings, images, videos, services, vibrants] = await Promise.all([
+    const [settings, images, videos, services, vibrants, signatures, about] = await Promise.all([
       vercelDb.getSettings(),
       vercelDb.getImages(),
       vercelDb.getVideos(),
       vercelDb.getServices(),
-      vercelDb.getVibrants()
+      vercelDb.getVibrants(),
+      vercelDb.getSignatures(),
+      vercelDb.getAbout()
     ]);
 
     // Sort items by order_index
@@ -21,7 +23,9 @@ export async function GET() {
       images: sortedImages,
       videos: sortedVideos,
       services,
-      vibrants: sortedVibrants
+      vibrants: sortedVibrants,
+      signatures,
+      about
     });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

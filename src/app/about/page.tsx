@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Award, ShieldCheck, Heart, Sparkles, Flame 
@@ -34,13 +34,36 @@ const milestones = [
   { year: 'PRESENT', event: '1000+ Events', description: 'Continuing excellence with massive silent generators and full setups.' }
 ];
 
-const teamMembers = [
+const defaultTeamMembers = [
   { name: 'ROHAN', role: 'Managing Director', bio: 'Directing creative operations, production strategies, and high-end light & sound installations.', src: '/images/WhatsApp-Image-2026-01-10-at-8.52.25-PM-3_vohntj.png' },
   { name: 'DISHANT', role: 'Managing Director', bio: 'Overseeing event execution, client coordination, and technical system setups.', src: '/images/WhatsApp-Image-2026-01-10-at-8.52.25-PM-2_ug0sl5.png' },
 ];
 
 export default function AboutPage() {
   const crewSliderRef = useRef<HTMLDivElement>(null);
+  const [heroImage, setHeroImage] = useState('/images/Untitled-design-13.png');
+  const [teamMembers, setTeamMembers] = useState(defaultTeamMembers);
+
+  useEffect(() => {
+    async function loadAboutData() {
+      try {
+        const res = await fetch(`/api/public/data?t=${Date.now()}`);
+        if (!res.ok) throw new Error('API request failed');
+        const data = await res.json();
+        if (data.about) {
+          if (data.about.hero_image_url) {
+            setHeroImage(data.about.hero_image_url);
+          }
+          if (data.about.crew && data.about.crew.length > 0) {
+            setTeamMembers(data.about.crew);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load dynamic about data:', err);
+      }
+    }
+    loadAboutData();
+  }, []);
 
   // Autoplay relative scroll for Crew Slider (slides right every 3s)
   useEffect(() => {
@@ -96,7 +119,7 @@ export default function AboutPage() {
               className="relative aspect-[4/3] w-full max-w-md mx-auto rounded-3xl overflow-hidden border border-white/10 bg-[#080808]"
             >
               <Image 
-                src="/images/Untitled-design-13.png" 
+                src={heroImage} 
                 alt="Kadam Production Stage Setup" 
                 fill
                 sizes="(max-width: 768px) 100vw, 450px"

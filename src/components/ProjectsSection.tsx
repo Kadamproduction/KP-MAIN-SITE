@@ -65,6 +65,36 @@ export default function ProjectsSection() {
     offset: ['start start', 'end end']
   });
 
+  const [projects, setProjects] = useState<ProjectItem[]>(projectsData);
+
+  useEffect(() => {
+    async function loadSignatures() {
+      try {
+        const res = await fetch(`/api/public/data?t=${Date.now()}`);
+        if (!res.ok) throw new Error('API request failed');
+        const data = await res.json();
+        if (data.signatures && data.signatures.length > 0) {
+          const mapped: ProjectItem[] = data.signatures.map((s: any) => ({
+            id: s.id,
+            number: s.number,
+            name: s.name,
+            category: s.category,
+            images: {
+              col1_img1: s.col1_img1,
+              col1_img2: s.col1_img2,
+              col2_img: s.col2_img
+            },
+            link: s.link || 'https://github.com'
+          }));
+          setProjects(mapped);
+        }
+      } catch (err) {
+        console.error('Failed to load dynamic signatures:', err);
+      }
+    }
+    loadSignatures();
+  }, []);
+
   return (
     <section 
       ref={containerRef}
@@ -82,13 +112,13 @@ export default function ProjectsSection() {
 
       {/* Sticky Stacking Cards Container */}
       <div className="w-full max-w-6xl space-y-12 md:space-y-32 relative">
-        {projectsData.map((project, idx) => {
+        {projects.map((project, idx) => {
           return (
             <CardWrapper 
               key={project.id} 
               project={project} 
               index={idx} 
-              totalCards={projectsData.length}
+              totalCards={projects.length}
               globalProgress={scrollYProgress} 
             />
           );

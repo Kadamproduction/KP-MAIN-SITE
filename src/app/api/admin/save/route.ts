@@ -29,6 +29,8 @@ export async function POST(request: Request) {
       videos, 
       serviceImages, 
       vibrants,
+      signatures,
+      about,
       adminCredentials,
       deletedUrls 
     } = await request.json();
@@ -61,6 +63,12 @@ export async function POST(request: Request) {
     }
     if (vibrants) {
       await vercelDb.setVibrants(vibrants);
+    }
+    if (signatures) {
+      await vercelDb.setSignatures(signatures);
+    }
+    if (about) {
+      await vercelDb.setAbout(about);
     }
     if (adminCredentials) {
       await vercelDb.setCredentials(adminCredentials);
