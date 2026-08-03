@@ -174,6 +174,7 @@ export default function AdminPage() {
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [resetEmailSending, setResetEmailSending] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   // Category selection for gallery view
   const [selectedGalleryCat, setSelectedGalleryCat] = useState<string>('All Events');
@@ -1734,11 +1735,31 @@ export default function AdminPage() {
                     </div>
 
                     <div className="grid grid-cols-3 gap-3">
+                      {/* Cover Image slot */}
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="text-[9px] font-bold text-zinc-500 uppercase">Cover Image</span>
+                        <div 
+                          onClick={() => setPreviewImage(s.col2_img)}
+                          className="relative w-full aspect-square rounded-xl overflow-hidden border border-white/5 bg-black cursor-zoom-in group hover:border-[#8B5CF6]/50 transition duration-350"
+                        >
+                          <img src={s.col2_img} className="w-full h-full object-cover group-hover:scale-105 transition duration-350" />
+                        </div>
+                        <button 
+                          onClick={() => triggerSignatureImageChange(s.id, 'col2_img')}
+                          className="w-full h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-bold text-zinc-400 hover:text-white transition duration-200 cursor-pointer"
+                        >
+                          Change
+                        </button>
+                      </div>
+
                       {/* Image 1 slot */}
                       <div className="flex flex-col items-center gap-2">
                         <span className="text-[9px] font-bold text-zinc-500 uppercase">Image 1</span>
-                        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-white/5 bg-black">
-                          <img src={s.col1_img1} className="w-full h-full object-cover" />
+                        <div 
+                          onClick={() => setPreviewImage(s.col1_img1)}
+                          className="relative w-full aspect-square rounded-xl overflow-hidden border border-white/5 bg-black cursor-zoom-in group hover:border-[#8B5CF6]/50 transition duration-350"
+                        >
+                          <img src={s.col1_img1} className="w-full h-full object-cover group-hover:scale-105 transition duration-350" />
                         </div>
                         <button 
                           onClick={() => triggerSignatureImageChange(s.id, 'col1_img1')}
@@ -1747,27 +1768,18 @@ export default function AdminPage() {
                           Change
                         </button>
                       </div>
+
                       {/* Image 2 slot */}
                       <div className="flex flex-col items-center gap-2">
                         <span className="text-[9px] font-bold text-zinc-500 uppercase">Image 2</span>
-                        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-white/5 bg-black">
-                          <img src={s.col1_img2} className="w-full h-full object-cover" />
+                        <div 
+                          onClick={() => setPreviewImage(s.col1_img2)}
+                          className="relative w-full aspect-square rounded-xl overflow-hidden border border-white/5 bg-black cursor-zoom-in group hover:border-[#8B5CF6]/50 transition duration-350"
+                        >
+                          <img src={s.col1_img2} className="w-full h-full object-cover group-hover:scale-105 transition duration-350" />
                         </div>
                         <button 
                           onClick={() => triggerSignatureImageChange(s.id, 'col1_img2')}
-                          className="w-full h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-bold text-zinc-400 hover:text-white transition duration-200 cursor-pointer"
-                        >
-                          Change
-                        </button>
-                      </div>
-                      {/* Image 3 slot */}
-                      <div className="flex flex-col items-center gap-2">
-                        <span className="text-[9px] font-bold text-zinc-500 uppercase">Cover Image</span>
-                        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-white/5 bg-black">
-                          <img src={s.col2_img} className="w-full h-full object-cover" />
-                        </div>
-                        <button 
-                          onClick={() => triggerSignatureImageChange(s.id, 'col2_img')}
                           className="w-full h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-bold text-zinc-400 hover:text-white transition duration-200 cursor-pointer"
                         >
                           Change
@@ -1796,8 +1808,11 @@ export default function AdminPage() {
             <div className="p-6 rounded-3xl border border-white/5 bg-zinc-900/30 space-y-6">
               <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-3">About Us Hero Image</h3>
               <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="relative w-full md:w-64 aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 bg-black flex-shrink-0">
-                  <img src={aboutData.hero_image_url} className="w-full h-full object-cover" />
+                <div 
+                  onClick={() => setPreviewImage(aboutData.hero_image_url)}
+                  className="relative w-full md:w-64 aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 bg-black flex-shrink-0 cursor-zoom-in group hover:border-[#8B5CF6]/50 transition duration-350"
+                >
+                  <img src={aboutData.hero_image_url} className="w-full h-full object-cover group-hover:scale-105 transition duration-350" />
                 </div>
                 <div className="space-y-3">
                   <p className="text-xs text-zinc-500 font-semibold leading-relaxed">This is the hero image displayed in the main graphic showcase on the About Us page.</p>
@@ -1818,8 +1833,11 @@ export default function AdminPage() {
                 {aboutData.crew.map((member, idx) => (
                   <div key={idx} className="p-5 rounded-2xl border border-white/5 bg-black/30 space-y-4">
                     <div className="flex flex-col sm:flex-row items-center gap-4">
-                      <div className="relative w-24 h-24 rounded-2xl overflow-hidden border border-white/10 bg-black flex-shrink-0">
-                        <img src={member.src} className="w-full h-full object-cover" />
+                      <div 
+                        onClick={() => setPreviewImage(member.src)}
+                        className="relative w-24 h-24 rounded-2xl overflow-hidden border border-white/10 bg-black flex-shrink-0 cursor-zoom-in group hover:border-[#8B5CF6]/50 transition duration-350"
+                      >
+                        <img src={member.src} className="w-full h-full object-cover group-hover:scale-105 transition duration-350" />
                       </div>
                       <div className="space-y-2 w-full">
                         <span className="text-[10px] text-[#8B5CF6] font-bold tracking-widest uppercase">CREW MEMBER {idx + 1}</span>
@@ -2247,6 +2265,28 @@ export default function AdminPage() {
                 )}
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* LIGHTBOX PREVIEW MODAL */}
+      {previewImage && (
+        <div 
+          className="fixed inset-0 z-[60] bg-black/95 flex items-center justify-center p-4 cursor-zoom-out"
+          onClick={() => setPreviewImage(null)}
+        >
+          <div className="relative max-w-5xl max-h-[85vh] rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+            <img 
+              src={previewImage} 
+              className="w-auto h-auto max-w-full max-h-[85vh] object-contain" 
+              alt="Enlarged Preview" 
+            />
+            <button 
+              onClick={() => setPreviewImage(null)}
+              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/60 border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
         </div>
       )}
