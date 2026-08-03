@@ -939,9 +939,17 @@ export default function AdminPage() {
     }
   };
 
+  const sanitizeInput = (val: string): string => {
+    if (!val) return '';
+    return val
+      .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width spaces
+      .replace(/[\r\n\t]/g, '') // remove carriage returns, newlines, tabs
+      .trim();
+  };
+
   const handleChangeCredentials = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newPassword !== confirmNewPassword) {
+    if (sanitizeInput(newPassword) !== sanitizeInput(confirmNewPassword)) {
       setCredsChangeError('New passwords do not match.');
       return;
     }
@@ -953,9 +961,9 @@ export default function AdminPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           token,
-          otp: credsOtp.trim(),
-          newUsername: newUsername.trim(),
-          newPassword: newPassword.trim()
+          otp: sanitizeInput(credsOtp),
+          newUsername: sanitizeInput(newUsername),
+          newPassword: sanitizeInput(newPassword)
         })
       });
       const data = await res.json();

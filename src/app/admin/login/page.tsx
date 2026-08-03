@@ -3,13 +3,22 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { Lock, Mail, AlertTriangle, ArrowRight, CheckCircle, X } from 'lucide-react';
+import { Lock, Mail, AlertTriangle, ArrowRight, CheckCircle, X, Eye, EyeOff } from 'lucide-react';
+
+function sanitizeInput(val: string): string {
+  if (!val) return '';
+  return val
+    .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width spaces
+    .replace(/[\r\n\t]/g, '') // remove carriage returns, newlines, tabs
+    .trim();
+}
 
 export default function AdminLoginPage() {
   const router = useRouter();
   const { user, login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPass, setShowPass] = useState(false);
   
   // Auth loading states
   const [loading, setLoading] = useState(false);
@@ -40,7 +49,7 @@ export default function AdminLoginPage() {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), password: password.trim() })
+        body: JSON.stringify({ email: sanitizeInput(email), password: sanitizeInput(password) })
       });
       const data = await res.json();
       
@@ -59,7 +68,7 @@ export default function AdminLoginPage() {
 
   const handleForgotPasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newPassword.trim() !== confirmPassword.trim()) {
+    if (sanitizeInput(newPassword) !== sanitizeInput(confirmPassword)) {
       setForgotError('Passwords do not match.');
       return;
     }
@@ -71,7 +80,7 @@ export default function AdminLoginPage() {
       const res = await fetch('/api/auth/recovery-reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recoveryKey: recoveryKey.trim(), newPassword: newPassword.trim() })
+        body: JSON.stringify({ recoveryKey: sanitizeInput(recoveryKey), newPassword: sanitizeInput(newPassword) })
       });
       const data = await res.json();
       if (!res.ok) {
@@ -158,14 +167,21 @@ export default function AdminLoginPage() {
             </div>
             <div className="relative">
               <input 
-                type="password"
+                type={showPass ? 'text' : 'password'}
                 required
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-12 pl-11 pr-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
+                className="w-full h-12 pl-11 pr-11 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
               />
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-550" />
+              <button
+                type="button"
+                onClick={() => setShowPass(!showPass)}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition cursor-pointer"
+              >
+                {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
           </div>
 

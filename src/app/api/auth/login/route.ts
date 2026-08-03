@@ -2,6 +2,14 @@ import { NextResponse } from 'next/server';
 import { vercelDb } from '@/utils/vercelDb';
 import { verifyPassword } from '@/utils/crypto';
 
+function sanitizeInput(val: string): string {
+  if (!val) return '';
+  return val
+    .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width spaces
+    .replace(/[\r\n\t]/g, '') // remove carriage returns, newlines, tabs
+    .trim();
+}
+
 // Simple delay helper to align response times
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -9,8 +17,8 @@ export async function POST(request: Request) {
   const startTime = Date.now();
   try {
     const body = await request.json();
-    const email = typeof body.email === 'string' ? body.email.trim() : '';
-    const password = typeof body.password === 'string' ? body.password.trim() : '';
+    const email = typeof body.email === 'string' ? sanitizeInput(body.email) : '';
+    const password = typeof body.password === 'string' ? sanitizeInput(body.password) : '';
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password are required.' }, { status: 400 });
@@ -35,10 +43,13 @@ export async function POST(request: Request) {
     }
 
     // Match username OR default email, and password
-    const isUserMatch = email === credentials.username || email === 'kadamproductionweb@gmail.com' || email === 'admin';
+    const cleanDbUsername = typeof credentials.username === 'string' ? sanitizeInput(credentials.username) : 'admin';
+    const cleanDbPasswordHash = typeof credentials.passwordHash === 'string' ? sanitizeInput(credentials.passwordHash) : '';
+
+    const isUserMatch = email === cleanDbUsername || email === 'kadamproductionweb@gmail.com' || email === 'admin';
     
     // We use timing safe scrypt verification
-    const isPassMatch = isUserMatch ? verifyPassword(password, credentials.passwordHash) : false;
+    const isPassMatch = isUserMatch ? verifyPassword(password, cleanDbPasswordHash) : false;
 
     if (isUserMatch && isPassMatch) {
       // Clear failed attempts on successful login

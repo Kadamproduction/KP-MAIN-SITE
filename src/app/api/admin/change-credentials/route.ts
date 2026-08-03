@@ -2,13 +2,21 @@ import { NextResponse } from 'next/server';
 import { vercelDb } from '@/utils/vercelDb';
 import { verifyPassword, hashPassword } from '@/utils/crypto';
 
+function sanitizeInput(val: string): string {
+  if (!val) return '';
+  return val
+    .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width spaces
+    .replace(/[\r\n\t]/g, '') // remove carriage returns, newlines, tabs
+    .trim();
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const token = body.token;
-    const otp = typeof body.otp === 'string' ? body.otp.trim() : '';
-    const newUsername = typeof body.newUsername === 'string' ? body.newUsername.trim() : '';
-    const newPassword = typeof body.newPassword === 'string' ? body.newPassword.trim() : '';
+    const otp = typeof body.otp === 'string' ? sanitizeInput(body.otp) : '';
+    const newUsername = typeof body.newUsername === 'string' ? sanitizeInput(body.newUsername) : '';
+    const newPassword = typeof body.newPassword === 'string' ? sanitizeInput(body.newPassword) : '';
 
     if (!token) {
       return NextResponse.json({ error: 'Token missing.' }, { status: 401 });

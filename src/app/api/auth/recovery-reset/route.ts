@@ -2,11 +2,19 @@ import { NextResponse } from 'next/server';
 import { vercelDb } from '@/utils/vercelDb';
 import { hashPassword } from '@/utils/crypto';
 
+function sanitizeInput(val: string): string {
+  if (!val) return '';
+  return val
+    .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width spaces
+    .replace(/[\r\n\t]/g, '') // remove carriage returns, newlines, tabs
+    .trim();
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const recoveryKey = typeof body.recoveryKey === 'string' ? body.recoveryKey.trim() : '';
-    const newPassword = typeof body.newPassword === 'string' ? body.newPassword.trim() : '';
+    const recoveryKey = typeof body.recoveryKey === 'string' ? sanitizeInput(body.recoveryKey) : '';
+    const newPassword = typeof body.newPassword === 'string' ? sanitizeInput(body.newPassword) : '';
 
     if (!recoveryKey || !newPassword) {
       return NextResponse.json({ error: 'Recovery Key and New Password are required.' }, { status: 400 });
@@ -21,7 +29,7 @@ export async function POST(request: Request) {
       'KP-SECURE-ADMIN-77'
     ];
 
-    const isMatch = dbRecoveryKeys.some((k: string) => k.trim().toLowerCase() === recoveryKey.trim().toLowerCase());
+    const isMatch = dbRecoveryKeys.some((k: string) => sanitizeInput(k).toLowerCase() === recoveryKey.toLowerCase());
 
     if (!isMatch) {
       return NextResponse.json({ error: 'Invalid Master Recovery Key.' }, { status: 401 });
