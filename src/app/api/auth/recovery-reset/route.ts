@@ -2,19 +2,35 @@ import { NextResponse } from 'next/server';
 import { vercelDb } from '@/utils/vercelDb';
 import { hashPassword } from '@/utils/crypto';
 
-function sanitizeInput(val: string): string {
+function sanitizeInput(val: string, type?: 'email' | 'password'): string {
   if (!val) return '';
-  return val
+  let clean = val
     .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width spaces
     .replace(/[\r\n\t]/g, '') // remove carriage returns, newlines, tabs
     .trim();
+
+  // Strip prefixes like "username : ", "password : "
+  if (type === 'email') {
+    clean = clean.replace(/^(username|email|user)\s*:\s*/i, '');
+  } else if (type === 'password') {
+    clean = clean.replace(/^(password|pass)\s*:\s*/i, '');
+  }
+
+  clean = clean.trim();
+
+  // Strip leading and trailing double/single quotes if present
+  if ((clean.startsWith('"') && clean.endsWith('"')) || (clean.startsWith("'") && clean.endsWith("'"))) {
+    clean = clean.slice(1, -1);
+  }
+
+  return clean.trim();
 }
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const recoveryKey = typeof body.recoveryKey === 'string' ? sanitizeInput(body.recoveryKey) : '';
-    const newPassword = typeof body.newPassword === 'string' ? sanitizeInput(body.newPassword) : '';
+    const recoveryKey = typeof body.recoveryKey === 'string' ? sanitizeInput(body.recoveryKey, 'email') : '';
+    const newPassword = typeof body.newPassword === 'string' ? sanitizeInput(body.newPassword, 'password') : '';
 
     if (!recoveryKey || !newPassword) {
       return NextResponse.json({ error: 'Recovery Key and New Password are required.' }, { status: 400 });
@@ -29,7 +45,7 @@ export async function POST(request: Request) {
       'KP-SECURE-ADMIN-77'
     ];
 
-    const isMatch = dbRecoveryKeys.some((k: string) => sanitizeInput(k).toLowerCase() === recoveryKey.toLowerCase());
+    const isMatch = dbRecoveryKeys.some((k: string) => sanitizeInput(k, 'email').toLowerCase() === recoveryKey.toLowerCase());
 
     if (!isMatch) {
       return NextResponse.json({ error: 'Invalid Master Recovery Key.' }, { status: 401 });

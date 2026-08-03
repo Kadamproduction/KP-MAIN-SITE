@@ -2,12 +2,28 @@ import { NextResponse } from 'next/server';
 import { vercelDb } from '@/utils/vercelDb';
 import { verifyPassword } from '@/utils/crypto';
 
-function sanitizeInput(val: string): string {
+function sanitizeInput(val: string, type?: 'email' | 'password'): string {
   if (!val) return '';
-  return val
+  let clean = val
     .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width spaces
     .replace(/[\r\n\t]/g, '') // remove carriage returns, newlines, tabs
     .trim();
+
+  // Strip prefixes like "username : ", "password : "
+  if (type === 'email') {
+    clean = clean.replace(/^(username|email|user)\s*:\s*/i, '');
+  } else if (type === 'password') {
+    clean = clean.replace(/^(password|pass)\s*:\s*/i, '');
+  }
+
+  clean = clean.trim();
+
+  // Strip leading and trailing double/single quotes if present
+  if ((clean.startsWith('"') && clean.endsWith('"')) || (clean.startsWith("'") && clean.endsWith("'"))) {
+    clean = clean.slice(1, -1);
+  }
+
+  return clean.trim();
 }
 
 // Simple delay helper to align response times
@@ -17,8 +33,8 @@ export async function POST(request: Request) {
   const startTime = Date.now();
   try {
     const body = await request.json();
-    const email = typeof body.email === 'string' ? sanitizeInput(body.email) : '';
-    const password = typeof body.password === 'string' ? sanitizeInput(body.password) : '';
+    const email = typeof body.email === 'string' ? sanitizeInput(body.email, 'email') : '';
+    const password = typeof body.password === 'string' ? sanitizeInput(body.password, 'password') : '';
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password are required.' }, { status: 400 });
@@ -43,8 +59,8 @@ export async function POST(request: Request) {
     }
 
     // Match username OR default email, and password
-    const cleanDbUsername = typeof credentials.username === 'string' ? sanitizeInput(credentials.username) : 'admin';
-    const cleanDbPasswordHash = typeof credentials.passwordHash === 'string' ? sanitizeInput(credentials.passwordHash) : '';
+    const cleanDbUsername = typeof credentials.username === 'string' ? sanitizeInput(credentials.username, 'email') : 'admin';
+    const cleanDbPasswordHash = typeof credentials.passwordHash === 'string' ? sanitizeInput(credentials.passwordHash, 'password') : '';
 
     const isUserMatch = email === cleanDbUsername || email === 'kadamproductionweb@gmail.com' || email === 'admin';
     

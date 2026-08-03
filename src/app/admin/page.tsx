@@ -939,17 +939,33 @@ export default function AdminPage() {
     }
   };
 
-  const sanitizeInput = (val: string): string => {
+  const sanitizeInput = (val: string, type?: 'email' | 'password'): string => {
     if (!val) return '';
-    return val
+    let clean = val
       .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width spaces
       .replace(/[\r\n\t]/g, '') // remove carriage returns, newlines, tabs
       .trim();
+
+    // Strip prefixes like "username : ", "password : "
+    if (type === 'email') {
+      clean = clean.replace(/^(username|email|user)\s*:\s*/i, '');
+    } else if (type === 'password') {
+      clean = clean.replace(/^(password|pass)\s*:\s*/i, '');
+    }
+
+    clean = clean.trim();
+
+    // Strip leading and trailing double/single quotes if present
+    if ((clean.startsWith('"') && clean.endsWith('"')) || (clean.startsWith("'") && clean.endsWith("'"))) {
+      clean = clean.slice(1, -1);
+    }
+
+    return clean.trim();
   };
 
   const handleChangeCredentials = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (sanitizeInput(newPassword) !== sanitizeInput(confirmNewPassword)) {
+    if (sanitizeInput(newPassword, 'password') !== sanitizeInput(confirmNewPassword, 'password')) {
       setCredsChangeError('New passwords do not match.');
       return;
     }
@@ -961,9 +977,9 @@ export default function AdminPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           token,
-          otp: sanitizeInput(credsOtp),
-          newUsername: sanitizeInput(newUsername),
-          newPassword: sanitizeInput(newPassword)
+          otp: sanitizeInput(credsOtp, 'email'),
+          newUsername: sanitizeInput(newUsername, 'email'),
+          newPassword: sanitizeInput(newPassword, 'password')
         })
       });
       const data = await res.json();

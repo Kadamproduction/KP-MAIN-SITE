@@ -2,21 +2,37 @@ import { NextResponse } from 'next/server';
 import { vercelDb } from '@/utils/vercelDb';
 import { verifyPassword, hashPassword } from '@/utils/crypto';
 
-function sanitizeInput(val: string): string {
+function sanitizeInput(val: string, type?: 'email' | 'password'): string {
   if (!val) return '';
-  return val
+  let clean = val
     .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width spaces
     .replace(/[\r\n\t]/g, '') // remove carriage returns, newlines, tabs
     .trim();
+
+  // Strip prefixes like "username : ", "password : "
+  if (type === 'email') {
+    clean = clean.replace(/^(username|email|user)\s*:\s*/i, '');
+  } else if (type === 'password') {
+    clean = clean.replace(/^(password|pass)\s*:\s*/i, '');
+  }
+
+  clean = clean.trim();
+
+  // Strip leading and trailing double/single quotes if present
+  if ((clean.startsWith('"') && clean.endsWith('"')) || (clean.startsWith("'") && clean.endsWith("'"))) {
+    clean = clean.slice(1, -1);
+  }
+
+  return clean.trim();
 }
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const token = body.token;
-    const otp = typeof body.otp === 'string' ? sanitizeInput(body.otp) : '';
-    const newUsername = typeof body.newUsername === 'string' ? sanitizeInput(body.newUsername) : '';
-    const newPassword = typeof body.newPassword === 'string' ? sanitizeInput(body.newPassword) : '';
+    const otp = typeof body.otp === 'string' ? sanitizeInput(body.otp, 'email') : '';
+    const newUsername = typeof body.newUsername === 'string' ? sanitizeInput(body.newUsername, 'email') : '';
+    const newPassword = typeof body.newPassword === 'string' ? sanitizeInput(body.newPassword, 'password') : '';
 
     if (!token) {
       return NextResponse.json({ error: 'Token missing.' }, { status: 401 });

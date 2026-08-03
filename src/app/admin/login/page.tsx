@@ -5,12 +5,28 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Lock, Mail, AlertTriangle, ArrowRight, CheckCircle, X, Eye, EyeOff } from 'lucide-react';
 
-function sanitizeInput(val: string): string {
+function sanitizeInput(val: string, type?: 'email' | 'password'): string {
   if (!val) return '';
-  return val
+  let clean = val
     .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width spaces
     .replace(/[\r\n\t]/g, '') // remove carriage returns, newlines, tabs
     .trim();
+
+  // Strip prefixes like "username : ", "password : "
+  if (type === 'email') {
+    clean = clean.replace(/^(username|email|user)\s*:\s*/i, '');
+  } else if (type === 'password') {
+    clean = clean.replace(/^(password|pass)\s*:\s*/i, '');
+  }
+
+  clean = clean.trim();
+
+  // Strip leading and trailing double/single quotes if present
+  if ((clean.startsWith('"') && clean.endsWith('"')) || (clean.startsWith("'") && clean.endsWith("'"))) {
+    clean = clean.slice(1, -1);
+  }
+
+  return clean.trim();
 }
 
 export default function AdminLoginPage() {
@@ -49,7 +65,10 @@ export default function AdminLoginPage() {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: sanitizeInput(email), password: sanitizeInput(password) })
+        body: JSON.stringify({ 
+          email: sanitizeInput(email, 'email'), 
+          password: sanitizeInput(password, 'password') 
+        })
       });
       const data = await res.json();
       
@@ -68,7 +87,7 @@ export default function AdminLoginPage() {
 
   const handleForgotPasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (sanitizeInput(newPassword) !== sanitizeInput(confirmPassword)) {
+    if (sanitizeInput(newPassword, 'password') !== sanitizeInput(confirmPassword, 'password')) {
       setForgotError('Passwords do not match.');
       return;
     }
@@ -80,7 +99,10 @@ export default function AdminLoginPage() {
       const res = await fetch('/api/auth/recovery-reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recoveryKey: sanitizeInput(recoveryKey), newPassword: sanitizeInput(newPassword) })
+        body: JSON.stringify({ 
+          recoveryKey: sanitizeInput(recoveryKey, 'email'), 
+          newPassword: sanitizeInput(newPassword, 'password') 
+        })
       });
       const data = await res.json();
       if (!res.ok) {
