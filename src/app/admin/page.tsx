@@ -952,9 +952,9 @@ export default function AdminPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           token,
-          otp: credsOtp,
-          newUsername,
-          newPassword
+          otp: credsOtp.trim(),
+          newUsername: newUsername.trim(),
+          newPassword: newPassword.trim()
         })
       });
       const data = await res.json();
@@ -1044,7 +1044,10 @@ export default function AdminPage() {
 
       {/* MOBILE HEADER BAR */}
       <div className="md:hidden w-full h-16 border-b border-white/10 bg-zinc-950 flex items-center justify-between px-6 z-30">
-        <span className="font-bold text-md tracking-wider">KP ADMIN PANEL</span>
+        <div className="flex items-center gap-2">
+          <img src="/logo.png" alt="Kadam Production Logo" className="w-8 h-8 object-contain" />
+          <span className="font-bold text-sm tracking-wider text-white">ADMIN PANEL</span>
+        </div>
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="w-10 h-10 rounded-xl border border-white/10 bg-black/40 flex items-center justify-center hover:bg-zinc-900 transition-colors"
@@ -1059,7 +1062,7 @@ export default function AdminPage() {
         ${sidebarOpen ? 'translate-x-0 pt-20 md:pt-6' : '-translate-x-full'}
       `}>
         <div className="space-y-8">
-          <div className="hidden md:flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <img 
               src="/logo.png" 
               alt="Kadam Production Logo" 

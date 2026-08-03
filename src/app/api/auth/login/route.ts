@@ -8,7 +8,9 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 export async function POST(request: Request) {
   const startTime = Date.now();
   try {
-    const { email, password } = await request.json();
+    const body = await request.json();
+    const email = typeof body.email === 'string' ? body.email.trim() : '';
+    const password = typeof body.password === 'string' ? body.password.trim() : '';
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password are required.' }, { status: 400 });

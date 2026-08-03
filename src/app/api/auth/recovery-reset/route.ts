@@ -4,7 +4,9 @@ import { hashPassword } from '@/utils/crypto';
 
 export async function POST(request: Request) {
   try {
-    const { recoveryKey, newPassword } = await request.json();
+    const body = await request.json();
+    const recoveryKey = typeof body.recoveryKey === 'string' ? body.recoveryKey.trim() : '';
+    const newPassword = typeof body.newPassword === 'string' ? body.newPassword.trim() : '';
 
     if (!recoveryKey || !newPassword) {
       return NextResponse.json({ error: 'Recovery Key and New Password are required.' }, { status: 400 });

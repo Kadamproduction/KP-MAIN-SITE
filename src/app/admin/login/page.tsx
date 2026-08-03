@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email: email.trim(), password: password.trim() })
       });
       const data = await res.json();
       
@@ -59,7 +59,7 @@ export default function AdminLoginPage() {
 
   const handleForgotPasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newPassword !== confirmPassword) {
+    if (newPassword.trim() !== confirmPassword.trim()) {
       setForgotError('Passwords do not match.');
       return;
     }
@@ -71,7 +71,7 @@ export default function AdminLoginPage() {
       const res = await fetch('/api/auth/recovery-reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recoveryKey, newPassword })
+        body: JSON.stringify({ recoveryKey: recoveryKey.trim(), newPassword: newPassword.trim() })
       });
       const data = await res.json();
       if (!res.ok) {

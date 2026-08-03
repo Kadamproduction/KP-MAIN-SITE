@@ -4,7 +4,11 @@ import { verifyPassword, hashPassword } from '@/utils/crypto';
 
 export async function POST(request: Request) {
   try {
-    const { token, otp, newUsername, newPassword } = await request.json();
+    const body = await request.json();
+    const token = body.token;
+    const otp = typeof body.otp === 'string' ? body.otp.trim() : '';
+    const newUsername = typeof body.newUsername === 'string' ? body.newUsername.trim() : '';
+    const newPassword = typeof body.newPassword === 'string' ? body.newPassword.trim() : '';
 
     if (!token) {
       return NextResponse.json({ error: 'Token missing.' }, { status: 401 });
