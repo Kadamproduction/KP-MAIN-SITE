@@ -8,7 +8,7 @@ import { Lock, Mail, AlertTriangle, ArrowRight, CheckCircle, X, Eye, EyeOff } fr
 function sanitizeInput(val: string, type?: 'email' | 'password'): string {
   if (!val) return '';
   let clean = val
-    .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width spaces
+    .replace(/[\u200B-\u200D\uFEFF\u200E\u200F\u202A-\u202E]/g, '') // remove zero-width & RTL/LTR control characters
     .replace(/[\r\n\t]/g, '') // remove carriage returns, newlines, tabs
     .trim();
 
@@ -26,7 +26,8 @@ function sanitizeInput(val: string, type?: 'email' | 'password'): string {
     clean = clean.slice(1, -1);
   }
 
-  return clean.trim();
+  // Strip any remaining wide unicode spaces or mathematical spaces from beginning/end
+  return clean.replace(/^[\s\u00A0\u2000-\u200F\u2028\u2029\u202F\u205F\u3000\uFEFF]+|[\s\u00A0\u2000-\u200F\u2028\u2029\u202F\u205F\u3000\uFEFF]+$/g, '');
 }
 
 export default function AdminLoginPage() {
@@ -158,6 +159,7 @@ export default function AdminLoginPage() {
               <input 
                 type="text"
                 required
+                autoComplete="username"
                 placeholder="admin@kadamproduction.in"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -191,6 +193,7 @@ export default function AdminLoginPage() {
               <input 
                 type={showPass ? 'text' : 'password'}
                 required
+                autoComplete="new-password"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

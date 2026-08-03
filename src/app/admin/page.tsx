@@ -942,7 +942,7 @@ export default function AdminPage() {
   const sanitizeInput = (val: string, type?: 'email' | 'password'): string => {
     if (!val) return '';
     let clean = val
-      .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width spaces
+      .replace(/[\u200B-\u200D\uFEFF\u200E\u200F\u202A-\u202E]/g, '') // remove zero-width & RTL/LTR control characters
       .replace(/[\r\n\t]/g, '') // remove carriage returns, newlines, tabs
       .trim();
 
@@ -960,7 +960,8 @@ export default function AdminPage() {
       clean = clean.slice(1, -1);
     }
 
-    return clean.trim();
+    // Strip any remaining wide unicode spaces or mathematical spaces from beginning/end
+    return clean.replace(/^[\s\u00A0\u2000-\u200F\u2028\u2029\u202F\u205F\u3000\uFEFF]+|[\s\u00A0\u2000-\u200F\u2028\u2029\u202F\u205F\u3000\uFEFF]+$/g, '');
   };
 
   const handleChangeCredentials = async (e: React.FormEvent) => {
