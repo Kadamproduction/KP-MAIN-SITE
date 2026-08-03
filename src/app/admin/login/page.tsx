@@ -57,6 +57,18 @@ export default function AdminLoginPage() {
     }
   }, [user, router]);
 
+  const handleEmailPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedText = e.clipboardData.getData('text');
+    setEmail(sanitizeInput(pastedText, 'email'));
+  };
+
+  const handlePasswordPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedText = e.clipboardData.getData('text');
+    setPassword(sanitizeInput(pastedText, 'password'));
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -160,6 +172,7 @@ export default function AdminLoginPage() {
                 type="text"
                 required
                 autoComplete="username"
+                onPaste={handleEmailPaste}
                 placeholder="admin@kadamproduction.in"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -194,6 +207,7 @@ export default function AdminLoginPage() {
                 type={showPass ? 'text' : 'password'}
                 required
                 autoComplete="new-password"
+                onPaste={handlePasswordPaste}
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
