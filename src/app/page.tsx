@@ -223,8 +223,8 @@ export default function HomePage() {
   const stageUserLockRef = useRef(false);
   const stageUserLockTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Cap to 3 stage clips — 6 simultaneous videos was the main sticky/jank cause
-  const stageCards = cylinderStats.slice(0, 3).map((stat, idx) => ({
+  // All stage clips (6) — only in-view / active slides actually play
+  const stageCards = cylinderStats.map((stat, idx) => ({
     ...stat,
     video: videoSources[idx] || defaultVideoSources[idx % defaultVideoSources.length],
   }));
@@ -386,11 +386,11 @@ export default function HomePage() {
             const url = item.video_url;
             return url.startsWith('/videos/') ? `${R2_BASE}${url}` : url;
           });
-          while (urls.length < 3) {
+          while (urls.length < 6) {
             urls.push(defaultVideoSources[urls.length % defaultVideoSources.length]);
           }
-          // Stage section only needs 3 clips — keep extras out of playback budget
-          setVideoSources(urls.slice(0, 3));
+          // Keep all stage clips (typically 6)
+          setVideoSources(urls.slice(0, Math.max(6, cylinderStats.length)));
         }
         if (data.vibrants && data.vibrants.length > 0) {
           const mapped = data.vibrants.map((item: any) => ({
