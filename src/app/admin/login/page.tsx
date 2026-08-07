@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { AlertTriangle, CheckCircle, X, Eye, EyeOff } from 'lucide-react';
 
-const LOGO_URL = 'https://assets.kadamproduction.in/logo.png';
+const LOGO_URL = '/admin-login-logo.png';
 
 function sanitizeInput(val: string, type?: 'email' | 'password'): string {
   if (!val) return '';
