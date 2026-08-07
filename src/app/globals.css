@@ -82,3 +82,14 @@ h1, h2, h3, h4, h5, h6, .hero-heading {
 .backface-hidden {
   backface-visibility: hidden;
 }
+
+/* Admin login logo pulse */
+@keyframes logo-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.06); opacity: 0.92; }
+}
+
+.logo-pulse {
+  animation: logo-pulse 2.4s ease-in-out infinite;
+  will-change: transform, opacity;
+}

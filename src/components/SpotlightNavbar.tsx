@@ -1,16 +1,16 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef, type ComponentType } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Calendar, Zap, Home, Image, Users, Mail } from 'lucide-react';
+import { Menu, X, Zap, Home, Image, Users, Mail } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 interface NavItem {
   label: string;
   href: string;
-  icon: any;
+  icon: ComponentType<{ className?: string }>;
 }
 
 const navItems: NavItem[] = [
@@ -23,7 +23,6 @@ const navItems: NavItem[] = [
 
 export default function SpotlightNavbar() {
   const pathname = usePathname();
-  const router = useRouter();
   const { siteSettings } = useAuth();
   const whatsappUrl = `https://wa.me/91${siteSettings.phone_1}`;
   const navbarRef = useRef<HTMLDivElement>(null);
@@ -81,16 +80,14 @@ export default function SpotlightNavbar() {
             transition={{ type: 'spring', damping: 25, stiffness: 220 }}
             className="fixed inset-0 bg-[#000000]/98 backdrop-blur-3xl z-40 md:hidden flex flex-col justify-center px-8"
           >
-            {/* Brand Logo inside mobile menu (Top Left) */}
+            {/* Brand Logo inside mobile menu (Top Left) — no outer circle */}
             <div className="absolute top-5 left-5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center overflow-hidden bg-black flex-shrink-0">
-                <img 
-                  src="/logo.png" 
-                  alt="Kadam Production Logo" 
-                  className="w-[90%] h-[90%] object-contain translate-y-[1px]"
-                />
-              </div>
-              <span 
+              <img
+                src="https://assets.kadamproduction.in/logo.png"
+                alt="Kadam Production Logo"
+                className="w-10 h-10 object-contain flex-shrink-0"
+              />
+              <span
                 className="text-xs font-black tracking-widest text-white uppercase"
                 style={{ fontFamily: 'Space Grotesk, sans-serif' }}
               >
