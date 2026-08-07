@@ -125,28 +125,25 @@ export default function AdminLoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-950 via-gray-900 to-black p-4 overflow-hidden">
-      {/* Light card — mirrors app.kadamproduction.in/login */}
-      <div className="relative z-10 w-full max-w-[420px] rounded-2xl bg-[#D1D5DB] px-7 py-9 sm:px-10 sm:py-10 shadow-[0_25px_60px_rgba(0,0,0,0.45)]">
-        <div className="flex flex-col items-center text-center mb-7">
-          <div className="logo-pulse mb-4">
+      {/* Card colour matches page background */}
+      <div className="relative z-10 w-full max-w-[420px] rounded-2xl bg-gradient-to-br from-gray-950 via-gray-900 to-black border border-white/10 px-7 py-9 sm:px-10 sm:py-10 shadow-[0_25px_60px_rgba(0,0,0,0.45)]">
+        <div className="flex flex-col items-center text-center mb-6">
+          <div className="logo-pulse mb-1.5">
             <img
               src={LOGO_URL}
               alt="Kadam Production Logo"
-              className="w-[88px] h-[88px] object-contain"
-              width={88}
-              height={88}
+              className="w-[140px] h-[140px] sm:w-[160px] sm:h-[160px] object-contain"
+              width={160}
+              height={160}
             />
           </div>
-          <h1 className="text-[22px] sm:text-2xl font-bold tracking-wide text-gray-900 uppercase">
+          <h1 className="text-[22px] sm:text-2xl font-bold tracking-wide text-white uppercase leading-tight">
             KADAM PRODUCTION
           </h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Professional Event Services
-          </p>
         </div>
 
         {errorMsg && (
-          <div className="mb-5 flex items-start gap-3 rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-600">
+          <div className="mb-5 flex items-start gap-3 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-400">
             <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
             <p className="leading-relaxed text-left">{errorMsg}</p>
           </div>
@@ -154,9 +151,7 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="text-left">
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-zinc-300 mb-1.5">Email</label>
             <input
               type="text"
               required
@@ -165,14 +160,12 @@ export default function AdminLoginPage() {
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-11 rounded-lg border border-gray-300 bg-white px-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
+              className="w-full h-11 rounded-lg border border-white/10 bg-black/40 px-3.5 text-sm text-white placeholder:text-zinc-500 focus:border-[#8B5CF6] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20 transition"
             />
           </div>
 
           <div className="text-left">
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Password
-            </label>
+            <label className="block text-sm font-medium text-zinc-300 mb-1.5">Password</label>
             <div className="relative">
               <input
                 type={showPass ? 'text' : 'password'}
@@ -182,12 +175,12 @@ export default function AdminLoginPage() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-11 rounded-lg border border-gray-300 bg-white px-3.5 pr-11 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
+                className="w-full h-11 rounded-lg border border-white/10 bg-black/40 px-3.5 pr-11 text-sm text-white placeholder:text-zinc-500 focus:border-[#8B5CF6] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20 transition"
               />
               <button
                 type="button"
                 onClick={() => setShowPass(!showPass)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition cursor-pointer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition cursor-pointer"
                 aria-label={showPass ? 'Hide password' : 'Show password'}
               >
                 {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -195,7 +188,6 @@ export default function AdminLoginPage() {
             </div>
           </div>
 
-          {/* Keep existing admin gradient button color */}
           <button
             type="submit"
             disabled={loading}
@@ -212,7 +204,7 @@ export default function AdminLoginPage() {
           </button>
         </form>
 
-        <div className="mt-5 flex items-center justify-between text-xs text-gray-500">
+        <div className="mt-5 flex items-center justify-between text-xs text-zinc-400">
           <button
             type="button"
             onClick={() => {
@@ -223,48 +215,48 @@ export default function AdminLoginPage() {
               setNewPassword('');
               setConfirmPassword('');
             }}
-            className="hover:text-gray-800 transition cursor-pointer"
+            className="hover:text-white transition cursor-pointer"
           >
             Forgot password?
           </button>
-          <span className="text-gray-400">Admin console</span>
+          <span className="text-zinc-500">Admin console</span>
         </div>
       </div>
 
-      <p className="absolute bottom-5 left-0 right-0 text-center text-[11px] text-gray-400">
+      <p className="absolute bottom-5 left-0 right-0 text-center text-[11px] text-zinc-500">
         © {new Date().getFullYear()} Kadam Production / Powered by Trishulhub
       </p>
 
       {showForgotModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-          <div className="relative w-full max-w-[420px] rounded-2xl bg-[#D1D5DB] p-6 sm:p-8 shadow-2xl space-y-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-[420px] rounded-2xl bg-gradient-to-br from-gray-950 via-gray-900 to-black border border-white/10 p-6 sm:p-8 shadow-2xl space-y-5">
             <button
               onClick={() => setShowForgotModal(false)}
-              className="absolute right-4 top-4 w-8 h-8 rounded-full bg-black/5 hover:bg-black/10 flex items-center justify-center transition cursor-pointer"
+              className="absolute right-4 top-4 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition cursor-pointer"
               aria-label="Close"
             >
-              <X className="w-4 h-4 text-gray-600" />
+              <X className="w-4 h-4 text-zinc-300" />
             </button>
 
             <div className="space-y-1 pr-8">
-              <h3 className="text-lg font-bold text-gray-900 uppercase tracking-wide">Reset Password</h3>
-              <p className="text-xs text-gray-500">
+              <h3 className="text-lg font-bold text-white uppercase tracking-wide">Reset Password</h3>
+              <p className="text-xs text-zinc-400">
                 Enter your Master Recovery Key to set a new admin password.
               </p>
             </div>
 
             {forgotError && (
-              <div className="flex items-start gap-2.5 rounded-lg border border-red-300 bg-red-50 p-3 text-xs text-red-600">
+              <div className="flex items-start gap-2.5 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-400">
                 <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <p>{forgotError}</p>
               </div>
             )}
 
             {forgotSuccess ? (
-              <div className="rounded-xl border border-green-300 bg-green-50 p-6 text-center space-y-3">
-                <CheckCircle className="w-10 h-10 text-green-600 mx-auto" />
-                <h4 className="font-bold text-sm text-gray-900">Password Reset Successful</h4>
-                <p className="text-xs text-gray-500 leading-relaxed">
+              <div className="rounded-xl border border-green-500/30 bg-green-500/10 p-6 text-center space-y-3">
+                <CheckCircle className="w-10 h-10 text-green-500 mx-auto" />
+                <h4 className="font-bold text-sm text-white">Password Reset Successful</h4>
+                <p className="text-xs text-zinc-400 leading-relaxed">
                   Your admin password has been updated. You can now log in with your new password.
                 </p>
                 <button
@@ -277,33 +269,33 @@ export default function AdminLoginPage() {
             ) : (
               <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Master Recovery Key</label>
+                  <label className="block text-sm font-medium text-zinc-300 mb-1.5">Master Recovery Key</label>
                   <input
                     type="text"
                     required
                     value={recoveryKey}
                     onChange={(e) => setRecoveryKey(e.target.value)}
-                    className="w-full h-11 rounded-lg border border-gray-300 bg-white px-3.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    className="w-full h-11 rounded-lg border border-white/10 bg-black/40 px-3.5 text-sm text-white focus:border-[#8B5CF6] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">New Password</label>
+                  <label className="block text-sm font-medium text-zinc-300 mb-1.5">New Password</label>
                   <input
                     type="password"
                     required
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full h-11 rounded-lg border border-gray-300 bg-white px-3.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    className="w-full h-11 rounded-lg border border-white/10 bg-black/40 px-3.5 text-sm text-white focus:border-[#8B5CF6] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Confirm Password</label>
+                  <label className="block text-sm font-medium text-zinc-300 mb-1.5">Confirm Password</label>
                   <input
                     type="password"
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full h-11 rounded-lg border border-gray-300 bg-white px-3.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    className="w-full h-11 rounded-lg border border-white/10 bg-black/40 px-3.5 text-sm text-white focus:border-[#8B5CF6] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20"
                   />
                 </div>
                 <button

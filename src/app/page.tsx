@@ -189,8 +189,9 @@ function StageVideo({ src, isActive, id, className }: StageVideoProps) {
       preload="metadata"
       disablePictureInPicture
       controls={false}
-      className={className}
-      style={{ contentVisibility: 'auto' }}
+      // Let page/carousel receive touch so vertical scroll is never trapped
+      className={`${className ?? ''} pointer-events-none`}
+      style={{ contentVisibility: 'auto', touchAction: 'pan-y' }}
     />
   );
 }
@@ -343,7 +344,7 @@ export default function HomePage() {
     if (!isReady || isMobile === false) return;
 
     const timer = setInterval(() => {
-      if (typeof window !== 'undefined' && window.innerWidth >= 768) return;
+      if (typeof window !== 'undefined' && window.innerWidth >= 1024) return;
       if (stageUserLockRef.current) return;
       scrollToStageSlide(activeStageIdx + 1);
     }, 7000);
@@ -635,7 +636,7 @@ export default function HomePage() {
           </div>
 
           {/* Desktop: 3-column grid — only in-view videos play */}
-          <div className="hidden md:grid grid-cols-3 gap-6 max-w-6xl mx-auto w-full relative z-20">
+          <div className="hidden lg:grid grid-cols-3 gap-6 max-w-6xl mx-auto w-full relative z-20">
             {stageCards.map((stat, idx) => (
               <div 
                 key={idx}
@@ -674,14 +675,15 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Mobile: horizontal carousel — only the active slide plays */}
-          <div className="block md:hidden w-full relative z-20">
+          {/* Mobile/Tablet: horizontal carousel — only the active slide plays */}
+          <div className="block lg:hidden w-full relative z-20">
             <div 
               ref={stagesSliderRef}
               onScroll={handleStagesScroll}
               onTouchStart={lockStageAutoplay}
               onPointerDown={lockStageAutoplay}
-              className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 overscroll-x-contain touch-pan-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+              className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+              style={{ touchAction: 'pan-x pan-y', WebkitOverflowScrolling: 'touch' }}
             >
               <div className="min-w-[4vw] flex-shrink-0" aria-hidden />
 

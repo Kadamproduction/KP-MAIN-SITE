@@ -36,7 +36,7 @@ export default function SpotlightNavbar() {
         className="fixed top-0 left-0 right-0 h-16 md:h-20 bg-transparent border-none z-50 px-6 md:px-12 flex items-center justify-center transition-all duration-300"
       >
         {/* Center Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-12 relative z-50">
+        <nav className="hidden lg:flex items-center gap-12 relative z-50">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -64,7 +64,7 @@ export default function SpotlightNavbar() {
         {/* Mobile Hamburger menu */}
         <button 
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden p-2 rounded-xl bg-white/3 border border-white/5 text-zinc-400 hover:text-white cursor-pointer absolute right-6 z-50"
+          className="lg:hidden p-2 rounded-xl bg-white/3 border border-white/5 text-zinc-400 hover:text-white cursor-pointer absolute right-6 z-50"
         >
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
@@ -78,16 +78,16 @@ export default function SpotlightNavbar() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-            className="fixed inset-0 bg-[#000000]/98 backdrop-blur-3xl z-40 md:hidden flex flex-col justify-center px-8"
+            className="fixed inset-0 bg-[#000000]/98 backdrop-blur-3xl z-40 lg:hidden flex flex-col justify-center px-8"
           >
-            {/* Brand mark in mobile menu — K only, no outer circle ring */}
+            {/* Original logo — no circle wrapper, no border */}
             <div className="absolute top-5 left-5 flex items-center gap-3">
               <img
-                src="/logo-mark.png"
-                alt="Kadam Production"
-                className="w-9 h-9 object-contain flex-shrink-0"
-                width={36}
-                height={36}
+                src="/logo.png"
+                alt="Kadam Production Logo"
+                className="w-11 h-11 object-contain flex-shrink-0"
+                width={44}
+                height={44}
               />
               <span
                 className="text-xs font-black tracking-widest text-white uppercase"
