@@ -80,12 +80,14 @@ export default function SpotlightNavbar() {
             transition={{ type: 'spring', damping: 25, stiffness: 220 }}
             className="fixed inset-0 bg-[#000000]/98 backdrop-blur-3xl z-40 md:hidden flex flex-col justify-center px-8"
           >
-            {/* Brand Logo inside mobile menu (Top Left) — no outer circle */}
+            {/* Brand mark in mobile menu — K only, no outer circle ring */}
             <div className="absolute top-5 left-5 flex items-center gap-3">
               <img
-                src="https://assets.kadamproduction.in/logo.png"
-                alt="Kadam Production Logo"
-                className="w-10 h-10 object-contain flex-shrink-0"
+                src="/logo-mark.png"
+                alt="Kadam Production"
+                className="w-9 h-9 object-contain flex-shrink-0"
+                width={36}
+                height={36}
               />
               <span
                 className="text-xs font-black tracking-widest text-white uppercase"

@@ -20,23 +20,25 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
   const rafRef = useRef<number | null>(null);
   const finishingRef = useRef(false);
 
-  // Smooth RAF progress — scaleX driven, no width layout thrash
+  // Fast, smooth progress via scaleX (compositor-only — no jitter)
   useEffect(() => {
     let last = performance.now();
 
     const tick = (now: number) => {
-      const dt = Math.min(40, now - last);
+      const dt = Math.min(32, now - last);
       last = now;
 
       const current = progressRef.current;
       let next = current;
 
       if (isReady) {
-        next = current + (100 - current) * Math.min(1, dt / 220);
-        if (next > 99.5) next = 100;
+        // Snap to 100% quickly once content is ready
+        next = current + (100 - current) * Math.min(1, dt / 140);
+        if (next > 99.4) next = 100;
       } else {
-        const target = 90;
-        const speed = current < 40 ? 0.045 : current < 70 ? 0.022 : 0.008;
+        // Reach ~88% in ~0.7s, then ease
+        const target = 88;
+        const speed = current < 50 ? 0.12 : current < 75 ? 0.05 : 0.018;
         next = Math.min(target, current + dt * speed);
       }
 
@@ -46,12 +48,11 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
       if (next >= 100 && isReady && !finishingRef.current) {
         finishingRef.current = true;
         setShowContent(false);
-        // Curtain slides up after a brief beat at 100%
-        window.setTimeout(() => setExitCurtain(true), 220);
+        window.setTimeout(() => setExitCurtain(true), 120);
         window.setTimeout(() => {
           setIsActive(false);
           onComplete();
-        }, 950);
+        }, 620);
         return;
       }
 
@@ -68,7 +69,7 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
     if (!showContent || isReady) return;
     const id = window.setInterval(() => {
       setLabelIdx((i) => (i + 1) % LOADING_LABELS.length);
-    }, 1400);
+    }, 900);
     return () => clearInterval(id);
   }, [showContent, isReady]);
 
@@ -79,7 +80,7 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
       <motion.div
         initial={{ y: 0 }}
         animate={{ y: exitCurtain ? '-100%' : 0 }}
-        transition={{ duration: 0.75, ease: [0.77, 0, 0.175, 1] }}
+        transition={{ duration: 0.5, ease: [0.77, 0, 0.175, 1] }}
         className="absolute inset-0 bg-zinc-950 flex flex-col items-center justify-center"
       >
         <AnimatePresence>
@@ -87,9 +88,9 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
             <motion.div
               key="loader-content"
               initial={{ opacity: 1 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.28 }}
-              className="relative z-10 flex flex-col items-center justify-center gap-7 px-6"
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2 }}
+              className="relative z-10 flex flex-col items-center justify-center gap-6 px-6"
             >
               <h1
                 className="text-2xl sm:text-4xl md:text-5xl font-semibold tracking-[0.08em] sm:tracking-[0.12em] text-white uppercase text-center"
@@ -109,9 +110,9 @@ export default function PageLoader({ onComplete, isReady }: PageLoaderProps) {
                 <div className="flex items-center justify-between w-full px-0.5">
                   <motion.span
                     key={isReady ? 'ready' : LOADING_LABELS[labelIdx]}
-                    initial={{ opacity: 0, y: 4 }}
+                    initial={{ opacity: 0, y: 3 }}
                     animate={{ opacity: 0.75, y: 0 }}
-                    transition={{ duration: 0.35 }}
+                    transition={{ duration: 0.25 }}
                     className="text-[10px] sm:text-xs uppercase tracking-[0.28em] text-zinc-400"
                     style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                   >

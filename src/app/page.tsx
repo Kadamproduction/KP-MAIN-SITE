@@ -410,15 +410,14 @@ export default function HomePage() {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
 
-    // Minimum display time for page loader logo (2 seconds)
+    // Snappy loader: brand beat ~0.85s, never block >2.5s on hero video
     const minTimer = setTimeout(() => {
       setMinTimeElapsed(true);
-    }, 2000);
+    }, 850);
 
-    // Fallback maximum timeout (10 seconds) to prevent infinite loaders
     const fallbackTimer = setTimeout(() => {
       setVideoLoaded(true);
-    }, 10000);
+    }, 2500);
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -454,8 +453,9 @@ export default function HomePage() {
                 muted 
                 loop 
                 playsInline 
-                preload="auto"
+                preload="metadata"
                 onLoadedData={() => setVideoLoaded(true)}
+                onCanPlay={() => setVideoLoaded(true)}
                 className="w-full h-full object-cover opacity-40 brightness-[0.9]"
               />
             )}
