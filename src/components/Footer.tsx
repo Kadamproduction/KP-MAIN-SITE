@@ -67,26 +67,26 @@ export default function Footer() {
   return (
     <footer className="relative z-20 bg-[#020202] border-t border-white/5 pt-20 pb-10 px-6 md:px-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16">
-        {/* Brand Description */}
+        {/* Brand Description — text optically centered to logo middle */}
         <div className="space-y-6">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-16 h-16 flex items-center justify-center flex-shrink-0">
+          <Link href="/" className="inline-flex items-center gap-3 group -ml-2.5 sm:-ml-3">
+            <div className="relative w-16 h-16 flex-shrink-0">
               <img 
                 src="/logo.png" 
                 alt="Kadam Production Logo" 
-                className="w-full h-full object-contain"
+                className="absolute inset-0 w-full h-full object-contain"
               />
             </div>
-            <div>
-              <h4 className="text-md font-black tracking-tight text-white">KADAM PRODUCTION</h4>
-            </div>
+            <h4
+              className="text-md font-black tracking-tight text-white leading-none"
+              style={{ transform: 'translateY(-3px)' }}
+            >
+              KADAM PRODUCTION
+            </h4>
           </Link>
-          
-
-
 
           {/* Social Links */}
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
             {socialLinks.map((soc) => {
               const Icon = soc.icon;
               return (
@@ -95,6 +95,7 @@ export default function Footer() {
                   href={soc.href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={soc.name}
                   className="w-9 h-9 rounded-xl bg-white/3 border border-white/5 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-gradient-to-tr hover:from-purple-500 hover:to-pink-500 transition-all duration-300 hover:scale-110 cursor-pointer"
                 >
                   <Icon className="w-4 h-4" />

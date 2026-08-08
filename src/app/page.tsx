@@ -127,40 +127,71 @@ const cylinderStats = [
 
 interface StageVideoProps {
   src: string;
+  /** When false, video stays paused even if visible (e.g. inactive mobile slide). */
   isActive: boolean;
   id?: string;
   className?: string;
 }
 
+/**
+ * Performance-safe stage video:
+ * - Loads only when near viewport (IntersectionObserver)
+ * - Plays only when visible AND marked active
+ * - Uses preload=metadata (not auto) to avoid sticky main-thread jank
+ */
 function StageVideo({ src, isActive, id, className }: StageVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible = entry.isIntersecting && entry.intersectionRatio >= 0.35;
+        setInView(visible);
+        if (entry.isIntersecting) setShouldLoad(true);
+      },
+      { rootMargin: '120px', threshold: [0, 0.35, 0.6] }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !shouldLoad) return;
 
-    if (isActive) {
+    const canPlay = isActive && inView;
+    if (canPlay) {
       const playPromise = video.play();
       if (playPromise !== undefined) {
-        playPromise.catch((err) => {
-          console.warn('Playback deferred/blocked:', err);
+        playPromise.catch(() => {
+          /* autoplay may be blocked — ignore */
         });
       }
     } else {
       video.pause();
     }
-  }, [isActive, src]);
+  }, [isActive, inView, shouldLoad, src]);
 
   return (
     <video
       ref={videoRef}
       id={id}
-      src={src}
+      src={shouldLoad ? src : undefined}
       muted
       playsInline
       loop
-      preload="auto"
-      className={className}
+      preload="metadata"
+      disablePictureInPicture
+      controls={false}
+      // Let page/carousel receive touch so vertical scroll is never trapped
+      className={`${className ?? ''} pointer-events-none`}
+      style={{ contentVisibility: 'auto', touchAction: 'pan-y' }}
     />
   );
 }
@@ -188,63 +219,75 @@ export default function HomePage() {
 
   const stagesSliderRef = useRef<HTMLDivElement>(null);
   const [activeStageIdx, setActiveStageIdx] = useState(0);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const stageUserLockRef = useRef(false);
+  const stageUserLockTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // All stage clips (6) — only in-view / active slides actually play
+  const stageCards = cylinderStats.map((stat, idx) => ({
+    ...stat,
+    video: videoSources[idx] || defaultVideoSources[idx % defaultVideoSources.length],
+  }));
 
   useEffect(() => {
     return () => {
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+      if (stageUserLockTimer.current) clearTimeout(stageUserLockTimer.current);
     };
   }, []);
 
-  const scrollToStageSlide = (idx: number) => {
-    setActiveStageIdx(idx);
-    if (stagesSliderRef.current) {
-      const slider = stagesSliderRef.current;
-      const slideWidth = slider.scrollWidth / cylinderStats.length;
-      slider.scrollTo({
-        left: slideWidth * idx,
-        behavior: 'smooth'
-      });
+  const lockStageAutoplay = () => {
+    stageUserLockRef.current = true;
+    if (stageUserLockTimer.current) clearTimeout(stageUserLockTimer.current);
+    stageUserLockTimer.current = setTimeout(() => {
+      stageUserLockRef.current = false;
+    }, 10000);
+  };
+
+  const scrollToStageSlide = (idx: number, smooth = true) => {
+    const clamped = ((idx % stageCards.length) + stageCards.length) % stageCards.length;
+    setActiveStageIdx(clamped);
+    const slider = stagesSliderRef.current;
+    if (!slider) return;
+
+    // Prefer the actual slide element (skips spacer divs)
+    const slides = slider.querySelectorAll<HTMLElement>('[data-stage-slide]');
+    const target = slides[clamped];
+    if (target) {
+      const left = target.offsetLeft - (slider.clientWidth - target.clientWidth) / 2;
+      slider.scrollTo({ left: Math.max(0, left), behavior: smooth ? 'smooth' : 'auto' });
+      return;
     }
+
+    const slideWidth = slider.clientWidth * 0.88 + 16;
+    slider.scrollTo({ left: slideWidth * clamped, behavior: smooth ? 'smooth' : 'auto' });
   };
 
   const handleStagesScroll = () => {
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
-    }
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
 
     scrollTimeoutRef.current = setTimeout(() => {
-      if (!stagesSliderRef.current) return;
       const container = stagesSliderRef.current;
-      const children = container.children;
+      if (!container) return;
+
+      const slides = container.querySelectorAll<HTMLElement>('[data-stage-slide]');
       let closestIdx = 0;
       let minDistance = Infinity;
       const containerCenter = container.scrollLeft + container.clientWidth / 2;
-      
-      // Skip left spacer (index 0) and right spacer (last index) to map slides correctly
-      for (let i = 1; i < children.length - 1; i++) {
-        const child = children[i] as HTMLElement;
+
+      slides.forEach((child, i) => {
         const childCenter = child.offsetLeft + child.clientWidth / 2;
         const distance = Math.abs(childCenter - containerCenter);
         if (distance < minDistance) {
           minDistance = distance;
-          closestIdx = i - 1; // Map child index i (1..6) to slide index (0..5)
+          closestIdx = i;
         }
-      }
-      
-      if (closestIdx !== activeStageIdx && closestIdx >= 0 && closestIdx < cylinderStats.length) {
+      });
+
+      if (closestIdx !== activeStageIdx) {
         setActiveStageIdx(closestIdx);
       }
-    }, 100); // 100ms debounce
-  };
-
-  const handleStageVideoEnded = (idx: number) => {
-    if (idx === activeStageIdx) {
-      const nextIdx = (idx + 1) % cylinderStats.length;
-      scrollToStageSlide(nextIdx);
-    }
+    }, 80);
   };
 
   const [vibrantsItems, setVibrantsItems] = useState([
@@ -296,15 +339,18 @@ export default function HomePage() {
 
 
 
-  // Autoplay slider interval for Stages Section
+  // Mobile-only stage carousel autoplay — never fights desktop page scroll
   useEffect(() => {
-    if (!isReady) return;
+    if (!isReady || isMobile === false) return;
+
     const timer = setInterval(() => {
-      const nextIdx = (activeStageIdx + 1) % cylinderStats.length;
-      scrollToStageSlide(nextIdx);
-    }, 6000); // 6 seconds auto scroll
+      if (typeof window !== 'undefined' && window.innerWidth >= 1024) return;
+      if (stageUserLockRef.current) return;
+      scrollToStageSlide(activeStageIdx + 1);
+    }, 7000);
+
     return () => clearInterval(timer);
-  }, [activeStageIdx, isReady]);
+  }, [activeStageIdx, isReady, isMobile]);
 
   // Autoplay slider for Choose Our Vibrants Section (both mobile & desktop, every 3s)
   useEffect(() => {
@@ -340,10 +386,11 @@ export default function HomePage() {
             const url = item.video_url;
             return url.startsWith('/videos/') ? `${R2_BASE}${url}` : url;
           });
-          while (urls.length < 3) {
+          while (urls.length < 6) {
             urls.push(defaultVideoSources[urls.length % defaultVideoSources.length]);
           }
-          setVideoSources(urls);
+          // Keep all stage clips (typically 6)
+          setVideoSources(urls.slice(0, Math.max(6, cylinderStats.length)));
         }
         if (data.vibrants && data.vibrants.length > 0) {
           const mapped = data.vibrants.map((item: any) => ({
@@ -364,15 +411,14 @@ export default function HomePage() {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
 
-    // Minimum display time for page loader logo (2 seconds)
+    // Snappy loader: brand beat ~0.85s, never block >2.5s on hero video
     const minTimer = setTimeout(() => {
       setMinTimeElapsed(true);
-    }, 2000);
+    }, 850);
 
-    // Fallback maximum timeout (10 seconds) to prevent infinite loaders
     const fallbackTimer = setTimeout(() => {
       setVideoLoaded(true);
-    }, 10000);
+    }, 2500);
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -408,8 +454,9 @@ export default function HomePage() {
                 muted 
                 loop 
                 playsInline 
-                preload="auto"
+                preload="metadata"
                 onLoadedData={() => setVideoLoaded(true)}
+                onCanPlay={() => setVideoLoaded(true)}
                 className="w-full h-full object-cover opacity-40 brightness-[0.9]"
               />
             )}
@@ -588,17 +635,16 @@ export default function HomePage() {
             <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">A glance at our production footage</p>
           </div>
 
-          {/* Universal Grid (Desktop View: 3-columns) */}
-          <div className="hidden md:grid grid-cols-3 gap-6 max-w-6xl mx-auto w-full relative z-20">
-            {cylinderStats.map((stat, idx) => (
+          {/* Desktop: 3-column grid — only in-view videos play */}
+          <div className="hidden lg:grid grid-cols-3 gap-6 max-w-6xl mx-auto w-full relative z-20">
+            {stageCards.map((stat, idx) => (
               <div 
                 key={idx}
                 className="relative w-full max-w-[340px] md:max-w-none mx-auto rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col hover:border-purple-550/30 hover:shadow-[0_0_35px_rgba(139,92,246,0.15)] transition-all duration-500 shadow-2xl"
               >
-                {/* Tall Video component with static mounting configuration to avoid autoplay block */}
-                {videoSources[idx] ? (
+                {stat.video ? (
                   <StageVideo
-                    src={videoSources[idx]}
+                    src={stat.video}
                     isActive={true}
                     className="w-full aspect-[9/16] object-cover rounded-[1.8rem] md:rounded-[2.2rem]"
                   />
@@ -608,9 +654,7 @@ export default function HomePage() {
                   </div>
                 )}
                 
-                {/* Padded Content below the video */}
                 <div className="flex-1 flex flex-col justify-between items-center text-center p-4 pt-6">
-                  {/* Courier Prime Font description text */}
                   <p 
                     className="text-white font-bold uppercase tracking-wider text-xs sm:text-sm min-h-[48px] flex items-center justify-center"
                     style={{ fontFamily: 'Space Grotesk, sans-serif' }}
@@ -618,10 +662,8 @@ export default function HomePage() {
                     {stat.description}
                   </p>
                   
-                  {/* Dotted/Dashed Line Divider */}
                   <div className="w-full border-t border-dashed border-zinc-700/60 my-5" />
 
-                  {/* Lora Font Stat label text */}
                   <span 
                     className="text-md sm:text-lg md:text-xl font-bold text-white tracking-wide uppercase"
                     style={{ fontFamily: 'Space Grotesk, sans-serif' }}
@@ -633,28 +675,30 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Mobile/Tablet View (Horizontal auto-scrolling swipeable carousel) */}
-          <div className="block md:hidden w-full relative z-20">
+          {/* Mobile/Tablet: horizontal carousel — only the active slide plays */}
+          <div className="block lg:hidden w-full relative z-20">
             <div 
               ref={stagesSliderRef}
               onScroll={handleStagesScroll}
+              onTouchStart={lockStageAutoplay}
+              onPointerDown={lockStageAutoplay}
               className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+              style={{ touchAction: 'pan-x pan-y', WebkitOverflowScrolling: 'touch' }}
             >
-              {/* Left padding spacer */}
-              <div className="min-w-[4vw] flex-shrink-0" />
+              <div className="min-w-[4vw] flex-shrink-0" aria-hidden />
 
-              {cylinderStats.map((stat, idx) => {
+              {stageCards.map((stat, idx) => {
                 const isActive = idx === activeStageIdx;
                 return (
                   <div 
                     key={idx}
+                    data-stage-slide
                     className="min-w-[88vw] snap-center relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-black p-4 flex flex-col shadow-2xl"
                   >
-                    {/* Tall Video component with static mounting configuration to avoid autoplay block */}
-                    {videoSources[idx] ? (
+                    {stat.video ? (
                       <StageVideo
                         id={`stage-video-${idx}`}
-                        src={videoSources[idx]}
+                        src={stat.video}
                         isActive={isActive}
                         className="w-full aspect-[9/16] object-cover rounded-[1.8rem]"
                       />
@@ -664,9 +708,7 @@ export default function HomePage() {
                       </div>
                     )}
                     
-                    {/* Padded Content below the video */}
                     <div className="flex-1 flex flex-col justify-between items-center text-center p-4 pt-6">
-                      {/* Courier Prime Font description text */}
                       <p 
                         className="text-white font-bold uppercase tracking-wider text-xs min-h-[48px] flex items-center justify-center"
                         style={{ fontFamily: 'Space Grotesk, sans-serif' }}
@@ -674,10 +716,8 @@ export default function HomePage() {
                         {stat.description}
                       </p>
                       
-                      {/* Dotted/Dashed Line Divider */}
                       <div className="w-full border-t border-dashed border-zinc-700/60 my-5" />
 
-                      {/* Lora Font Stat label text */}
                       <span 
                         className="text-md font-bold text-white tracking-wide uppercase"
                         style={{ fontFamily: 'Space Grotesk, sans-serif' }}
@@ -689,16 +729,19 @@ export default function HomePage() {
                 );
               })}
 
-              {/* Right padding spacer */}
-              <div className="min-w-[4vw] flex-shrink-0" />
+              <div className="min-w-[4vw] flex-shrink-0" aria-hidden />
             </div>
 
-            {/* Bullet indicators for slider progress */}
             <div className="flex justify-center gap-2 mt-4">
-              {cylinderStats.map((_, idx) => (
+              {stageCards.map((_, idx) => (
                 <button
                   key={idx}
-                  onClick={() => scrollToStageSlide(idx)}
+                  type="button"
+                  aria-label={`Go to stage clip ${idx + 1}`}
+                  onClick={() => {
+                    lockStageAutoplay();
+                    scrollToStageSlide(idx);
+                  }}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === activeStageIdx ? 'bg-white w-6' : 'bg-white/20'}`}
                 />
               ))}

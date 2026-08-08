@@ -3,16 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { Lock, Mail, AlertTriangle, ArrowRight, CheckCircle, X, Eye, EyeOff } from 'lucide-react';
+import { AlertTriangle, CheckCircle, X, Eye, EyeOff } from 'lucide-react';
+
+const LOGO_URL = '/download.png';
 
 function sanitizeInput(val: string, type?: 'email' | 'password'): string {
   if (!val) return '';
   let clean = val
-    .replace(/[\u200B-\u200D\uFEFF\u200E\u200F\u202A-\u202E]/g, '') // remove zero-width & RTL/LTR control characters
-    .replace(/[\r\n\t]/g, '') // remove carriage returns, newlines, tabs
+    .replace(/[\u200B-\u200D\uFEFF\u200E\u200F\u202A-\u202E]/g, '')
+    .replace(/[\r\n\t]/g, '')
     .trim();
 
-  // Strip prefixes like "username : ", "password : "
   if (type === 'email') {
     clean = clean.replace(/^(username|email|user)\s*:\s*/i, '');
   } else if (type === 'password') {
@@ -21,12 +22,10 @@ function sanitizeInput(val: string, type?: 'email' | 'password'): string {
 
   clean = clean.trim();
 
-  // Strip leading and trailing double/single quotes if present
   if ((clean.startsWith('"') && clean.endsWith('"')) || (clean.startsWith("'") && clean.endsWith("'"))) {
     clean = clean.slice(1, -1);
   }
 
-  // Strip any remaining wide unicode spaces or mathematical spaces from beginning/end
   return clean.replace(/^[\s\u00A0\u2000-\u200F\u2028\u2029\u202F\u205F\u3000\uFEFF]+|[\s\u00A0\u2000-\u200F\u2028\u2029\u202F\u205F\u3000\uFEFF]+$/g, '');
 }
 
@@ -36,12 +35,10 @@ export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
-  
-  // Auth loading states
+
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Forgot password modal states
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [recoveryKey, setRecoveryKey] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -50,7 +47,6 @@ export default function AdminLoginPage() {
   const [forgotSuccess, setForgotSuccess] = useState(false);
   const [forgotError, setForgotError] = useState<string | null>(null);
 
-  // If already logged in, redirect to admin immediately
   useEffect(() => {
     if (user) {
       router.push('/admin');
@@ -59,14 +55,12 @@ export default function AdminLoginPage() {
 
   const handleEmailPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const pastedText = e.clipboardData.getData('text');
-    setEmail(sanitizeInput(pastedText, 'email'));
+    setEmail(sanitizeInput(e.clipboardData.getData('text'), 'email'));
   };
 
   const handlePasswordPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const pastedText = e.clipboardData.getData('text');
-    setPassword(sanitizeInput(pastedText, 'password'));
+    setPassword(sanitizeInput(e.clipboardData.getData('text'), 'password'));
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -78,21 +72,21 @@ export default function AdminLoginPage() {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          email: sanitizeInput(email, 'email'), 
-          password: sanitizeInput(password, 'password') 
-        })
+        body: JSON.stringify({
+          email: sanitizeInput(email, 'email'),
+          password: sanitizeInput(password, 'password'),
+        }),
       });
       const data = await res.json();
-      
+
       if (!res.ok) {
         throw new Error(data.error || 'Invalid login credentials. Please try again.');
       }
 
       login(data.token, data.user);
       router.push('/admin');
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Connection error. Please try again.');
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : 'Connection error. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -112,112 +106,82 @@ export default function AdminLoginPage() {
       const res = await fetch('/api/auth/recovery-reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          recoveryKey: sanitizeInput(recoveryKey, 'email'), 
-          newPassword: sanitizeInput(newPassword, 'password') 
-        })
+        body: JSON.stringify({
+          recoveryKey: sanitizeInput(recoveryKey, 'email'),
+          newPassword: sanitizeInput(newPassword, 'password'),
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || 'Failed to reset password.');
       }
       setForgotSuccess(true);
-    } catch (err: any) {
-      setForgotError(err.message);
+    } catch (err: unknown) {
+      setForgotError(err instanceof Error ? err.message : 'Failed to reset password.');
     } finally {
       setForgotLoading(false);
     }
   };
 
   return (
-    <div className="relative min-h-screen bg-black text-white font-space-grotesk flex items-center justify-center p-4 selection:bg-[#8B5CF6]/30 overflow-hidden">
-      
-      {/* Background visual neon nodes */}
-      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-pink-600/10 rounded-full blur-[100px] pointer-events-none" />
-
-      {/* Main Glassmorphic card wrapper */}
-      <div className="relative w-full max-w-[450px] rounded-3xl border border-white/10 bg-zinc-950/60 p-8 shadow-2xl backdrop-blur-xl md:p-10 z-10 transition-all duration-300">
-        
-        {/* Logo and brand name */}
-        <div className="flex flex-col items-center text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#8B5CF6] to-[#EC4899] p-0.5 shadow-lg shadow-[#8B5CF6]/20 mb-4 flex items-center justify-center overflow-hidden">
-            <div className="w-full h-full bg-black rounded-2xl flex items-center justify-center overflow-hidden">
-              <img src="/logo.png" alt="Kadam Production Logo" className="w-12 h-12 object-contain" />
-            </div>
+    <div className="relative flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-950 via-gray-900 to-black p-4 overflow-hidden">
+      {/* Card colour matches page background */}
+      <div className="relative z-10 w-full max-w-[420px] rounded-2xl bg-gradient-to-br from-gray-950 via-gray-900 to-black border border-white/10 px-7 py-9 sm:px-10 sm:py-10 shadow-[0_25px_60px_rgba(0,0,0,0.45)]">
+        <div className="flex flex-col items-center text-center mb-6">
+          <div className="logo-pulse mb-1.5">
+            <img
+              src={LOGO_URL}
+              alt="Kadam Production Logo"
+              className="w-[140px] h-[140px] sm:w-[160px] sm:h-[160px] object-contain"
+              width={160}
+              height={160}
+            />
           </div>
-          <h1 className="text-2xl font-bold tracking-wider text-white">
+          <h1 className="text-[22px] sm:text-2xl font-bold tracking-wide text-white uppercase leading-tight">
             KADAM PRODUCTION
           </h1>
-          <p className="text-xs text-zinc-450 tracking-widest mt-1 uppercase">
-            Admin Console Portal
-          </p>
         </div>
 
-        {/* Display Alert banners */}
         {errorMsg && (
-          <div className="mb-6 flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">
-            <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-            <p className="leading-relaxed">{errorMsg}</p>
+          <div className="mb-5 flex items-start gap-3 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-400">
+            <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <p className="leading-relaxed text-left">{errorMsg}</p>
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div>
-            <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">
-              Username or Email
-            </label>
-            <div className="relative">
-              <input 
-                type="text"
-                required
-                autoComplete="username"
-                onPaste={handleEmailPaste}
-                placeholder="admin@kadamproduction.in"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-12 pl-11 pr-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
-              />
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-550" />
-            </div>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div className="text-left">
+            <label className="block text-sm font-medium text-zinc-300 mb-1.5">Email</label>
+            <input
+              type="text"
+              required
+              autoComplete="username"
+              onPaste={handleEmailPaste}
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full h-11 rounded-lg border border-white/10 bg-black/40 px-3.5 text-sm text-white placeholder:text-zinc-500 focus:border-[#8B5CF6] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20 transition"
+            />
           </div>
 
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase">
-                Password
-              </label>
-              <button 
-                type="button" 
-                onClick={() => {
-                  setShowForgotModal(true);
-                  setForgotSuccess(false);
-                  setForgotError(null);
-                  setRecoveryKey('');
-                  setNewPassword('');
-                  setConfirmPassword('');
-                }}
-                className="text-[10px] font-bold text-zinc-400 hover:text-white transition duration-200 cursor-pointer uppercase tracking-widest"
-              >
-                Forgot Password?
-              </button>
-            </div>
+          <div className="text-left">
+            <label className="block text-sm font-medium text-zinc-300 mb-1.5">Password</label>
             <div className="relative">
-              <input 
+              <input
                 type={showPass ? 'text' : 'password'}
                 required
-                autoComplete="new-password"
+                autoComplete="current-password"
                 onPaste={handlePasswordPaste}
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-12 pl-11 pr-11 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition-colors duration-200"
+                className="w-full h-11 rounded-lg border border-white/10 bg-black/40 px-3.5 pr-11 text-sm text-white placeholder:text-zinc-500 focus:border-[#8B5CF6] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20 transition"
               />
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-550" />
               <button
                 type="button"
                 onClick={() => setShowPass(!showPass)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition cursor-pointer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition cursor-pointer"
+                aria-label={showPass ? 'Hide password' : 'Show password'}
               >
                 {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -227,115 +191,119 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-12 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] text-sm font-bold text-white flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-all duration-250 cursor-pointer disabled:opacity-40"
+            className="mt-2 w-full h-11 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] text-sm font-bold uppercase tracking-wider text-white hover:opacity-95 active:scale-[0.99] transition disabled:opacity-50 cursor-pointer"
           >
             {loading ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <span className="inline-flex items-center gap-2">
+                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Signing in…
+              </span>
             ) : (
-              <>
-                Sign In to Console
-                <ArrowRight className="w-4 h-4" />
-              </>
+              'LOGIN'
             )}
           </button>
         </form>
+
+        <div className="mt-5 flex items-center justify-between text-xs text-zinc-400">
+          <button
+            type="button"
+            onClick={() => {
+              setShowForgotModal(true);
+              setForgotSuccess(false);
+              setForgotError(null);
+              setRecoveryKey('');
+              setNewPassword('');
+              setConfirmPassword('');
+            }}
+            className="hover:text-white transition cursor-pointer"
+          >
+            Forgot password?
+          </button>
+          <span className="text-zinc-500">Admin console</span>
+        </div>
       </div>
 
-      {/* FORGOT PASSWORD MODAL */}
+      <p className="absolute bottom-5 left-0 right-0 text-center text-[11px] text-zinc-500">
+        © {new Date().getFullYear()} Kadam Production / Powered by Trishulhub
+      </p>
+
       {showForgotModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-[420px] rounded-3xl border border-white/10 bg-zinc-950 p-6 md:p-8 shadow-2xl space-y-6">
-            <button 
+          <div className="relative w-full max-w-[420px] rounded-2xl bg-gradient-to-br from-gray-950 via-gray-900 to-black border border-white/10 p-6 sm:p-8 shadow-2xl space-y-5">
+            <button
               onClick={() => setShowForgotModal(false)}
-              className="absolute right-6 top-6 w-8 h-8 rounded-full border border-white/5 hover:border-white/20 bg-black/20 flex items-center justify-center hover:bg-zinc-900 transition-colors"
+              className="absolute right-4 top-4 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition cursor-pointer"
+              aria-label="Close"
             >
-              <X className="w-4 h-4 text-zinc-400 hover:text-white" />
+              <X className="w-4 h-4 text-zinc-300" />
             </button>
 
-            <div className="space-y-2 pr-8">
-              <h3 className="text-lg font-bold text-white uppercase tracking-wider">Reset Console Password</h3>
-              <p className="text-xs text-zinc-450">Enter your Master Recovery Key to instantly configure a new password for the console.</p>
+            <div className="space-y-1 pr-8">
+              <h3 className="text-lg font-bold text-white uppercase tracking-wide">Reset Password</h3>
+              <p className="text-xs text-zinc-400">
+                Enter your Master Recovery Key to set a new admin password.
+              </p>
             </div>
 
             {forgotError && (
-              <div className="flex items-start gap-2.5 rounded-xl border border-red-500/20 bg-red-500/10 p-3.5 text-xs text-red-400">
-                <AlertTriangle className="w-4.5 h-4.5 flex-shrink-0 mt-0.5" />
-                <p className="leading-relaxed">{forgotError}</p>
+              <div className="flex items-start gap-2.5 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-400">
+                <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <p>{forgotError}</p>
               </div>
             )}
 
             {forgotSuccess ? (
-              <div className="rounded-xl border border-green-500/20 bg-green-500/10 p-6 text-center space-y-3">
+              <div className="rounded-xl border border-green-500/30 bg-green-500/10 p-6 text-center space-y-3">
                 <CheckCircle className="w-10 h-10 text-green-500 mx-auto" />
                 <h4 className="font-bold text-sm text-white">Password Reset Successful</h4>
-                <p className="text-xs text-zinc-450 leading-relaxed">Your admin password has been updated. You can now close this modal and log in with your new password.</p>
-                <button 
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  Your admin password has been updated. You can now log in with your new password.
+                </p>
+                <button
                   onClick={() => setShowForgotModal(false)}
-                  className="mt-4 w-full h-10 rounded-xl bg-zinc-800 text-xs font-bold text-white hover:bg-zinc-700 transition"
+                  className="mt-2 w-full h-10 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] text-xs font-bold text-white uppercase tracking-wider"
                 >
-                  Close Modal
+                  Close
                 </button>
               </div>
             ) : (
               <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">Master Recovery Key</label>
-                  <div className="relative">
-                    <input 
-                      type="text" 
-                      required 
-                      placeholder="" 
-                      value={recoveryKey} 
-                      onChange={(e) => setRecoveryKey(e.target.value)} 
-                      className="w-full h-12 pl-11 pr-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition"
-                    />
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-550" />
-                  </div>
+                  <label className="block text-sm font-medium text-zinc-300 mb-1.5">Master Recovery Key</label>
+                  <input
+                    type="text"
+                    required
+                    value={recoveryKey}
+                    onChange={(e) => setRecoveryKey(e.target.value)}
+                    className="w-full h-11 rounded-lg border border-white/10 bg-black/40 px-3.5 text-sm text-white focus:border-[#8B5CF6] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20"
+                  />
                 </div>
-
                 <div>
-                  <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">New Password</label>
-                  <div className="relative">
-                    <input 
-                      type="password" 
-                      required 
-                      placeholder="••••••••" 
-                      value={newPassword} 
-                      onChange={(e) => setNewPassword(e.target.value)} 
-                      className="w-full h-12 pl-11 pr-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition"
-                    />
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-550" />
-                  </div>
+                  <label className="block text-sm font-medium text-zinc-300 mb-1.5">New Password</label>
+                  <input
+                    type="password"
+                    required
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full h-11 rounded-lg border border-white/10 bg-black/40 px-3.5 text-sm text-white focus:border-[#8B5CF6] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20"
+                  />
                 </div>
-
                 <div>
-                  <label className="block text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-2">Confirm Password</label>
-                  <div className="relative">
-                    <input 
-                      type="password" 
-                      required 
-                      placeholder="••••••••" 
-                      value={confirmPassword} 
-                      onChange={(e) => setConfirmPassword(e.target.value)} 
-                      className="w-full h-12 pl-11 pr-4 rounded-xl border border-white/10 bg-black/40 text-sm text-white placeholder-zinc-650 focus:border-[#8B5CF6] focus:outline-none transition"
-                    />
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-550" />
-                  </div>
+                  <label className="block text-sm font-medium text-zinc-300 mb-1.5">Confirm Password</label>
+                  <input
+                    type="password"
+                    required
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full h-11 rounded-lg border border-white/10 bg-black/40 px-3.5 text-sm text-white focus:border-[#8B5CF6] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20"
+                  />
                 </div>
-
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={forgotLoading}
-                  className="w-full h-12 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] text-xs font-bold text-white flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] transition disabled:opacity-40"
+                  className="w-full h-11 rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] text-xs font-bold uppercase tracking-wider text-white disabled:opacity-50 cursor-pointer"
                 >
-                  {forgotLoading ? (
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      Reset Password Now
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
+                  {forgotLoading ? 'Resetting…' : 'Reset Password'}
                 </button>
               </form>
             )}
