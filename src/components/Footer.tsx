@@ -67,23 +67,23 @@ export default function Footer() {
   return (
     <footer className="relative z-20 bg-[#020202] border-t border-white/5 pt-20 pb-10 px-6 md:px-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16">
-        {/* Brand — logo, title, and social icons share one center axis */}
-        <div className="flex flex-col items-center text-center space-y-5">
-          <Link href="/" className="flex flex-col items-center gap-2 group">
-            <div className="w-16 h-16 flex items-center justify-center">
+        {/* Brand Description — same layout as before, alignment fixed */}
+        <div className="space-y-6">
+          <Link href="/" className="inline-flex items-center gap-3 group">
+            <div className="w-16 h-16 flex items-center justify-center flex-shrink-0">
               <img 
                 src="/logo.png" 
                 alt="Kadam Production Logo" 
                 className="w-full h-full object-contain"
               />
             </div>
-            <h4 className="text-sm font-black tracking-[0.12em] text-white uppercase text-center">
+            <h4 className="text-md font-black tracking-tight text-white leading-none self-center">
               KADAM PRODUCTION
             </h4>
           </Link>
 
-          {/* Social Links — centered under logo */}
-          <div className="flex gap-4 justify-center">
+          {/* Social Links — left edge lines up with logo */}
+          <div className="flex gap-4 items-center">
             {socialLinks.map((soc) => {
               const Icon = soc.icon;
               return (
