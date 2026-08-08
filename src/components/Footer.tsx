@@ -67,14 +67,14 @@ export default function Footer() {
   return (
     <footer className="relative z-20 bg-[#020202] border-t border-white/5 pt-20 pb-10 px-6 md:px-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16">
-        {/* Brand Description — same layout as before, alignment fixed */}
+        {/* Brand Description — logo/text flush left with Instagram */}
         <div className="space-y-6">
-          <Link href="/" className="inline-flex items-center gap-3 group">
-            <div className="w-16 h-16 flex items-center justify-center flex-shrink-0">
+          <Link href="/" className="inline-flex items-center gap-3 group -ml-2.5 sm:-ml-3">
+            <div className="w-16 h-16 flex items-center justify-center flex-shrink-0 overflow-visible">
               <img 
                 src="/logo.png" 
                 alt="Kadam Production Logo" 
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain scale-[1.28] origin-left"
               />
             </div>
             <h4 className="text-md font-black tracking-tight text-white leading-none self-center">
@@ -82,7 +82,7 @@ export default function Footer() {
             </h4>
           </Link>
 
-          {/* Social Links — left edge lines up with logo */}
+          {/* Social Links */}
           <div className="flex gap-4 items-center">
             {socialLinks.map((soc) => {
               const Icon = soc.icon;
