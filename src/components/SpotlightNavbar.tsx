@@ -80,18 +80,20 @@ export default function SpotlightNavbar() {
             transition={{ type: 'spring', damping: 25, stiffness: 220 }}
             className="fixed inset-0 bg-[#000000]/98 backdrop-blur-3xl z-40 lg:hidden flex flex-col justify-center px-8"
           >
-            {/* Original logo — no circle wrapper, no border */}
-            <div className="absolute top-5 left-5 flex items-center gap-3">
-              <img
-                src="/logo.png"
-                alt="Kadam Production Logo"
-                className="w-11 h-11 object-contain flex-shrink-0"
-                width={44}
-                height={44}
-              />
+            {/* Menu brand — text optically centered with logo middle (same as footer) */}
+            <div className="absolute top-5 left-5 inline-flex items-center gap-3 -ml-1.5">
+              <div className="relative w-11 h-11 flex-shrink-0">
+                <img
+                  src="/logo.png"
+                  alt="Kadam Production Logo"
+                  className="absolute inset-0 w-full h-full object-contain"
+                  width={44}
+                  height={44}
+                />
+              </div>
               <span
-                className="text-xs font-black tracking-widest text-white uppercase"
-                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                className="text-xs font-black tracking-widest text-white uppercase leading-none"
+                style={{ fontFamily: 'Space Grotesk, sans-serif', transform: 'translateY(-2px)' }}
               >
                 KADAM PRODUCTION
               </span>
